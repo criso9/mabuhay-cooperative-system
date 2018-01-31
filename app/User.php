@@ -16,9 +16,9 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+    // protected $fillable = [
+    //     'name', 'email', 'password',
+    // ];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -27,6 +27,17 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password', 'remember_token',
+    ];
+
+	public static $reg_rules = [
+        'f_name' => 'required',
+        'emailadd' => 'required|email',
+        'password' => 'required|min:8|confirmed',
+        'bday'=> 'required',
+        'age'=>'required'
+      // 'cnumber'=>'required'
+
+
     ];
 
     public static $rules = [

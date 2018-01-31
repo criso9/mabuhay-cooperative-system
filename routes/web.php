@@ -20,6 +20,13 @@ Route::get('login', array('as' => 'login', 'uses' => 'Auth\LoginController@getLo
 Route::post('login', array('as' => 'login.post','uses' => 'Auth\LoginController@postLogin'));
 Route::post('logout', array('as' => 'logout', 'uses' => 'Auth\LoginController@getLogout'));
 
+Route::get('/register', function () {
+return view('register');
+});
+
+Route::post('/register',array('as' =>'register.post', 'uses' => 'Auth\RegisterController@store')); //for submit method @store - add
+
+
 Route::get('/admin/role', function () {
     return view('admin.crud.role');
 });
