@@ -1,0 +1,24 @@
+/*Panel*/
+.logo-panel {width: 20%;float: left;}
+.logo-img {
+	width: 35px;
+    height: 34px;
+    background: #fff;
+    z-index: 1000;
+    position: inherit;
+    border: 1px solid rgba(52,73,94,.44);
+}
+
+.profile_info h2 {text-transform: capitalize;}
+
+.login100-form-logo img {
+	border-radius: 50%;
+    width: 120px;
+    height: 120px;
+}
+
+.nav-sm .navbar.nav_title .logo-panel img {
+    width: 40px;
+    height: 38px;
+    margin: 3px 0 0 4px;
+}
