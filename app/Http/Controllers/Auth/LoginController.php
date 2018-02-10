@@ -9,12 +9,14 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use App\User;
+use App\Cooperative;
 
 class LoginController extends Controller
 {
 
     public function getLogin(){
-        return View('auth.login');
+        $coop = Cooperative::whereNotNull('id')->first();
+        return View('auth.login', compact('coop'));
     }
 
     public function postLogin(){
@@ -22,18 +24,27 @@ class LoginController extends Controller
 
         $validator = Validator::make($data, User::$rules);
 
+        //dd($data);
+
         if ($validator->fails())
         {
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
         if (Auth::attempt(array('email' => Input::get('email'), 'password' => Input::get('password')))){
-            return Redirect::intended('/');
+            
+            if (Auth::user()->role_id == '1') {
+                return Redirect::intended('/admin');
+            } else if (Auth::user()->role_id == '2') {
+                return Redirect::intended('/');
+            } else if (Auth::user()->role_id == '3') {
+                return Redirect::intended('/');
+            }
         } else {
             return Redirect::back()->withErrors('These credentials do not match our records.')->withInput();
         }
         
-        return Redirect::route('login');
+        //return Redirect::to('/admin');
     }
 
     public function getLogout(){

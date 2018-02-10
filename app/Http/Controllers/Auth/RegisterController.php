@@ -12,65 +12,10 @@ use Illuminate\Support\Facades\Redirect;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
-    use RegistersUsers;
-
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest');
+    public function index(){
+        return View('register');
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    // protected function validator(array $data)
-    // {
-    //     return Validator::make($data, [
-    //         'name' => 'required|string|max:255',
-    //         'email' => 'required|string|email|max:255|unique:users',
-    //         'password' => 'required|string|min:6|confirmed',
-    //     ]);
-    // }
-
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
-    // protected function create(array $data)
-    // {
-    //     return User::create([
-    //         'name' => $data['name'],
-    //         'email' => $data['email'],
-    //         'password' => bcrypt($data['password']),
-    //     ]);
-    // }
     public function store(Request $request)
     {
         $validator = Validator::make($request = Input::all(), User::$reg_rules);
@@ -82,20 +27,24 @@ class RegisterController extends Controller
 
             $data = new User;
 
-            $data->password = bcrypt($request['password']);
-            $data->role_id = '3';
             $data->f_name = $request['f_name'];
-            $data->emailadd = $request['emailadd'];
-            $data->cnumber = $request['cnumber'];
-            $data->bday = $request['bday'];
-            $data->age = $request['age'];
-            $data->civilstats = $request['civilstats'];
-            $data->bplace = $request['bplace'];
-            // $data->avatar = 'users/default.png';
-            
+            $data->m_name = $request['m_name'];
+            $data->l_name = $request['l_name'];
+            $data->phone = $request['phone'];
+            $data->address = $request['address'];
+            $data->b_date = $request['b_date'];
+            $data->gender = $request['gender'];
+            $data->email = $request['email'];
+            $data->password = bcrypt($request['password']);
+            $data->avatar = 'user-male.png';
+            $data->status = 'active';
+            $data->role_id = '3';
+            $data->referral = $request['referral'];
+            $data->ref_relation = $request['ref_relation'];
+         
             $data->save();
 
-           return redirect('/');
+           return redirect('/login');
     }
 }
 

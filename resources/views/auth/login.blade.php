@@ -30,13 +30,30 @@
 </head>
 <body>
 	<div class="limiter">
+		<div>
+	  		@if (count($errors) > 0)
+				<div class="alert alert-danger">
+					<strong>Whoops!</strong> There were some problems with your input.<br><br>
+					<ul>
+						@foreach ($errors->all() as $error)
+							<li>{{ $error }}</li>
+						@endforeach
+					</ul>
+				</div>
+			@endif
+	  	</div>
+
 		<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
 			<div class="wrap-login100">
 				<form class="login100-form validate-form" action="{{ route('login.post') }}" method="POST">
 					 {{ csrf_field() }}
 					<div class="login100-form-logo">
 						<!-- <i class="zmdi zmdi-landscape"></i> -->
-						<img src="images/logo.jpg"/>
+						@if($coop)
+		                	<img src="/uploads/{{ $coop->logo }}"/>
+		                @else
+		                    <img src="/images/na.png"/>
+		                @endif
 					</div>
 
 					<span class="login100-form-title p-b-34 p-t-27">
@@ -53,12 +70,12 @@
 						<span class="focus-input100" data-placeholder="&#xf191;"></span>
 					</div>
 
-					<div class="contact100-form-checkbox">
+					<!-- <div class="contact100-form-checkbox">
 						<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
 						<label class="label-checkbox100" for="ckb1">
 							Remember me
 						</label>
-					</div>
+					</div> -->
 
 					<div class="container-login100-form-btn">
 						<button class="login100-form-btn">
@@ -68,9 +85,9 @@
 
 					<div class="text-center" style="padding-top: 35px;">
 						<span style="font-family: Poppins-Regular;color: #e5e5e5;font-size: 15px;">
-							Don't have an account? 
-							<a class="txt1" style="color: #48B0F7;" href="{{url('/register')}}">
-								Sign Up
+							Create an account? 
+							<a style="color: #48B0F7;" href="{{url('/register')}}">
+								Sign Up Here
 							</a>
 						</span>
 					</div>

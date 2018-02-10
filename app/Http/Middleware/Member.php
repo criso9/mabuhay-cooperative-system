@@ -25,6 +25,6 @@ class Member
             }
         }
 
-        return redirect('/member');
+        return redirect('/login');
     }
 }

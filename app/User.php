@@ -31,19 +31,25 @@ class User extends Authenticatable
 
 	public static $reg_rules = [
         'f_name' => 'required',
-        'emailadd' => 'required|email',
+        'l_name' => 'required',
+        'phone' => 'required',
+        'address' => 'required',
+        'b_date'=> 'required',
+        'gender'=> 'required',
+        'email' => 'required|email',
         'password' => 'required|min:8|confirmed',
-        'bday'=> 'required',
-        'age'=>'required'
-      // 'cnumber'=>'required'
-
-
+        'referral'=> 'required',
+        'ref_relation'=> 'required',
     ];
 
     public static $rules = [
         'email' => 'required|email',
         'password' => 'required',
     ];
+
+    public function role(){
+        return $this->belongsTo('App\Role');
+    }
 
     public function checkRoles()
     {

@@ -1,4 +1,4 @@
-@extends('admin.layout.default')
+@extends('layout.panel')
 
 @section('content')
 	 <div class="">
@@ -8,6 +8,10 @@
               </div>
 
               <div class="title_right">
+              	<div class="col-md-2 col-sm-2 col-xs-12 form-group pull-right">
+                	<!-- <button type="button" class="btn btn-round btn-info">Add Member</button> -->
+                	<a href="{{url('/admin/users/member/create')}}" class="btn btn-round btn-info">Add Member</a>
+                </div>
                 <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
                   <div class="input-group">
                     <input type="text" class="form-control" placeholder="Search for...">
@@ -50,11 +54,12 @@
 			                          <div class="col-sm-12">
 			                            <h4 class="brief"><i>Member</i></h4>
 			                            <div class="left col-xs-7">
-			                              <h2 style="text-transform: capitalize;">{{ $member->name }}</h2>
+			                              <h2 style="text-transform: capitalize;">{{ $member->f_name }} {{ $member->l_name }}</h2>
 			                              <p><strong>About: </strong> Member since 2017 </p>
 			                              <ul class="list-unstyled">
-			                                <li><i class="fa fa-building"></i> Address: </li>
-			                                <li><i class="fa fa-phone"></i> Phone #: </li>
+			                                <li><i class="fa fa-building"></i> Address: {{ $member->address }}</li>
+			                                <li><i class="fa fa-phone"></i> Phone: {{ $member->phone }}</li>
+			                                <li><i class="fa fa-user"></i> Status: {{ $member->status }}</li>
 			                              </ul>
 			                            </div>
 			                            <div class="right col-xs-5 text-center">
@@ -63,12 +68,12 @@
 			                          </div>
 			                          <div class="col-xs-12 bottom text-center">
 			                            <div class="col-xs-12 emphasis">
-			                              <button type="button" class="btn btn-primary btn-xs" style="width: 87px;">
-			                                <i class="fa fa-user"> </i> View Profile
-			                              </button>
-			                               <button type="button" class="btn btn-success btn-xs" style="width: 87px;">
+			                              <a href="{{url('/admin/users/member/'.$member->id)}}" class="btn btn-primary btn-xs" style="width: 87px;">
+			                              	 <i class="fa fa-user"> </i> View Profile
+			                              </a>
+			                               <!-- <button type="button" class="btn btn-success btn-xs" style="width: 87px;">
 			                                <i class="fa fa-edit"> </i> Edit
-			                              </button>
+			                              </button> -->
 			                            </div>
 			                          </div>
 			                        </div>
@@ -83,7 +88,7 @@
 		                          <div class="col-sm-12">
 		                            <h4 class="brief"><i>Member</i></h4>
 		                            <div class="left col-xs-7">
-		                              <h2 style="text-transform: capitalize;">{{ $members[0]->name }}</h2>
+		                              <h2 style="text-transform: capitalize;">{{ $members[0]->f_name }}</h2>
 		                              <p><strong>About: </strong> Member since 2017 </p>
 		                              <ul class="list-unstyled">
 		                                <li><i class="fa fa-building"></i> Address: </li>
