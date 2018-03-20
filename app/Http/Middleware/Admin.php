@@ -22,9 +22,11 @@ class Admin
             if ($role == 'admin')
             {
                 return $next($request);
+            } else {
+                return redirect('/page_403');
             }
         }
 
-        return redirect('/admin');
+        return redirect('/login');
     }
 }

@@ -29,6 +29,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    protected $dates = ['reviewed_at', 'activated_at', 'created_at', 'updated_at'];
+
 	public static $reg_rules = [
         'f_name' => 'required',
         'l_name' => 'required',
@@ -36,10 +38,9 @@ class User extends Authenticatable
         'address' => 'required',
         'b_date'=> 'required',
         'gender'=> 'required',
+        'civil_status'=> 'required',
         'email' => 'required|email',
         'password' => 'required|min:8|confirmed',
-        'referral'=> 'required',
-        'ref_relation'=> 'required',
     ];
 
     public static $rules = [
@@ -49,6 +50,11 @@ class User extends Authenticatable
 
     public function role(){
         return $this->belongsTo('App\Role');
+    }
+
+    public function monthly_contribution()
+    {
+        return $this->hasOne('App\MonthlyContribution');
     }
 
     public function checkRoles()

@@ -22,6 +22,8 @@ class Member
             if ($role == 'member')
             {
                 return $next($request);
+            } else {
+                return redirect('/page_403');
             }
         }
 

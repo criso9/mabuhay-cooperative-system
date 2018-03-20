@@ -1,34 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="{{ asset('images/icons/favicon.ico') }}"/>
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}"/>
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ asset('css/font-awesome.min.css') }}"/>
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ asset('css/material-design-iconic-font.min.css') }}"/>
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ asset('css/animate.css') }}"/>
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="{{ asset('css/hamburgers.min.css') }}"/>
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ asset('css/animsition.min.css') }}"/>
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ asset('css/select2.min.css') }}"/>
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="{{ asset('css/daterangepicker.css') }}"/>
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ asset('css/util.css') }}"/>
-	<link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}"/>
-	<link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}"/>
-<!--===============================================================================================-->
-</head>
-<body>
+@extends('layout.main')
+
+@section('content')
 	<div class="limiter">
 		<div>
 	  		@if (count($errors) > 0)
@@ -95,26 +67,36 @@
 			</div>
 		</div>
 	</div>
-	
 
-	<div id="dropDownSelect1"></div>
-	
-<!--===============================================================================================-->
-	<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('js/animsition.min.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('js/popper.min.js') }}"></script>
-	<script src="{{ asset('js/bootstrap.min.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('js/select2.min.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('js/moment.min.js') }}"></script>
-	<script src="{{ asset('js/daterangepicker.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('js/countdowntime.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('js/main.js') }}"></script>
+	<!-- Modal for Terms and Conditions as a Member -->
+    <div class="modal fade" id="msgModal" tabindex="-1" role="dialog" aria-labelledby="Message" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h3 class="modal-title">Message</h3>
+              </div>
 
-</body>
-</html>
+              <div class="modal-body">
+              	 <br/>
+                 <p>{{ Session::get('flash_message') }}</p>
+                 <br/>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="ok-button" data-dismiss="modal">OK</button>
+              </div>
+          </div>
+      </div>
+  </div>
+	
+	<script src="{{ asset('js/jquery.min.js') }}"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			@if (Session::has('flash_message'))
+		      $('#msgModal').modal('show');
+		      console.log('gumana!');
+		    @endif
+		});
+	</script>
+
+@stop

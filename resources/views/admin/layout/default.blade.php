@@ -1,26 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Mabuhay BNHS - Admin Panel</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta content="" name="description" />
-    <!-- Bootstrap Styles-->
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
-    <!-- FontAwesome Styles-->
-    <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet" type="text/css" />
-    <!-- Custom Styles-->
-    <link href="{{ asset('css/admin-panel.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('css/custom.css') }}" rel="stylesheet" type="text/css" />
+  <title>
+    @if (Auth::user()->role_id == '1')
+      Admin Panel
+    @elseif (Auth::user()->role_id == '2')
+      Officer Panel
+    @elseif (Auth::user()->role_id == '3')
+      Member Panel
+    @endif
+  </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta content="" name="description" />
+  <!-- Bootstrap Styles-->
+  <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+  <!-- Vendors Styles-->
+  <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet" type="text/css" />
+  <link href="{{ asset('css/dropzone.min.css') }}" rel="stylesheet" type="text/css" />
+  <link href="{{ asset('css/daterangepicker.css') }}" rel="stylesheet" type="text/css" />
+  <!-- Custom Styles-->
+  <link href="{{ asset('css/admin-panel.min.css') }}" rel="stylesheet" type="text/css" />
+  <link href="{{ asset('css/custom.css') }}" rel="stylesheet" type="text/css" />
 </head>
 <body class="nav-md">
-	 <div class="container body">
+   <div class="container body">
       <div class="main_container">
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="index.html" class="site_title"><div class="logo-panel"><img src="/images/logo.jpg" alt="..." class="img-circle logo-img"></div> <span>Mabuhay BNHS</span></a>
+              <a href="index.html" class="site_title">
+                <div class="logo-panel">
+                  @if($coop)
+                    <img src="/uploads/{{ $coop->logo }}" alt="..." class="img-circle logo-img">
+                  @else
+                    <img src="/images/na.png" alt="..." class="img-circle logo-img">
+                  @endif
+                </div> 
+                <span>
+                  @if($coop)
+                    {{ $coop->name }}
+                  @else
+                    [COOP Name here]
+                  @endif
+              </span></a>
             </div>
 
             <div class="clearfix"></div>
@@ -45,11 +69,12 @@
                 <h3>General</h3>
                 <ul class="nav side-menu">
                   <li>
-                    <a><i class="fa fa-home"></i> Dashboard </a>
+                    <a href="{{url('/admin')}}"><i class="fa fa-home"></i> Dashboard </a>
                   </li>
                   <li><a><i class="fa fa-users"></i> Users <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{{url('/admin/users/member')}}">Members</a></li>
+                      <li><a href="{{url('/admin/users/all')}}">All Users</a></li>
+                      <li><a href="{{url('/admin/users/member')}}">Members Only</a></li>
                       <li><a href="media_gallery.html">Officers</a></li>
                       <li><a href="typography.html">Admin</a></li>
                     </ul>
@@ -65,7 +90,13 @@
               <div class="menu_section">
                 <h3>CRUD</h3>
                 <ul class="nav side-menu">
-                  <li><a><i class="fa fa-user-circle"></i> Roles</a>
+                  <li><a><i class="fa fa-user-circle"></i> Roles</a></li>
+                </ul>
+              </div>
+              <div class="menu_section">
+                <h3>SETTINGS</h3>
+                <ul class="nav side-menu">
+                  <li><a href="{{url('admin/coop')}}"><i class="fa fa-info-circle"></i> Setup</a>
                   </li>
                 </ul>
               </div>
@@ -98,7 +129,14 @@
                       </a>
                     </li>
                     <li><a href="javascript:;">Help</a></li>
-                    <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                    <li>
+                      <form action="{{ route('logout') }}" method="POST">
+                        {{ csrf_field() }}
+                        <button type="submit" class="btn btn-danger btn-block">
+                            <i class="fa fa-sign-out pull-right"> Log Out</i>
+                        </button>
+                      </form>
+                    </li>
                   </ul>
                 </li>
 
@@ -194,9 +232,14 @@
     <script src="{{ asset('js/jquery.min.js') }}"></script>
     <!-- Bootstrap Js -->
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-    <!-- FastClick Js -->
+    <!-- Vendors -->
     <script src="{{ asset('js/fastclick.js') }}"></script>
-   
+    <script src="{{ asset('js/jquery.smartWizard.js') }}"></script>
+    <script src="{{ asset('js/dropzone.min.js') }}"></script>
+    <script src="{{ asset('js/validator.js') }}"></script>
+    <script src="{{ asset('js/bootstrap-progressbar.min.js') }}"></script>
+    <script src="{{ asset('js/daterangepicker.js') }}"></script>
+    <script src="{{ asset('js/moment.min.js') }}"></script>
     <!-- Custom Js -->
     <script src="{{ asset('js/custom.min.js') }}"></script>
 

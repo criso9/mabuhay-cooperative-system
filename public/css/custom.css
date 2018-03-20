@@ -1,5 +1,6 @@
 /*Panel*/
-.logo-panel {width: 20%;float: left;}
+.top_nav .navbar-right {width: 40%;}
+.logo-panel {margin-right: 10px;float: left;}
 .logo-img {
 	width: 35px;
     height: 34px;
@@ -50,18 +51,20 @@
     height: 220px;
 }
 
-#main-slider {
+/*#main-slider {
     margin-top: 160px;
-}
+}*/
 
 /*.change-status {
     display: none;
 }*/
 
-.modal {
+.breadcrumb {margin: 0;}
+
+.custom-modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 99; /* Sit on top */
+    z-index: 1050; /* Sit on top */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -72,7 +75,7 @@
 }
 
 /* Modal Content/Box */
-.modal-content {
+.custom-modal-content {
     background-color: #fefefe;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
@@ -94,3 +97,312 @@
     text-decoration: none;
     cursor: pointer;
 }
+
+.panel-header {
+    float: left;
+    margin: 0;
+    padding-top: 13px;
+}
+
+.panel-header a {
+    font-weight: 400;
+    font-size: 22px;
+}
+
+.right_col {
+    min-height: 700px !important;
+    height: 100%;
+}
+
+.left_col {background: none;}
+
+
+
+.site_title {
+    text-align: center;
+    padding-left: 0px;
+    font-weight: bold;
+}
+
+
+#sidebar-menu a:hover, #sidebar-menu a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+/*PROFILE*/
+.profile .dropdown-menu {
+    width: 250px;
+    padding: 18px;
+    padding-bottom: 18px;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175) !important;
+}
+
+li.profile-img {
+    padding: 0;
+    max-height: 300px;
+    overflow: hidden;
+}
+
+img.profile-img {
+    height: 60px;
+    width: 60px;
+    float: left;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.profile-body {
+    padding-left: 10px;
+}
+
+.profile .dropdown-menu h5 {
+    float: left;
+    margin-bottom: 5px;
+    margin-top: 12px;
+    text-transform: capitalize;
+}
+
+.profile .dropdown-menu h6 {
+    margin-top: 0;
+    font-weight: 200;
+    width: 115px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.profile .dropdown-menu > li {
+    margin: 2px 0;
+}
+
+.profile .dropdown-menu > li > a {
+    display: block;
+    padding: 10px 5px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #777;
+    white-space: nowrap;
+    text-align: left;
+    transition: color .3s ease;
+    border-radius: 3px;
+    background: none;
+}
+
+.profile .btn {
+    margin-bottom: 0;
+}
+
+.profile .dropdown-menu>li>a:focus, .profile .dropdown-menu>li>a:hover {
+    color: #262626;
+    text-decoration: none;
+    background-color: #f5f5f5;
+}
+
+.navbar-nav .open .dropdown-menu {width: 250px;}
+
+/*Tables*/
+table thead th {
+    background-color: #337ab7;
+    color: #fff;
+}
+
+/*Contributions*/
+.year-contribution, .month-contribution, .pending-type {
+    top: 18px;
+    position: absolute;
+    font-weight: normal;
+    z-index: 99;
+}
+
+.year-contribution {
+    right: 160px;
+}
+
+.month-contribution {
+    right: -164px;
+    width: 100%;
+    float: right;
+    top: -1px;
+}
+
+.monthly-contribution #datatable-fixed-header_filter {margin-right: 180px;}
+
+.bootstrap-datetimepicker-widget table thead tr:first-child th {
+    background: #337ab7;
+    border-radius: 0;
+}
+
+.bootstrap-datetimepicker-widget table thead tr:nth-child(2) th {
+    background: none;
+    border-radius: 0;
+    color: inherit;
+}
+
+.bootstrap-datetimepicker-widget table thead tr:first-child th:hover {
+  color: black;
+}
+
+.info-contribution {display: none;}
+.dt-buttons {position: absolute; margin-left: 175px;z-index: 99;color: inherit;}
+.dt-buttons .btn-default {
+    font-size: 12px;
+    height: 30px;
+}
+#officer-m-cont_filter, #member-m-cont_filter {
+    margin-left: 240px;
+    position: absolute;
+}
+
+#pending-users_filter {
+    margin-left: 50px;
+    position: absolute;
+}
+
+#officer-m-cont_length {margin-bottom: 10px;}
+
+.navbar-brand {margin-left: -130px;margin-right: 70px;}
+
+.login-home {
+    font-size: 12px;
+    float: right;
+    text-transform: capitalize;
+    font-weight: 700;
+    margin-right: -170px;
+}
+
+.info-month-cont {
+    float: right;
+    display: inline;
+    width: 32px;
+    height: 20px;
+}
+
+.info-month-cont img {
+    width: 20px;
+    height: 20px;
+}
+
+.info-popup {
+    visibility: hidden;
+    width: 240px;
+    /*background-color: #fff;*/
+    color: black;
+    text-align: center;
+    padding: 5px 0;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+ 
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+
+    margin-left: 26px;
+    margin-top: -48px;
+    padding: 8px;
+    /*border: solid 3px #0F964A;*/
+    border: 3px solid #71c35d;
+    background-color: rgba(255, 255, 255, 0.95);
+  
+    -webkit-box-shadow: 10px 10px 95px -8px rgba(75, 128, 61, 0.3);
+    -moz-box-shadow: 10px 10px 95px -8px rgba(75, 128, 61, 0.3);
+    box-shadow: 10px 10px 95px -8px rgba(75, 128, 61, 0.3);
+}
+
+.info-popup td {
+    text-align: left;
+    padding-right: 5px;
+}
+
+.info-month-cont:hover .info-popup {
+    visibility: visible;
+}
+
+.info-popup::after {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    right: 101%; /* To the left of the tooltip */
+    margin-top: -5px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent #71c35d transparent transparent;
+}
+
+.member-filter li a[selected="true"] {
+    background-color: #26B99A;
+    color: #fff;
+}
+
+.profile_details .profile_view .left {margin-top: 0;}
+
+.off-active {
+    width: 70px;
+    text-align: center;
+    background-color: #26B99A;
+    color: #fff;
+    border-radius: 3px;
+    float: left;
+    height: 23px;
+}
+
+.off-inactive {
+    width: 70px;
+    text-align: center;
+    background-color: #d9534f;
+    color: #fff;
+    border-radius: 3px;
+}
+
+#officers-active tr td:nth-child(1), #officers-inactive tr td:nth-child(1) {
+    width: 40px !important;
+}
+
+.calendar-table table thead tr:first-child th {
+    background: #337ab7;
+    border-radius: 0;
+}
+
+.calendar-table table thead tr:nth-child(2) th {
+    background: none;
+    border-radius: 0;
+    color: inherit;
+}
+
+.calendar-table table thead tr:first-child th:hover {
+  color: black;
+}
+
+.reg-form {
+    font-size: 14px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+.reg-form {width: 100%;}
+
+.reg-form td {padding: 10px;}
+
+.reg-form input {width: 100%;}
+
+form span.req{
+  display:inline;
+  float:none;
+  color:red !important;
+  font-weight:bold;
+  margin:0;
+  padding:0;
+}
+
+.alert-danger {
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 14px;
+}
+
+/*table thead tr td {
+    text-align: center;
+    font-weight: bold;
+}*/

@@ -41,7 +41,7 @@
                 </li>
 
                  <li>
-                  <i class="fa fa-user user-profile-icon"></i> {{ $member->status }}
+                  <i class="fa fa-user user-profile-icon"></i> <span style="color:{{ $member->status == "inactive" ? "red" : "inherit" }};">{{$member->status}}</span>
                 </li>
               </ul>
 
@@ -58,18 +58,13 @@
           			</div>
           			<div class="modal-body">
           				{{ Form::model($member, array('route' => array('admin.member.update', $member->id), 'method' => 'put')) }}
-							<!-- <select class="form-control" name="status">
-				                <option>Active</option>
-				                <option>Inactive</option>
-				             </select> -->
-
+                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
 				             {{ Form::select('status', ['active' => 'active', 'inactive' => 'inactive'], $member->status, ['class' => 'form-control']) }}
 				             <br/>
 				             <button class="btn btn-success">Save</button>
 			             </form>
           			</div>
           		</div>
-      			
               </div>
 
 

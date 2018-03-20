@@ -22,9 +22,11 @@ class Officer
             if ($role == 'officer')
             {
                 return $next($request);
+            } else {
+                return redirect('/page_403');
             }
         }
 
-        return redirect('/officer');
+        return redirect('/login');
     }
 }
