@@ -6,6 +6,7 @@ use App\Cooperative;
 use App\User;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
@@ -13,12 +14,10 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
-class RegisterController extends Controller
+class RegisterController extends BaseController
 {
     public function index(){
-        $coop = Cooperative::whereNotNull('id')->first();
-
-        return View('auth.register', compact('coop'));
+        return View('auth.register');
     }
 
     public function store(Request $request)
@@ -31,8 +30,10 @@ class RegisterController extends Controller
 
         $validator = Validator::make($request = Input::all(), User::$reg_rules);
 
+        $email = User::select('id')->where('email', '=', $request['email'])->count();
+
         //Add custom validation
-        $validator->after(function ($validator) use ($agree, $age, $gender, $cStatus) {
+        $validator->after(function ($validator) use ($agree, $age, $gender, $cStatus, $email) {
             if($gender == 'Select Gender'){
                 $validator->errors()->add('gender', 'The gender field is required.');
             }if($cStatus == 'Select Status'){
@@ -44,6 +45,10 @@ class RegisterController extends Controller
             if($age < 18){
                 $validator->errors()->add('b_date', 'You must 18 or over to be a member in this Cooperative');
             }
+            if($email > 0){
+                $validator->errors()->add('email', 'Email is already registered.');
+            }
+           
         });
 
         if($validator->fails())

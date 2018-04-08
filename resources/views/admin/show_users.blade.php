@@ -48,8 +48,8 @@
               <button type="button" id="myBtn" class="btn btn-primary" data-toggle="modal" data-target = "#change-status-modal"><i class="fa fa-edit m-right-xs"></i> Change Status</button>
 
               <br />
-              <div id="myModal" class="modal">
-          		<div class="modal-content">
+              <div id="myModal" class="modal custom-modal">
+          		<div class="modal-content custom-modal-content">
           			<div class="modal-header">
           				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
           					<span aria-hidden="true">&times;</span>
@@ -57,11 +57,25 @@
           				<h4 class="modal-title" id="favoritesModalLabel">Change Status</h4>
           			</div>
           			<div class="modal-body">
-          				{{ Form::model($member, array('route' => array('admin.member.update', $member->id), 'method' => 'put')) }}
+          				{{ Form::model($member, array('route' => array('admin.member.update', $member->id), 'method' => 'put', 'class' => 'form-horizontal form-label-left')) }}
                   <input type="hidden" name="_token" value="{{ csrf_token() }}">
-				             {{ Form::select('status', ['active' => 'active', 'inactive' => 'inactive'], $member->status, ['class' => 'form-control']) }}
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Status</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12"> 
+                          {{ Form::select('status', ['active' => 'active', 'inactive' => 'inactive'], $member->status, ['class' => 'form-control', 'id' => 'status-field', 'onchange' => 'statusChange(this)']) }}
+                        </div>
+                      </div>
+                      <div class="form-group" style="display: none;" id="remarks-field">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Remarks <span class="req">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">     
+                          <textarea name="remarks" placeholder="Enter text here" style="width: 100%;" required></textarea>
+                        </div>
+                      </div>
 				             <br/>
-				             <button class="btn btn-success">Save</button>
+                      <div style="float: right;">
+				                <button class="btn btn-success">Save</button>
+                      </div>
 			             </form>
           			</div>
           		</div>
@@ -130,6 +144,15 @@
 	        modal.style.display = "none";
 	    }
 	}
+
+  function statusChange(val){
+    if(val.value == 'inactive'){
+      $('#remarks-field').css('display', 'block');
+    } else {
+      $('#remarks-field').css('display', 'none');
+    }
+  }
+
   </script>
 
   <!-- {{$member}} -->

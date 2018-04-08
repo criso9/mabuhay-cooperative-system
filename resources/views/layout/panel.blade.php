@@ -33,6 +33,21 @@
   <!-- Custom Styles-->
   <link href="{{ asset('css/admin-panel.min.css') }}" rel="stylesheet" type="text/css" />
    <link href="{{ asset('css/jquery.mCustomScrollbar.min.css') }}" rel="stylesheet"/>
+
+
+
+   <!-- Generic page styles -->
+<link rel="stylesheet" href="{{asset('css/fileupload/style.css')}}">
+<!-- blueimp Gallery styles -->
+<link rel="stylesheet" href="https://blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
+<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+<link rel="stylesheet" href="{{asset('css/fileupload/jquery.fileupload.css')}}">
+<link rel="stylesheet" href="{{asset('css/fileupload/jquery.fileupload-ui.css')}}">
+<!-- CSS adjustments for browsers with JavaScript disabled -->
+<noscript><link rel="stylesheet" href="css/fileupload/jquery.fileupload-noscript.css"></noscript>
+<noscript><link rel="stylesheet" href="css/fileupload/jquery.fileupload-ui-noscript.css"></noscript>
+
+
    
   <link href="{{ asset('css/custom.css') }}" rel="stylesheet" type="text/css" />
   
@@ -78,8 +93,8 @@
                 <div class="menu_section">
                 <h3>General</h3>
                 <ul class="nav side-menu">
-                 <li>
-                    <a href="{{url('/admin')}}"><i class="fa fa-home"></i> Dashboard </a>
+                  <li>
+                    <a href="{{url('/admin')}}"><i class="fa fa-home"></i> Admin Dashboard </a>
                   </li>
                   <li><a><i class="fa fa-users"></i> Users <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
@@ -91,7 +106,7 @@
                   </li>
                   <li><a><i class="fa fa-database"></i> Database <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="tables.html">Backup</a></li>
+                      <li><a href="{{route('admin.database.backup')}}">Backup</a></li>
                       <li><a href="tables_dynamic.html">Restore</a></li>
                     </ul>
                   </li>
@@ -104,30 +119,56 @@
                 </ul>
               </div>
               <div class="menu_section">
+                <h3>Others</h3>
+                <ul class="nav side-menu">
+                  <li>
+                    <a href="#" id="officer-links" data-toggle="modal" data-target="#officerModal"><i class="fa fa-info-circle"></i> Officer Links</a>
+                  </li>
+                  <li>
+                    <a href="#" id="member-links" data-toggle="modal" data-target="#memberModal"><i class="fa fa-info-circle"></i> Member Links</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="menu_section">
                 <h3>SETTINGS</h3>
                 <ul class="nav side-menu">
                   <li><a href="{{url('admin/coop')}}"><i class="fa fa-info-circle"></i> Setup</a>
                   </li>
                 </ul>
               </div>
-                
               @elseif (Auth::user()->role_id == '2')
-                 <div class="menu_section">
+              <div class="menu_section">
                 <h3>General</h3>
                 <ul class="nav side-menu">
                   <li>
-                    <a href="{{route('officer.index')}}"><i class="fa fa-home"></i> Dashboard </a>
+                    <a href="{{route('officer.index')}}"><i class="fa fa-home"></i> Officer Dashboard </a>
                   </li>
-                  <li><a><i class="fa fa-money"></i> Contributions </a>
-                    <ul class="nav child_menu">
-                      <li><a href="{{route('officer.contribution.monthly')}}">Monthly</a></li>
-                      <li><a href="{{route('officer.contribution.damayan')}}">Damayan</a></li>
-                      <li><a href="{{route('officer.contribution.sharecapital')}}">Share Capital</a></li>
-                    </ul>
+                  @if($position == 'Treasurer')
+                    <li><a><i class="fa fa-money"></i> Contributions </a>
+                      <ul class="nav child_menu">
+                        <li><a href="{{route('officer.contribution.monthly')}}">Monthly</a></li>
+                        <li><a href="{{route('officer.contribution.damayan')}}">Damayan</a></li>
+                        <li><a href="{{route('officer.contribution.sharecapital')}}">Share Capital</a></li>
+                      </ul>
+                    </li>
+                    <li>
+                    <a href="{{route('admin.loan.index')}}"><i class="fa fa-home"></i> Loan Approval </a>
+                  </li>
+                  @elseif($position == 'President')
+                  <li>
+                    <a href="{{url('/officer/loan?s=Pending')}}"><i class="fa fa-home"></i> Loan Approval </a>
+                  </li>
+                  @endif
+                </ul>
+              </div>
+              <div class="menu_section">
+                <h3>Others</h3>
+                <ul class="nav side-menu">
+                  <li>
+                    <a href="" id="member-links" data-toggle="modal" data-target="#memberModal"><i class="fa fa-info-circle"></i> Member Links</a>
                   </li>
                 </ul>
               </div>
-
               @elseif (Auth::user()->role_id == '3')
                 <div class="menu_section">
                 <h3>General</h3>
@@ -142,7 +183,7 @@
                     </ul>
                   </li>
                   <li>
-                    <a href="{{route('member.loan.apply')}}"><i class="fa fa-credit-card"></i> Loans </a>
+                    <a href="{{route('member.loan.index')}}"><i class="fa fa-credit-card"></i> Loans </a>
                   </li>
                   <li>
                     <a href="{{route('member.report')}}"><i class="fa fa-bar-chart"></i> Reports </a>
@@ -302,6 +343,85 @@
           <div class="clearfix"></div>
         </footer>
         <!-- /footer content -->
+        
+      </div>
+    </div>
+
+    <div class="modal fade custom-modal" id="officerModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content custom-modal-content" style="width: 100%;">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Officer Links</h4>
+          </div>
+          <div class="modal-body">
+            @if (Auth::user()->role_id == '1')
+              <a href="{{route('officer.index')}}" class="btn btn-app">
+                <i class="fa fa-dashboard"></i> Dashboard
+              </a>
+              <br/>
+              <div style="background-color: cornflowerblue;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Contributions</h5></div>
+              <a href="{{route('officer.contribution.monthly')}}" class="btn btn-app">
+                <i class="fa fa-calendar"></i> Monthly
+              </a>
+              <a href="{{route('officer.contribution.damayan')}}" class="btn btn-app">
+                <i class="fa fa-medkit"></i> Damayan
+              </a>
+              <a href="{{route('officer.contribution.sharecapital')}}" class="btn btn-app">
+                <i class="fa fa-line-chart"></i> Share Capital
+              </a>
+              @if($position == 'President')
+                <br/>
+                <div style="background-color: cornflowerblue;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Others</h5></div>
+                <a href="{{url('/officer/loan?s=Pending')}}" class="btn btn-app">
+                  <i class="fa fa-credit-card"></i> Loan Approval
+                </a>
+              @endif
+            @endif
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade custom-modal" id="memberModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content custom-modal-content" style="width: 100%;">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Member Links</h4>
+          </div>
+          <div class="modal-body">
+            @if (Auth::user()->role_id != '3')
+              <a href="{{route('member.index')}}" class="btn btn-app">
+                <i class="fa fa-dashboard"></i> Dashboard
+              </a>
+              <br/>
+              <div style="background-color: cornflowerblue;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Contributions</h5></div>
+              <a href="{{route('member.contribution.monthly')}}" class="btn btn-app">
+                <i class="fa fa-calendar"></i> Monthly
+              </a>
+              <a href="{{route('member.contribution.other')}}" class="btn btn-app">
+                <i class="fa fa-medkit"></i> Damayan
+              </a>
+              <a href="{{route('member.contribution.other')}}" class="btn btn-app">
+                <i class="fa fa-line-chart"></i> Share Capital
+              </a>
+              <br/>
+              <div style="background-color: cornflowerblue;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Others</h5></div>
+              <a href="{{route('member.loan.index')}}" class="btn btn-app">
+                <i class="fa fa-money"></i> Loans
+              </a>
+              <a href="{{route('member.report')}}" class="btn btn-app">
+                <i class="fa fa-pie-chart"></i> Reports
+              </a>
+            @endif
+
+          </div>
+        </div>
       </div>
     </div>
 
@@ -317,7 +437,7 @@
     <!-- Vendors -->
     <script src="{{ asset('js/fastclick.js') }}"></script>
     <script src="{{ asset('js/jquery.smartWizard.js') }}"></script>
-    <script src="{{ asset('js/dropzone.min.js') }}"></script>
+    <!-- <script src="{{ asset('js/dropzone.min.js') }}"></script> -->
     <script src="{{ asset('js/validator.js') }}"></script>
     <script src="{{ asset('js/bootstrap-progressbar.min.js') }}"></script>
     <script src="{{ asset('js/daterangepicker.js') }}"></script>
@@ -351,7 +471,7 @@
     <script type="text/javascript">
       var role = {{ Auth::user()->role_id }};
 
-      console.log(role);
+      // console.log(role);
 
       if(role == "1"){
          document.getElementById("side-panel").setAttribute("style", "background: #993333;");

@@ -19,7 +19,7 @@ class Officer
         if ( Auth::check() )
         {
             $role = Auth::user()->checkRoles();
-            if ($role == 'officer')
+            if ($role == 'officer' || $role == 'admin')
             {
                 return $next($request);
             } else {

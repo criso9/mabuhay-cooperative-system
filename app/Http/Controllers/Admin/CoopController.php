@@ -4,17 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use App\Cooperative;
 
-class CoopController extends Controller
+class CoopController extends BaseController
 {
     public function index()
 	{
-		$coop = Cooperative::whereNotNull('id')->first();
-		return view('admin.settings.coop', compact('coop'));
+		
+		return view('admin.settings.coop');
 	}
 
 	public function store(Request $request)

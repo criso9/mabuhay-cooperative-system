@@ -29,9 +29,12 @@ class CreateUsersTable extends Migration
             $table->string('status');
             $table->string('role_id');
             $table->bigInteger('reviewed_by')->unsigned()->nullable();
-            $table->string('remarks')->nullable();
+            $table->string('remarks_reviewed')->nullable();
             $table->dateTime('reviewed_at')->nullable();
             $table->dateTime('activated_at')->nullable();
+            $table->bigInteger('changestat_by')->unsigned()->nullable();
+            $table->string('remarks_changestat')->nullable();
+            $table->dateTime('changestat_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -5,11 +5,11 @@
 	<title>Access Denied</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-	<link rel="stylesheet" href="css/base.css">  
-   <link rel="stylesheet" href="css/main-403.css">
-   <link rel="stylesheet" href="css/vendor.css">
+	<link rel="stylesheet" href="{{ asset('css/base.css') }}">  
+   <link rel="stylesheet" href="{{ asset('css/main-403.css') }}">
+   <link rel="stylesheet" href="{{ asset('css/vendor.css') }}">
 
-   <script src="js/modernizr.js"></script>
+   <script src="{{ asset('js/modernizr.js') }}"></script>
 </head>
 <body>
 
@@ -27,8 +27,7 @@
 	         </a>
 	      </div>   		
    	</div>   
-
-   	<a class="menu-toggle" href="#"><span>Menu</span></a>	
+	
    </header> <!-- /header -->
 
    <!-- navigation 

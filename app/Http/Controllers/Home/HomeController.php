@@ -4,38 +4,34 @@ namespace App\Http\Controllers\Home;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Cooperative;
 
-class HomeController extends Controller
+class HomeController extends BaseController
 {
     public function index()
 	{
-		$coop = Cooperative::whereNotNull('id')->first();
-		return view('home.index', compact('coop'));
+		return view('home.index');
 	}
 
 	public function about()
 	{
-		$coop = Cooperative::whereNotNull('id')->first();
-		return view('home.about', compact('coop'));
+		return view('home.about');
 	}
 
 	public function services()
 	{
-		$coop = Cooperative::whereNotNull('id')->first();
-		return view('home.services', compact('coop'));
+		return view('home.services');
 	}
 
 	public function contacts()
 	{
-		$coop = Cooperative::whereNotNull('id')->first();
-		return view('home.contacts', compact('coop'));
+		return view('home.contacts');
 	}
 
 	public function forbidden()
 	{
-		$coop = Cooperative::whereNotNull('id')->first();
-		return view('layout.403', compact('coop'));
+		return view('layout.403');
 	}
 
 

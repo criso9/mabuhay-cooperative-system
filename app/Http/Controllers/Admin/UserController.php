@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -18,59 +19,97 @@ use App\Officer;
 use App\Admin;
 use Carbon\Carbon;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
     public function indexMember()
 	{
 		$selected_filter = Input::get('f');
+		$status_filter = Input::get('s');
 		$members = '';
+		$statFilter = array();
+
+		if($status_filter == 'all' || $status_filter == ''){
+			array_push($statFilter,  "active");
+			array_push($statFilter,  "inactive");
+		}else{
+			array_push($statFilter,  $status_filter);
+		}
+
+		// dd($statFilter);
 		
 		if ($selected_filter != '') {
-        	$members = User::where('role_id', '=', '3')
+   //      	$members = User::where('l_name', 'like', $selected_filter.'%')
+			// ->whereIn('status', $statFilter)
+			// ->orderBy('l_name', 'asc')
+			// ->get();
+
+			$members = DB::table('users')
+			->select('users.id', 'f_name', 'l_name', 'm_name', 'phone', 'address', 'status', 'role_id', 'avatar',
+				DB::raw("(CASE role_id 
+						WHEN 1 THEN 'Admin' 
+						WHEN 3 THEN 'Member' 
+						WHEN 2 THEN 
+							(CASE (SELECT o.status FROM officers o WHERE o.status = 'active' AND user_id = users.id) 
+							WHEN 'active'
+							THEN (SELECT p.position FROM officers o JOIN positions p ON o.position_id = p.id WHERE o.status = 'active' AND o.user_id = users.id)
+							END)
+						END) AS description"))
 			->where('l_name', 'like', $selected_filter.'%')
+			->whereIn('users.status', $statFilter)
 			->orderBy('l_name', 'asc')
 			->get();
         } else {
-        	$members = User::where('role_id', '=', '3')
+   //      	$members = User::whereIn('status', $statFilter)
+			// ->orderBy('l_name', 'asc')
+			// ->get();
+
+			$members = DB::table('users')
+			->select('users.id', 'f_name', 'l_name', 'm_name', 'phone', 'address', 'status', 'role_id', 'avatar',
+				DB::raw("(CASE role_id 
+						WHEN 1 THEN 'Admin' 
+						WHEN 3 THEN 'Member' 
+						WHEN 2 THEN 
+							(CASE (SELECT o.status FROM officers o WHERE o.status = 'active' AND user_id = users.id) 
+							WHEN 'active'
+							THEN (SELECT p.position FROM officers o JOIN positions p ON o.position_id = p.id WHERE o.status = 'active' AND o.user_id = users.id)
+							END)
+						END) AS description"))
+			->whereIn('users.status', $statFilter)
 			->orderBy('l_name', 'asc')
 			->get();
         }
 
 		// dd($members);
 
-		$coop = Cooperative::whereNotNull('id')->first();
-
+		
 		$filters = range('A', 'Z');
 
 		// dd($alphas);
 
-		return view('admin.members', compact('members', 'coop', 'filters', 'selected_filter'));
+		return view('admin.members', compact('members', 'filters', 'selected_filter', 'status_filter'));
 	}
 
 	public function showMember($id)
 	{
 		$member = User::where('role_id', '=', '3')->where('id', '=', $id)->with('role')->first();
-		$coop = Cooperative::whereNotNull('id')->first();
-
+		
 		//dd($member);
 	
-		return view('admin.show_users', compact('member', 'coop'));
+		return view('admin.show_users', compact('member'));
 	}
 
 	public function editMember($id)
 	{
 		$member = User::where('role_id', '=', '3')->where('id', '=', $id)->with('role')->first();
-		$coop = Cooperative::whereNotNull('id')->first();
-
-		return view('admin.edit_users', compact('member', 'coop'));
+		
+		return view('admin.edit_users', compact('member'));
 	}
 
 	public function updateMember(Request $request, $id)
 	{
 
 		$user = User::findOrFail($id);
-		$coop = Cooperative::whereNotNull('id')->first();
-
+		
 		// $validator = Validator::make($request = Input::all(), User::$profile_rules);
 		
 		// if ($validator->fails())
@@ -79,6 +118,12 @@ class UserController extends Controller
 		// 	}
 	
 		$user->status = $request->status;
+		$user->changestat_by = Auth::user()->id;
+		$user->changestat_at = date('Y-m-d H:i:s');
+
+		if($request->status == 'inactive'){
+			$user->remarks_changestat = $request->remarks;
+		}
 		
         $user->update();
 
@@ -87,11 +132,11 @@ class UserController extends Controller
 
 	public function createMember()
 	{
-		$coop = Cooperative::whereNotNull('id')->first();
+		// $coop = Cooperative::whereNotNull('id')->first();
 		// dd('test');
 		//$coop = Cooperative::whereNotNull('id')->first();
 
-		return view('admin.add_users', compact('coop'));
+		return view('admin.add_users');
 	}
 
 	public function storeMember(Request $request)
@@ -107,15 +152,13 @@ class UserController extends Controller
 
 	public function memberFilter(Request $request)
 	{
-		dd($request->filter);
-		return Redirect::route('admin.member.index', ['f'=>$request->filter]);
+		// dd($request->filter);
+		return Redirect::route('admin.member.index', ['f'=>$request->filter, 's'=>$request->statusFilter]);
 	}
 
 	public function indexOfficer()
 	{
 		
-		$coop = Cooperative::whereNotNull('id')->first();
-
 		$users = User::select(DB::raw("CONCAT(l_name, ', ', f_name) AS fullName"),'id')
 		->where('status', 'active')
 		->whereNotIn('id', [DB::raw("SELECT DISTINCT user_id FROM officers WHERE status ='active'")])
@@ -154,7 +197,7 @@ class UserController extends Controller
 		->where('officers.status', '=', 'inactive')
 		->get();
 
-		return view('admin.officer.index', compact('coop', 'officers', 'inactive', 'users', 'positions'));
+		return view('admin.officer.index', compact('officers', 'inactive', 'users', 'positions'));
 	}
 
 	public function storeOfficer(Request $request)
@@ -191,8 +234,7 @@ class UserController extends Controller
 	public function updateOfficer(Request $request)
 	{
 		$officer = Officer::findOrFail($request->officerId);
-		$coop = Cooperative::whereNotNull('id')->first();
-
+		
 		$user_id = Officer::select('user_id')->where('id', '=', $request->officerId)->first();
 		$admin = Admin::select('user_id')->where('user_id', '=', $user_id->user_id)->where('status', '=', 'active')->first();
 		$user = User::findOrFail($user_id->user_id);
@@ -230,8 +272,7 @@ class UserController extends Controller
         	$selected_type = "pending";
         }
 
-		$coop = Cooperative::whereNotNull('id')->first();
-
+		
 		$users = User::select(DB::raw("CONCAT(l_name, ' ', f_name) AS fullName"),
 			'id', 'phone', 'address', 'b_date',
 			'gender', 'civil_status', 'email', 'referral', 'ref_relation', 'created_at', 'status')
@@ -241,7 +282,7 @@ class UserController extends Controller
 
 		// dd($users);
 
-		return view('admin.pending.index', compact('coop', 'users', 'selected_type'));
+		return view('admin.pending.index', compact('users', 'selected_type'));
 	}
 
 	public function indexPendingType(Request $request)
@@ -253,8 +294,7 @@ class UserController extends Controller
 	{
 		$paramId = Crypt::decrypt(Input::get('u'));
 		$user = User::findOrFail($paramId);
-		$coop = Cooperative::whereNotNull('id')->first();
-
+		
 		//check if link is already expired (will expire after 7 days)
 		if (Carbon::now()->greaterThan($user->reviewed_at->addDays(7))) {
 	        return Redirect::route('login')->withFlashMessage('Sorry, the link has expired.');;
@@ -271,8 +311,6 @@ class UserController extends Controller
 	public function indexAdmin()
 	{
 		
-		$coop = Cooperative::whereNotNull('id')->first();
-
 		$users = User::select(DB::raw("CONCAT(l_name, ', ', f_name) AS fullName"),'id')
 		->where('status', 'active')
 		->whereNotIn('id', [DB::raw("SELECT DISTINCT user_id FROM admins WHERE status ='active'")])
@@ -299,11 +337,11 @@ class UserController extends Controller
 			DB::raw("DATE_FORMAT(admins.to,'%Y %M') AS toMoYr"),
 			DB::raw("(SELECT CONCAT(users.f_name, '', users.l_name) FROM users WHERE users.id = admins.removed_by) AS rem_by"),
 			'admins.updated_at', 'admins.remarks')
-		->where('users.role_id', '=', '2')
+		// ->where('users.role_id', '=', '2')
 		->where('admins.status', '=', 'inactive')
 		->get();
 
-		return view('admin.admin.index', compact('coop', 'admins', 'inactive', 'users'));
+		return view('admin.admin.index', compact('admins', 'inactive', 'users'));
 	}
 
 	public function storeAdmin(Request $request)
@@ -345,8 +383,6 @@ class UserController extends Controller
 		$officer = Officer::select('user_id')->where('user_id', '=', $user_id->user_id)->where('status', '=', 'active')->first();
 		$user = User::findOrFail($user_id->user_id);
 		
-		$coop = Cooperative::whereNotNull('id')->first();
-	
 		$ad->status = "inactive";
 		$ad->remarks = $request->remarks;
 		$ad->to = date('Y-m-d H:i:s');

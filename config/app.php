@@ -163,6 +163,8 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         'Collective\Html\HtmlServiceProvider',
+        Spatie\Backup\BackupServiceProvider::class,
+        'DaveJamesMiller\Breadcrumbs\ServiceProvider',
 
         /*
          * Package Service Providers...
@@ -228,6 +230,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Form' => 'Collective\Html\FormFacade',
         'HTML' => 'Collective\Html\HtmlFacade',
+        'Breadcrumbs' => 'DaveJamesMiller\Breadcrumbs\Facade',
 
     ],
 

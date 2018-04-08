@@ -75,7 +75,7 @@
 	          	</ul>
 				<div id="step-1">
 				  	<div class="form-group">
-				        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="coop-name">Cooperative Name <span class="required">*</span>
+				        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="coop-name">Cooperative Name <span class="req">*</span>
 				        </label>
 				        <div class="col-md-6 col-sm-6 col-xs-12">
 				        	<!-- <input type="text" id="name" name="name" required="required" class="form-control col-md-7 col-xs-12">
@@ -88,11 +88,18 @@
 				        </div>
 				  	</div>
 				  	<div class="form-group">
-					 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="coop-name">Date Founded <span class="required">*</span>
-                           
+					 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="coop-name">Date Founded <span class="req">*</span></label>
+                     <div class="col-md-6 col-sm-6 col-xs-12">   
+	                  <div class="input-group date">
+	                    <input id="date-founded" type="text" class="form-control col-md-10" name="date_founded" required />
+	                    <span class="input-group-addon">
+	                      <span class="glyphicon glyphicon-calendar"></span>
+	                    </span>
+	                  </div>
+	                </div>
 				  	</div>
 						<div class="form-group">
-						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="logo">Logo <span class="required">*</span>
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="logo">Logo <span class="req">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
 						  <!-- <input type="file" id="logo" name="logo" required="required" class="col-md-7 col-xs-12"> -->
@@ -101,20 +108,20 @@
 						</div>
 				  	</div>
 				  	<div class="form-group">
-				        <label for="banner" class="control-label col-md-3 col-sm-3 col-xs-12">Banner<span class="required">*</span></label>
+				        <label for="banner" class="control-label col-md-3 col-sm-3 col-xs-12">Banner<span class="req">*</span></label>
 				        <div class="col-md-6 col-sm-6 col-xs-12">
 				        	<input type="file" name="banner" id="banner" required="required">
 							<img src="" id="banner-img" width="500px" />
 				        </div>
 				  	</div>
 				  	<div class="form-group">
-				        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mission<span class="required">*</span></label>
+				        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mission<span class="req">*</span></label>
 				        <div class="col-md-6 col-sm-6 col-xs-12">
 				          <textarea id="mission" class="form-control" style="overflow-x: hidden;" name="mission" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Minimum is 20 characters long" data-parsley-validation-threshold="10"></textarea>
 				        </div>
 				  	</div>
 				  	<div class="-group">
-				        <label class="control-label col-md-3 col-sm-3 col-xs-12">Vision<span class="required">*</span></label>
+				        <label class="control-label col-md-3 col-sm-3 col-xs-12">Vision<span class="req">*</span></label>
 				        <div class="col-md-6 col-sm-6 col-xs-12">
 				          <textarea id="vision" class="form-control" style="overflow-x: hidden;" name="vision" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Minimum is 20 characters long" data-parsley-validation-threshold="10"></textarea>
 				        </div>
@@ -122,19 +129,22 @@
 				</div>
 				<div id="step-2">
 					<h2 class="StepTitle">Slide show of Pictures</h2>
-					<div class="dropzone"></div>
+					<div>
+						
+						
+					</div>
 				</div>
 				<div id="step-3">
 					<h2 class="StepTitle">Upload the following documents</h2>
 					  	<div class="form-group">
-					        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Policies<span class="required">*</span>
+					        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Policies<span class="req">*</span>
 					        </label>
 					        <div class="col-md-6 col-sm-6 col-xs-12">
 					           <div class="dropzone"></div>
 					        </div>
 					  	</div>
 							<div class="form-group">
-							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Other Documents<span class="required">*</span>
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Other Documents<span class="req">*</span>
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
 					            <div class="dropzone"></div>
@@ -144,14 +154,14 @@
 				<div id="step-4">
 					<h2 class="StepTitle">Interest Rate</h2>
 						<div class="form-group">
-					        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="formula">Member <span class="required">*</span>
+					        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="formula">Member <span class="req">*</span>
 					        </label>
 					        <div class="col-md-6 col-sm-6 col-xs-12">
 					          <input type="text" id="formula" class="form-control col-md-7 col-xs-12">
 					        </div>
 					  	</div>
 					  	<div class="form-group">
-					        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="formula">Non-Member <span class="required">*</span>
+					        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="formula">Non-Member <span class="req">*</span>
 					        </label>
 					        <div class="col-md-6 col-sm-6 col-xs-12">
 					          <input type="text" id="formula" class="form-control col-md-7 col-xs-12">
@@ -166,20 +176,21 @@
 	</div>
 </div>
 
-<!-- <script type="text/javascript">
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            
-            reader.onload = function (e) {
-                $('#logo-img').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-    $("#logo").change(function(){
-        readURL(this);
-    });
-</script> -->
+<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		@if (Session::has('flash_message'))
+	      Snackbar.show({
+	        pos: 'top-right', 
+	        text: '{{ Session::get('flash_message') }}',
+	      });
+	    @endif
+
+    	$('#date-founded').datetimepicker({
+	        format: "MMMM DD, YYYY",
+	        maxDate: moment()
+	      });
+	});
+</script>
 
 @stop

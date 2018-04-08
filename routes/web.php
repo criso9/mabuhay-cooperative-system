@@ -42,6 +42,9 @@ Route::get('confirmation', array('as' => 'confirmation', 'uses' => 'Admin\UserCo
 
 //Route::get('admin/users/member', array('as' => 'admin.member.show','uses' => 'Admin\UserController@showMember'));
 
+Route::post('send/loanapproval', array('as' => 'officer.email.loan.approval', 'uses' => 'EmailController@loanApproval'));
+
+
 // Admin panel
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
    // Route::resource('users', 'Admin\UserController', ['as' => 'admin']);
@@ -50,6 +53,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
 	
    Route::get('users/member', array('as' => 'admin.member.index','uses' => 'Admin\UserController@indexMember'));
    Route::post('users/member', array('as' => 'admin.member.index.filter','uses' => 'Admin\UserController@memberFilter'));
+
 
    Route::get('users/member/show/{member}', array('as' => 'admin.member.show','uses' => 'Admin\UserController@showMember'));
    Route::get('users/member/{member}/edit', array('as' => 'admin.member.edit','uses' => 'Admin\UserController@editMember'));
@@ -75,6 +79,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
    Route::post('users/pending', array('as' => 'admin.pending.index.type','uses' => 'Admin\UserController@indexPendingType'));
 
    Route::post('send/approval', array('as' => 'admin.email.approval', 'uses' => 'EmailController@userApproval'));
+
+   Route::get('database/backup', array('as' => 'admin.database.backup','uses' => 'Admin\AdminController@backupDB'));
+   Route::post('database/backup', array('as' => 'admin.database.backup','uses' => 'Admin\AdminController@storeBackupDB'));
 });
 
 // Officer panel
@@ -90,6 +97,11 @@ Route::group(['prefix' => 'officer', 'middleware' => 'officer'], function () {
 
 	 // Route::get('contribution/add', array('as' => 'officer.contribution.add','uses' => 'Officer\OfficerController@addContribution'));
 	 Route::post('contribution/add', array('as' => 'officer.contribution.store','uses' => 'Officer\OfficerController@storeContribution'));
+
+	 Route::get('/loan', array('as' => 'officer.loan.index','uses' => 'Officer\OfficerController@loan'));
+     Route::post('/loan', array('as' => 'officer.loan.index.filter','uses' => 'Officer\OfficerController@loanFilter'));
+
+     Route::post('/loan/approval', array('as' => 'officer.loan.approval', 'uses' => 'Officer\OfficerController@loanApproval'));
 	
 });
 
@@ -103,8 +115,11 @@ Route::group(['prefix' => 'member', 'middleware' => 'member'], function () {
 	Route::get('/contribution/other', array('as' => 'member.contribution.other','uses' => 'Member\MemberController@otherContribution'));
 
 	Route::get('/loan', array('as' => 'member.loan.index','uses' => 'Member\MemberController@loan'));
-	Route::get('/loan/apply', array('as' => 'member.loan.apply','uses' => 'Member\MemberController@loanApply'));
+	Route::post('/loan', array('as' => 'member.loan.index.filter','uses' => 'Member\MemberController@loanFilter'));
+
 	
+	// Route::get('/loan/apply', array('as' => 'member.loan.apply','uses' => 'Member\MemberController@loanApply'));
+	Route::post('/loan/apply', array('as' => 'member.loan.store','uses' => 'Member\MemberController@storeLoan'));
 
 	Route::get('/report', array('as' => 'member.report','uses' => 'Member\MemberController@report'));
 });

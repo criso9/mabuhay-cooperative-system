@@ -19,7 +19,7 @@ class Member
         if ( Auth::check() )
         {
             $role = Auth::user()->checkRoles();
-            if ($role == 'member')
+            if ($role == 'member' || $role == 'officer' || $role == 'admin')
             {
                 return $next($request);
             } else {

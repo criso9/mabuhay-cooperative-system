@@ -7,6 +7,9 @@ Share Capital
 @section('content')
 
 <div class="flex-center position-ref full-height">
+	<div class="custom-breadcrumb">
+    {!! Breadcrumbs::render() !!}
+  </div>
 	<div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="x_panel">
 			<div class="x_title">
@@ -46,8 +49,8 @@ Share Capital
 		</div>
 	</div>
 
-	<div id="myModal" class="modal">
-		<div class="modal-content">
+	<div id="myModal" class="modal custom-modal">
+		<div class="modal-content custom-modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>

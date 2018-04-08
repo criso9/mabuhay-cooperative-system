@@ -72,7 +72,7 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('secret'),
             'avatar' => 'user-male.png',
             'status' => 'active',
-            'role_id' => '1',
+            'role_id' => '3',
         ]);
 
         DB::table('users')->insert([
@@ -87,7 +87,7 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('secret'),
             'avatar' => 'user-female.png',
             'status' => 'active',
-            'role_id' => '1',
+            'role_id' => '3',
         ]);
 
         DB::table('users')->insert([
@@ -102,7 +102,7 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('secret'),
             'avatar' => 'user-female.png',
             'status' => 'active',
-            'role_id' => '2',
+            'role_id' => '3',
         ]);
 
         DB::table('users')->insert([
@@ -117,7 +117,7 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('secret'),
             'avatar' => 'user-female.png',
             'status' => 'active',
-            'role_id' => '1',
+            'role_id' => '3',
         ]);
 
         DB::table('users')->insert([
@@ -132,7 +132,7 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('secret'),
             'avatar' => 'user-female.png',
             'status' => 'active',
-            'role_id' => '2',
+            'role_id' => '3',
         ]);
 
         DB::table('users')->insert([
@@ -147,7 +147,7 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('secret'),
             'avatar' => 'user-female.png',
             'status' => 'active',
-            'role_id' => '2',
+            'role_id' => '3',
         ]);
 
         DB::table('users')->insert([
@@ -162,7 +162,7 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('secret'),
             'avatar' => 'user-female.png',
             'status' => 'active',
-            'role_id' => '2',
+            'role_id' => '3',
         ]);
 
         DB::table('users')->insert([
@@ -177,7 +177,7 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('secret'),
             'avatar' => 'user-male.png',
             'status' => 'active',
-            'role_id' => '2',
+            'role_id' => '3',
         ]);
 
         DB::table('users')->insert([
@@ -192,7 +192,7 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('secret'),
             'avatar' => 'user-female.png',
             'status' => 'active',
-            'role_id' => '2',
+            'role_id' => '3',
         ]);
 
         DB::table('users')->insert([
@@ -207,7 +207,7 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('secret'),
             'avatar' => 'user-male.png',
             'status' => 'active',
-            'role_id' => '2',
+            'role_id' => '3',
         ]);
 
         DB::table('users')->insert([
@@ -222,7 +222,7 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('secret'),
             'avatar' => 'user-male.png',
             'status' => 'active',
-            'role_id' => '2',
+            'role_id' => '3',
         ]);
 
         DB::table('users')->insert([
@@ -237,7 +237,7 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('secret'),
             'avatar' => 'user-female.png',
             'status' => 'active',
-            'role_id' => '2',
+            'role_id' => '3',
         ]);
 
 

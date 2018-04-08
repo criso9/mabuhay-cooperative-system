@@ -101,11 +101,14 @@
       {{ Form::close() }}
 
       <!-- Modal for Terms and Conditions as a Member -->
-        <div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="Terms and conditions" aria-hidden="true">
+        <div class="modal fade custom-modal" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="Terms and conditions" aria-hidden="true">
           <div class="modal-dialog">
-              <div class="modal-content">
+              <div class="modal-content custom-modal-content">
                   <div class="modal-header">
-                      <h3 class="modal-title">Terms and conditions</h3>
+                    <button type="button" id="reject-close" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                      <h4 class="modal-title">Terms and conditions</h4>
                   </div>
 
                   <div class="modal-body">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Member;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -15,13 +16,13 @@ use DB;
 use App\Cooperative;
 use App\User;
 use App\MonthlyContribution;
+use App\Loan;
 
-class MemberController extends Controller
+class MemberController extends BaseController
 {
     public function index()
 	{
-		$coop = Cooperative::whereNotNull('id')->first();
-		return view('member.index', compact('coop'));
+		return view('member.index');
 	}
 
 	public function monthlyContribution()
@@ -64,13 +65,11 @@ class MemberController extends Controller
 
         // dd($contributions);
 
-		$coop = Cooperative::whereNotNull('id')->first();
-
 		
 
         //get list of months
         $curr_date = new DateTime(date('Y-m-d'));
-       	$date_founded = new DateTime(date($coop->date_founded));
+       	$date_founded = new DateTime(date($this->coop->date_founded));
 
        	$months = array();
 
@@ -105,7 +104,7 @@ class MemberController extends Controller
 
 		rsort($years);
 
-		return view('member.contribution.monthly', compact('coop', 'contributions', 'months', 'years', 'selected_year', 'selected_month'));
+		return view('member.contribution.monthly', compact('contributions', 'months', 'years', 'selected_year', 'selected_month'));
 	}
 
 	public function monthlyContributionYearSelected(Request $request)
@@ -115,20 +114,78 @@ class MemberController extends Controller
 
 	public function otherContribution()
 	{
-		$coop = Cooperative::whereNotNull('id')->first();
-		return view('member.contribution.other', compact('coop'));
+		return view('member.contribution.other');
 	}
 
 	public function loan()
 	{
-		$coop = Cooperative::whereNotNull('id')->first();
-		return view('member.loan.index', compact('coop'));
+		$status_filter = Input::get('s');
+		$statFilter = array();
+		$cashLoan = "false";
+		$loanable = "false";
+
+		$stat = DB::table('loans')
+		->select(DB::raw("DISTINCT status"))
+		->where('user_id', '=', Auth::user()->id)
+		// ->where('status', '=', 'pending')
+		->pluck('status');
+
+		// dd($stat);
+
+		if($status_filter == 'all' || $status_filter == ''){
+			foreach($stat as $s) {
+				array_push($statFilter, $s);
+			}
+		}else{
+			array_push($statFilter,  $status_filter);
+		}
+
+		$loans = DB::table('loans')
+		->where('user_id', '=', Auth::user()->id)
+		->whereIn('status', $statFilter)
+		->get();
+
+		$user = User::where('status', 'active')->where('id', [Auth::user()->id])->first();
+
+		$contribution = DB::table('contributions')
+		->join('payments', 'contributions.payment_id', '=', 'payments.id')
+		->select(DB::raw('FORMAT(SUM(contributions.amount), 2) AS amount'),
+			DB::raw('SUM(contributions.amount) * 2 AS loan_limit')
+		)
+		->where('payments.payment', '=', 'Monthly Contribution')
+		->where('contributions.user_id', '=', Auth::user()->id)
+		->first();
+
+		$interest = DB::table('interest')
+		->where('type', '=', 'Member')
+		->first();
+
+		$activeLoan = DB::table('loans')
+		->select(DB::raw('SUM(amount_loan) AS amount'), DB::raw('SUM(remaining_balance) AS balance'))
+		->where('user_id', '=', Auth::user()->id)
+		->where('status', '=', 'active')
+		->first();
+
+		if($activeLoan->balance >= $contribution->loan_limit){
+			$cashLoan = "false";
+		} else {
+			$cashLoan = "true";
+			$loanable = abs($contribution->loan_limit - $activeLoan->balance);
+		}
+
+		// dd($cashLoan);
+
+		return view('member.loan.index', compact('loans', 'stat', 'status_filter', 'user', 'contribution', 'interest', 'cashLoan', 'activeLoan', 'loanable'));
+	}
+
+	public function loanFilter(Request $request)
+	{
+		// dd($request->filter);
+		return Redirect::route('member.loan.index', ['s'=>$request->statusFilter]);
 	}
 
 	public function loanApply()
 	{
-		$coop = Cooperative::whereNotNull('id')->first();
-
 		$user = User::where('status', 'active')->where('id', [Auth::user()->id])->first();
 		$contribution = DB::table('contributions')
 		->join('payments', 'contributions.payment_id', '=', 'payments.id')
@@ -145,12 +202,44 @@ class MemberController extends Controller
 
 		// dd($interest);
 
-		return view('member.loan.create', compact('coop', 'user', 'contribution', 'interest'));
+		return view('member.loan.create', compact('user', 'contribution', 'interest'));
+	}
+
+	public function storeLoan(Request $request)
+	{
+
+		if($request->confirm == 'no'){
+			return Redirect::back();
+		}else if($request->confirm == 'yes'){
+			$loan = new Loan;
+
+			$loan->user_id = Auth::user()->id;
+			$loan->transaction_no = $request->transaction_no;
+			$loan->status = "Pending";
+			$loan->date_applied = date('Y-m-d H:i:s');
+			$loan->amount_loan = $request->amount_loan;
+
+	        $loan->save();
+
+	        return Redirect::route('member.loan.index')->withFlashMessage('Loan successfully applied');
+		}
+
+		// dd($request->confirm);
+		
+
+		// $validator = Validator::make($data = Input::all(), Admin::$rules);
+		// if ($validator->fails())
+		// {
+		// 	return Redirect::back()->withErrors($validator)->withInput();
+		// }
+
+		// dd($request->transaction_no);
+
+		
 	}
 
 	public function report()
 	{
-		$coop = Cooperative::whereNotNull('id')->first();
-		return view('member.report', compact('coop'));
+		return view('member.report');
 	}
 }
