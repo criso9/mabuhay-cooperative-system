@@ -50,10 +50,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
    // Route::resource('users', 'Admin\UserController', ['as' => 'admin']);
 	Route::get('/', array('as' => 'admin.index','uses' => 'Admin\AdminController@index'));
 
-	
    Route::get('users/member', array('as' => 'admin.member.index','uses' => 'Admin\UserController@indexMember'));
    Route::post('users/member', array('as' => 'admin.member.index.filter','uses' => 'Admin\UserController@memberFilter'));
-
 
    Route::get('users/member/show/{member}', array('as' => 'admin.member.show','uses' => 'Admin\UserController@showMember'));
    Route::get('users/member/{member}/edit', array('as' => 'admin.member.edit','uses' => 'Admin\UserController@editMember'));
@@ -82,6 +80,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
 
    Route::get('database/backup', array('as' => 'admin.database.backup','uses' => 'Admin\AdminController@backupDB'));
    Route::post('database/backup', array('as' => 'admin.database.backup','uses' => 'Admin\AdminController@storeBackupDB'));
+
+   Route::get('business', array('as' => 'admin.business.index','uses' => 'Admin\AdminController@businessList'));
+   Route::post('business', array('as' => 'admin.business.index.filter','uses' => 'Admin\AdminController@businessFilter'));
+   Route::put('business', array('as' => 'admin.business.update','uses' => 'Admin\AdminController@businessUpdate'));
+
+   Route::post('business/add', array('as' => 'admin.business.store','uses' => 'Admin\AdminController@businessAdd'));
 });
 
 // Officer panel

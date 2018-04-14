@@ -11,6 +11,7 @@ use App\User;
 use App\Cooperative;
 use App\Loan;
 use Auth;
+use Tzsk\Sms\Facade\Sms;
 
 class EmailController extends BaseController
 {
@@ -69,6 +70,10 @@ class EmailController extends BaseController
             $message->to($user->email);
             $message->subject('Loan Application');
         });
+
+        Sms::send("Text to send.", function($sms) {
+		    $sms->to(['+639151178289']); # The numbers to send to.
+		});
 
         $loanUpdate = Loan::findOrFail($request->_id);
     	$msg = "";

@@ -78,7 +78,7 @@
 		  			<div class="col-five tab-full bottom-links">
 			   		<ul class="links">
 				   		<li><a href="javascript:history.back()">Go back</a></li>
-				         <li><a href="/">Home page</a></li>		                    
+				         <li><a href="{{url('/')}}">Home page</a></li>		                    
 				   	</ul>
 
 			   	</div>   		   		

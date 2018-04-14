@@ -276,7 +276,7 @@ table thead th, table thead td {
     position: absolute;
 }
 
-#pending-users_filter, #loans-list_filter {
+#pending-users_filter, #loans-list_filter, #business-list_filter {
     margin-left: 50px;
     position: absolute;
 }

@@ -11,7 +11,8 @@ class Cooperative extends Model
 
 	public static $rules = [
         'name' => 'required',
-        'logo' => 'required',
-        'banner' => 'required',
+        'date_founded' => 'required',
+        'mission' => 'required',
+        'vision' => 'required',
     ];
 }

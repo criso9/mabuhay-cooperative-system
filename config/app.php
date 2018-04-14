@@ -165,6 +165,7 @@ return [
         'Collective\Html\HtmlServiceProvider',
         Spatie\Backup\BackupServiceProvider::class,
         'DaveJamesMiller\Breadcrumbs\ServiceProvider',
+        Tzsk\Sms\Provider\SmsServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -231,6 +232,7 @@ return [
         'Form' => 'Collective\Html\FormFacade',
         'HTML' => 'Collective\Html\HtmlFacade',
         'Breadcrumbs' => 'DaveJamesMiller\Breadcrumbs\Facade',
+        'Sms' => Tzsk\Sms\Facade\Sms::class,
 
     ],
 

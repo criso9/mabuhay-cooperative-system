@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta content="" name="description" />
 
-  <link rel="icon" href="/uploads/{{$coop->icon}}"/>
+  <link rel="icon" href="{{url('/uploads/'.$coop->icon)}}"/>
 
   <!-- Bootstrap Styles-->
   <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
@@ -44,8 +44,8 @@
 <link rel="stylesheet" href="{{asset('css/fileupload/jquery.fileupload.css')}}">
 <link rel="stylesheet" href="{{asset('css/fileupload/jquery.fileupload-ui.css')}}">
 <!-- CSS adjustments for browsers with JavaScript disabled -->
-<noscript><link rel="stylesheet" href="css/fileupload/jquery.fileupload-noscript.css"></noscript>
-<noscript><link rel="stylesheet" href="css/fileupload/jquery.fileupload-ui-noscript.css"></noscript>
+<noscript><link rel="stylesheet" href="{{asset('css/fileupload/jquery.fileupload-noscript.css')}}"></noscript>
+<noscript><link rel="stylesheet" href="{{asset('css/fileupload/jquery.fileupload-ui-noscript.css')}}"></noscript>
 
 
    
@@ -104,10 +104,13 @@
                        <li><a href="{{route('admin.pending.index')}}">Membership Approval</a></li>
                     </ul>
                   </li>
+                  <li>
+                    <a href="{{route('admin.business.index')}}"><i class="fa fa-briefcase"></i> Business </a>
+                  </li>
                   <li><a><i class="fa fa-database"></i> Database <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{{route('admin.database.backup')}}">Backup</a></li>
-                      <li><a href="tables_dynamic.html">Restore</a></li>
+                      <li><a href="{{route('admin.database.backup')}}">Restore</a></li>
                     </ul>
                   </li>
                 </ul>
@@ -151,12 +154,12 @@
                         <li><a href="{{route('officer.contribution.sharecapital')}}">Share Capital</a></li>
                       </ul>
                     </li>
-                    <li>
-                    <a href="{{route('admin.loan.index')}}"><i class="fa fa-home"></i> Loan Approval </a>
+                  <li>
+                    <a href="{{url('/officer/loan')}}"><i class="fa fa-home"></i> List of Loan </a>
                   </li>
                   @elseif($position == 'President')
                   <li>
-                    <a href="{{url('/officer/loan?s=Pending')}}"><i class="fa fa-home"></i> Loan Approval </a>
+                    <a href="{{url('/officer/loan?s=Pending')}}"><i class="fa fa-home"></i> List of Loan </a>
                   </li>
                   @endif
                 </ul>
@@ -165,7 +168,7 @@
                 <h3>Others</h3>
                 <ul class="nav side-menu">
                   <li>
-                    <a href="" id="member-links" data-toggle="modal" data-target="#memberModal"><i class="fa fa-info-circle"></i> Member Links</a>
+                    <a href="#" id="member-links" data-toggle="modal" data-target="#memberModal"><i class="fa fa-info-circle"></i> Member Links</a>
                   </li>
                 </ul>
               </div>
@@ -206,12 +209,12 @@
               </div>
 
               <div class="panel-header">
-                <a href="index.html">
+                <a href="{{url('/')}}">
                 <div class="logo-panel">
                   @if($coop)
-                    <img src="/uploads/{{ $coop->logo }}" alt="..." class="img-circle logo-img" id="coop-logo">
+                    <img src="{{url('/uploads/'.$coop->logo)}}" alt="..." class="img-circle logo-img" id="coop-logo">
                   @else
-                    <img src="/images/na.png" alt="..." class="img-circle logo-img">
+                    <img src="{{url('/images/na.png')}}" alt="..." class="img-circle logo-img">
                   @endif
                 </div> 
                 <span>
@@ -372,11 +375,11 @@
               <a href="{{route('officer.contribution.sharecapital')}}" class="btn btn-app">
                 <i class="fa fa-line-chart"></i> Share Capital
               </a>
-              @if($position == 'President')
+              @if($position == 'President' || $position == 'Treasurer')
                 <br/>
                 <div style="background-color: cornflowerblue;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Others</h5></div>
                 <a href="{{url('/officer/loan?s=Pending')}}" class="btn btn-app">
-                  <i class="fa fa-credit-card"></i> Loan Approval
+                  <i class="fa fa-credit-card"></i> List of Loan
                 </a>
               @endif
             @endif

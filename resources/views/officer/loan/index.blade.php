@@ -31,16 +31,16 @@
 	              </select>
 	            </div>
 	          </div>
-	        </form>
+	        {{ Form::close() }}
 			<div>
           <table id="loans-list" class="table table-striped table-bordered" style="font-size: 13px;">
             <thead>
             <tr>
 
-        	  @if($status_filter == 'Pending')
-				<td>Approve</td>
-                <td>Reject</td>
-        	  @endif
+          	  @if($status_filter == 'Pending')
+  				      <td class="no-sort">Approve</td>
+                <td class="no-sort">Reject</td>
+          	  @endif
 
               <td>Transaction No.</td>
               <td>Date Applied</td>
@@ -57,12 +57,30 @@
 	                @foreach($loans as $l)
 	                  <tr>
 	                  	@if($status_filter == 'Pending')
-							         <td align="middle">
-                      	<a href="" id="approveBtn" data-toggle="modal" data-target = "#approveModal" onclick="approveStatus('{{$l->id}}', '{{$l->amount_loan}}')"><img id="{{$l->id}}-approve" src="/images/approve.png" style="width:25px; height: 25px;" onmouseover="onHover('{{$l->id}}-approve');" onmouseout="offHover('{{$l->id}}-approve');"/></a>
-                    	</td>
-                    	<td align="middle">
-                      	<a href="" id="rejectBtn" data-toggle="modal" data-target = "#rejectModal" onclick="rejectStatus('{{$l->id}}')"><img id="{{$l->id}}-reject" src="/images/reject.png" style="width:25px; height: 25px;" onmouseover="rejHover('{{$l->id}}-reject');" onmouseout="rejOffHover('{{$l->id}}-reject');"/></a>
-                    	</td>
+							         @if($position == 'President')
+                          <td align="middle">
+                            <a href="" id="approveBtn" data-toggle="modal" data-target = "#approveModal" onclick="approveStatus('{{$l->id}}', '{{$l->amount_loan}}')"><img id="{{$l->id}}-approve" src="/images/approve.png" style="width:25px; height: 25px;" onmouseover="onHover('{{$l->id}}-approve');" onmouseout="offHover('{{$l->id}}-approve');"/></a>
+                          </td>
+                          <td align="middle">
+                            <a href="" id="rejectBtn" data-toggle="modal" data-target = "#rejectModal" onclick="rejectStatus('{{$l->id}}')"><img id="{{$l->id}}-reject" src="/images/reject.png" style="width:25px; height: 25px;" onmouseover="rejHover('{{$l->id}}-reject');" onmouseout="rejOffHover('{{$l->id}}-reject');"/></a>
+                          </td>
+                        @else if ($position == 'Treasurer')
+                          @if($l->user_id == '')
+                            <td align="middle">
+                            <a href="" id="approveBtn" data-toggle="modal" data-target = "#approveModal" onclick="approveStatus('{{$l->id}}', '{{$l->amount_loan}}')"><img id="{{$l->id}}-approve" src="/images/approve.png" style="width:25px; height: 25px;" onmouseover="onHover('{{$l->id}}-approve');" onmouseout="offHover('{{$l->id}}-approve');"/></a>
+                          </td>
+                          <td align="middle">
+                            <a href="" id="rejectBtn" data-toggle="modal" data-target = "#rejectModal" onclick="rejectStatus('{{$l->id}}')"><img id="{{$l->id}}-reject" src="/images/reject.png" style="width:25px; height: 25px;" onmouseover="rejHover('{{$l->id}}-reject');" onmouseout="rejOffHover('{{$l->id}}-reject');"/></a>
+                          </td>
+                          @else
+                            <td align="middle">
+                            <a href="" id="approveBtn" data-toggle="modal" data-target = "#approveModal" onclick="approveStatus('{{$l->id}}', '{{$l->amount_loan}}')"><img id="{{$l->id}}-approve" src="/images/approve.png" style="width:25px; height: 25px;" onmouseover="onHover('{{$l->id}}-approve');" onmouseout="offHover('{{$l->id}}-approve');"/></a>
+                          </td>
+                          <td align="middle">
+                            <a href="" id="rejectBtn" data-toggle="modal" data-target = "#rejectModal" onclick="rejectStatus('{{$l->id}}')"><img id="{{$l->id}}-reject" src="/images/reject.png" style="width:25px; height: 25px;" onmouseover="rejHover('{{$l->id}}-reject');" onmouseout="rejOffHover('{{$l->id}}-reject');"/></a>
+                          </td>
+                          @endif
+                       @endif
 						          @endif
 	                    <td>{{$l->transaction_no}}</td>
 	                    <td>{{$l->date_applied}}</td>
@@ -175,21 +193,27 @@ $(document).ready(function() {
       });
     @endif
 
-    $('#loans-list').DataTable({
-      // dom: 'B<"clear">lfrtip',
-      // buttons: [
-      //   'copy', 'csv', 'excel', 'pdf', 'print'
-      // ],
-      fixedHeader: {
-        header: true,
-        footer: false
-      },
-      "order": [[ 3, "desc" ]],
-      "columnDefs": [
-        { "orderable": false, "targets": 0 },
-        { "orderable": false, "targets": 1 }
-      ]
-    });
+    @if ($status_filter == 'Pending')
+      $('#loans-list').DataTable({
+        fixedHeader: {
+          header: true,
+          footer: false
+        },
+        "order": [[ 3, "desc" ]],
+        "columnDefs": [
+          { "orderable": false, "targets": "no-sort" }
+        ]
+      });
+    @else
+      $('#loans-list').DataTable({
+        fixedHeader: {
+          header: true,
+          footer: false
+        },
+        "order": [[ 1, "desc" ]]
+      });
+    @endif
+    
 
 });
 

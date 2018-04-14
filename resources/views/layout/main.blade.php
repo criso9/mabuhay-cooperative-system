@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mabuhay BNHS Coop Page</title>
 
-  <link rel="icon" href="/uploads/{{$coop->icon}}"/>
+  <link rel="icon" href="{{url('/uploads/'.$coop->icon)}}"/>
   
   <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ asset('css/font-awesome.min.css') }}"/>
@@ -18,8 +18,8 @@
   <link rel="stylesheet" type="text/css" href="{{ asset('css/select2.min.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ asset('css/util.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}"/>
-  <link href="css/prettyPhoto.css" rel="stylesheet">
-  <link href="css/style-home.css" rel="stylesheet" />
+  <link href="{{ asset('css/prettyPhoto.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/style-home.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/custom.css') }}" rel="stylesheet" type="text/css" />
 </head>
 
@@ -49,10 +49,10 @@
           <div class="navbar-collapse collapse">
             <div class="menu">
               <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation"><a href="/" class="active">Home</a></li>
-                <li role="presentation"><a href="/about">About Us</a></li>
-                <li role="presentation"><a href="/services">Services</a></li>
-                <li role="presentation"><a href="/contacts">Contact Us</a></li>
+                <li role="presentation"><a href="{{url('/')}}" class="active">Home</a></li>
+                <li role="presentation"><a href="{{url('/about')}}">About Us</a></li>
+                <li role="presentation"><a href="{{url('/services')}}">Services</a></li>
+                <li role="presentation"><a href="{{url('/contacts')}}">Contact Us</a></li>
               </ul>
             </div>
             <div class="login-home">

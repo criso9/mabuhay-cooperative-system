@@ -13,7 +13,7 @@
   <section id="main-slider" class="no-margin">
     <div class="carousel slide">
       <div class="carousel-inner">
-        <div class="item active" style="background-image: url(/images/bmember2.jpg)">
+        <div class="item active" style="background-image:url({{url('/images/bmember2.jpg')}})">
           <div class="container">
             <div class="row slide-margin">
               <div class="col-sm-6">

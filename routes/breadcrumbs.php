@@ -41,6 +41,11 @@ Breadcrumbs::register('admin.database.backup', function ($breadcrumbs) {
     $breadcrumbs->push('Database', route('admin.database.backup'));
 });
 
+Breadcrumbs::register('admin.business.index', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin.index');
+    $breadcrumbs->push('Business', route('admin.business.index'));
+});
+
 // OFFICER
 
 Breadcrumbs::register('officer.index', function ($breadcrumbs) {
