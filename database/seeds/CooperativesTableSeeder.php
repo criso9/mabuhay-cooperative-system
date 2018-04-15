@@ -12,12 +12,14 @@ class CooperativesTableSeeder extends Seeder
     public function run()
     {
         DB::table('cooperatives')->insert([
-            'name' => 'Mabuhay BNHS Cooperative',
-            'logo' => 'logo/logo-20180222-144417.png',
-            'icon' => 'icon/icon.ico',
-            'mission' => 'taguig city',
-            'vision' => '1995-11-15',
-            'date_founded' => '2014-05-01',
+            'coop_name' => '',
+            'logo' => 'na.png',
+            'icon' => '',
+            'mission' => '',
+            'vision' => '',
+            'date_founded' => '',
+            'mem_int' => 0.00,
+            'nonmem_int' => 0.00,
         ]);
     }
 }

@@ -13,7 +13,12 @@
 
   <div class="services">
     <div class="container">
-      <h3>BNHS Cooperative Services</h3>
+      <h3>@if($coop)
+          {{ $coop->coop_name }}
+        @else
+          [COOP Name here]
+        @endif
+      Cooperative Services</h3>
       <hr>
       <div class="col-md-6">
         <img src="images/motmot.png" class="img-responsive">

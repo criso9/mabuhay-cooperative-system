@@ -29,7 +29,7 @@
 <h4>Hello {{$user->f_name}},</h4>
 
 <p>Good day!</p>
-<p>You membership request for {{$coop->name}} was approved.</p>
+<p>You membership request for {{$coop->coop_name}} was approved.</p>
 <p>Please click below link to verify your email address and to activate your account.</p>
 
 <div>

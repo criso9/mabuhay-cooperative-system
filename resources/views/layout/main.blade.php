@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mabuhay BNHS Coop Page</title>
+  <title>{{$coop->coop_name}}</title>
 
   <link rel="icon" href="{{url('/uploads/'.$coop->icon)}}"/>
   
@@ -38,7 +38,7 @@
             <div class="navbar-brand">
               <a href="{{url('/')}}"><h1>
                 @if($coop)
-                  <span>{{ $coop->name }}</span>
+                  <span>{{ $coop->coop_name }}</span>
                 @else
                   <span>[COOP Name here] </span>
                 @endif

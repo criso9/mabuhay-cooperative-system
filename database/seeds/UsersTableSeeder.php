@@ -26,6 +26,7 @@ class UsersTableSeeder extends Seeder
             'role_id' => '1',
             'referral' => 'marites',
             'ref_relation' => 'mother',
+            'activated_at' => '2018-03-24 01:34:36',
         ]);
 
         DB::table('users')->insert([
@@ -43,6 +44,7 @@ class UsersTableSeeder extends Seeder
             'role_id' => '3',
             'referral' => 'marites',
             'ref_relation' => 'relative',
+            'activated_at' => '2018-03-24 01:34:36',
         ]);
 
         DB::table('users')->insert([
@@ -58,6 +60,7 @@ class UsersTableSeeder extends Seeder
             'avatar' => 'user-male.png',
             'status' => 'active',
             'role_id' => '3',
+            'activated_at' => '2018-03-24 01:34:36',
         ]);
 
         DB::table('users')->insert([
@@ -73,6 +76,7 @@ class UsersTableSeeder extends Seeder
             'avatar' => 'user-male.png',
             'status' => 'active',
             'role_id' => '3',
+            'activated_at' => '2018-03-24 01:34:36',
         ]);
 
         DB::table('users')->insert([
@@ -88,6 +92,7 @@ class UsersTableSeeder extends Seeder
             'avatar' => 'user-female.png',
             'status' => 'active',
             'role_id' => '3',
+            'activated_at' => '2018-03-24 01:34:36',
         ]);
 
         DB::table('users')->insert([
@@ -103,6 +108,7 @@ class UsersTableSeeder extends Seeder
             'avatar' => 'user-female.png',
             'status' => 'active',
             'role_id' => '3',
+            'activated_at' => '2018-03-24 01:34:36',
         ]);
 
         DB::table('users')->insert([
@@ -118,6 +124,7 @@ class UsersTableSeeder extends Seeder
             'avatar' => 'user-female.png',
             'status' => 'active',
             'role_id' => '3',
+            'activated_at' => '2018-03-24 01:34:36',
         ]);
 
         DB::table('users')->insert([
@@ -133,6 +140,7 @@ class UsersTableSeeder extends Seeder
             'avatar' => 'user-female.png',
             'status' => 'active',
             'role_id' => '3',
+            'activated_at' => '2018-03-24 01:34:36',
         ]);
 
         DB::table('users')->insert([
@@ -148,6 +156,7 @@ class UsersTableSeeder extends Seeder
             'avatar' => 'user-female.png',
             'status' => 'active',
             'role_id' => '3',
+            'activated_at' => '2018-03-24 01:34:36',
         ]);
 
         DB::table('users')->insert([
@@ -163,6 +172,7 @@ class UsersTableSeeder extends Seeder
             'avatar' => 'user-female.png',
             'status' => 'active',
             'role_id' => '3',
+            'activated_at' => '2018-03-24 01:34:36',
         ]);
 
         DB::table('users')->insert([
@@ -178,6 +188,7 @@ class UsersTableSeeder extends Seeder
             'avatar' => 'user-male.png',
             'status' => 'active',
             'role_id' => '3',
+            'activated_at' => '2018-03-24 01:34:36',
         ]);
 
         DB::table('users')->insert([
@@ -193,6 +204,7 @@ class UsersTableSeeder extends Seeder
             'avatar' => 'user-female.png',
             'status' => 'active',
             'role_id' => '3',
+            'activated_at' => '2018-03-24 01:34:36',
         ]);
 
         DB::table('users')->insert([
@@ -208,6 +220,7 @@ class UsersTableSeeder extends Seeder
             'avatar' => 'user-male.png',
             'status' => 'active',
             'role_id' => '3',
+            'activated_at' => '2018-03-24 01:34:36',
         ]);
 
         DB::table('users')->insert([
@@ -223,6 +236,7 @@ class UsersTableSeeder extends Seeder
             'avatar' => 'user-male.png',
             'status' => 'active',
             'role_id' => '3',
+            'activated_at' => '2018-03-24 01:34:36',
         ]);
 
         DB::table('users')->insert([
@@ -238,8 +252,8 @@ class UsersTableSeeder extends Seeder
             'avatar' => 'user-female.png',
             'status' => 'active',
             'role_id' => '3',
+            'activated_at' => '2018-03-24 01:34:36',
         ]);
-
 
     }
 }

@@ -17,7 +17,7 @@ class BaseController extends Controller
 		$this->middleware(function ($request, $next) {
 	       
 			$this->coop = Cooperative::whereNotNull('id')->first();
-
+			
 			if(Auth::user()){
 				$this->position = DB::table('officers')
 				->join('positions', 'officers.position_id', '=', 'positions.id')

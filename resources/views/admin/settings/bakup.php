@@ -81,7 +81,7 @@
 				        	<!-- <input type="text" id="name" name="name" required="required" class="form-control col-md-7 col-xs-12">
 				      		</input> -->
 				      		@if ($coop)
-								{{ Form::input('text', 'name', $coop->name, array('class' => 'form-control col-md-7 col-xs-12', 'required' => 'required')) }}
+								{{ Form::input('text', 'name', $coop->coop_name, array('class' => 'form-control col-md-7 col-xs-12', 'required' => 'required')) }}
 							@else
 								{{ Form::input('text', 'name', null, array('class' => 'form-control col-md-7 col-xs-12', 'required' => 'required')) }}
 				      		@endif

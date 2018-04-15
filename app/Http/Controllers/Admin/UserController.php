@@ -53,7 +53,9 @@ class UserController extends BaseController
 							WHEN 'active'
 							THEN (SELECT p.position FROM officers o JOIN positions p ON o.position_id = p.id WHERE o.status = 'active' AND o.user_id = users.id)
 							END)
-						END) AS description"))
+						END) AS description"),
+				DB::raw("YEAR(activated_at) as activated_at")
+	        )
 			->where('l_name', 'like', $selected_filter.'%')
 			->whereIn('users.status', $statFilter)
 			->orderBy('l_name', 'asc')
@@ -73,7 +75,9 @@ class UserController extends BaseController
 							WHEN 'active'
 							THEN (SELECT p.position FROM officers o JOIN positions p ON o.position_id = p.id WHERE o.status = 'active' AND o.user_id = users.id)
 							END)
-						END) AS description"))
+						END) AS description"),
+				DB::raw("YEAR(activated_at) as activated_at")
+			)
 			->whereIn('users.status', $statFilter)
 			->orderBy('l_name', 'asc')
 			->get();
@@ -91,9 +95,17 @@ class UserController extends BaseController
 
 	public function showMember($id)
 	{
-		$member = User::where('role_id', '=', '3')->where('id', '=', $id)->with('role')->first();
 		
-		//dd($member);
+		$member = DB::table('users')
+			->join('roles', 'users.role_id', '=', 'roles.id')
+			->select('users.id', 'f_name', 'l_name', 'm_name', 'phone','gender', 'address', 'civil_status', 'email', 'avatar', 'status', 'roles.role_name',
+				DB::raw("DATE_FORMAT(activated_at, '%M %d, %Y') as activated_at"),
+				DB::raw("DATE_FORMAT(b_date, '%M %d, %Y') as b_date")
+			)
+			->where('users.id', '=', $id)
+			->first();
+		
+		// dd($member);
 	
 		return view('admin.show_users', compact('member'));
 	}
@@ -162,6 +174,7 @@ class UserController extends BaseController
 		$users = User::select(DB::raw("CONCAT(l_name, ', ', f_name) AS fullName"),'id')
 		->where('status', 'active')
 		->whereNotIn('id', [DB::raw("SELECT DISTINCT user_id FROM officers WHERE status ='active'")])
+		->where('id', '!=', Auth::user()->id)
 		->orderBy('l_name')
 		->pluck('fullName', 'id');
 
@@ -174,7 +187,7 @@ class UserController extends BaseController
 		$officers = DB::table('officers')
 		->join('users', 'officers.user_id', '=', 'users.id')
 		->join('positions', 'officers.position_id', '=', 'positions.id')
-		->select('users.id', 'users.f_name', 'users.l_name', 'users.m_name', 'positions.position', 
+		->select('officers.user_id', 'users.f_name', 'users.l_name', 'users.m_name', 'positions.position', 
 			DB::raw("DATE_FORMAT(officers.from,'%Y %M') AS fromMoYr"),
 			DB::raw("DATE_FORMAT(officers.to,'%Y %M') AS toMoYr"),
 			DB::raw("(SELECT CONCAT(users.f_name, '', users.l_name) FROM users WHERE users.id = officers.added_by) AS add_by"),
@@ -319,12 +332,11 @@ class UserController extends BaseController
 
 		$admins = DB::table('admins')
 		->join('users', 'admins.user_id', '=', 'users.id')
-		->select('users.id', 'users.f_name', 'users.l_name', 'users.m_name',
+		->select('admins.user_id', 'users.f_name', 'users.l_name', 'users.m_name',
 			DB::raw("DATE_FORMAT(admins.from,'%Y %M') AS fromMoYr"),
 			DB::raw("DATE_FORMAT(admins.to,'%Y %M') AS toMoYr"),
 			DB::raw("(SELECT CONCAT(users.f_name, '', users.l_name) FROM users WHERE users.id = admins.added_by) AS add_by"),
 			'admins.id', 'admins.status', 'admins.created_at')
-		// ->where('users.role_id', '=', '1')
 		->where('admins.status', '=', 'active')
 		->get();
 

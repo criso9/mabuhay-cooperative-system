@@ -107,7 +107,7 @@ Loan Application
 			<div class="modal-body">
 				<div>
 					<p>
-						I hereby apply for loan in an amount of (&#8369; <label id="sum-amount"></label>) in consideration hereof, I promise to pay the said amount to the {{$coop->name}} with interest at the rate of {{$interest->rate}}% a month.
+						I hereby apply for loan in an amount of (&#8369; <label id="sum-amount"></label>) in consideration hereof, I promise to pay the said amount to the {{$coop->coop_name}} with interest at the rate of {{$interest->rate}}% a month.
 					</p>
 				</div>
         

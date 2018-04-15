@@ -809,7 +809,7 @@ Monthly Contributions
                   {
                     alignment: 'left',
                     italics: true,
-                    text: '{{ $coop->name }}',
+                    text: '{{ $coop->coop_name }}',
                     fontSize: 18,
                     margin: [10,0]
                   },
@@ -882,7 +882,7 @@ Monthly Contributions
 
                 $(win.document.body)
                   .prepend(
-                      '<div style="text-align: center;font-size: 22px;color: black;margin-top: 10px;margin-bottom: 20px;height: 95px;line-height: 95px;"><div style="display: inline-block;vertical-align: middle;"><div style="display: inline; margin-right: 20px;"><img src="{{url('/uploads/')}}/{{ $coop->logo }}" style="width:100px;" /></div><h2 style="display: inherit;font-size:36px;">{{ $coop->name }}</h2></div></div>'
+                      '<div style="text-align: center;font-size: 22px;color: black;margin-top: 10px;margin-bottom: 20px;height: 95px;line-height: 95px;"><div style="display: inline-block;vertical-align: middle;"><div style="display: inline; margin-right: 20px;"><img src="{{url('/uploads/')}}/{{ $coop->logo }}" style="width:100px;" /></div><h2 style="display: inherit;font-size:36px;">{{ $coop->coop_name }}</h2></div></div>'
                   );
 
                 $(win.document.body).find('h1').addClass('display').css('font-size', '28px');

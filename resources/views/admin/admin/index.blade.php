@@ -20,7 +20,7 @@ Admin List
       <div class="x_content">
         <div>
           <div class="off-active"><h4 style="margin-top: 3px;">Active</h4></div>
-          <div style="float: right;"><a href="" class="btn btn-round btn-info" id="myBtn" data-toggle="modal" data-target = "#change-status-modal">Add Admin</a></div>
+          <div style="float: right;"><a href="" class="btn btn-round btn-info" id="myBtn" data-toggle="modal" data-target = "#add-admin" onclick="addAdmin()">Add Admin</a></div>
         </div>
         <div style="clear:both;"></div>
       	<br/>
@@ -41,8 +41,13 @@ Admin List
               @if ($admins->count() > 1)
                 @foreach($admins as $o)
                   <tr>
-                    <td align="middle"><a href="" id="statusBtn" data-toggle="modal" data-target = "#change-status-modal" onclick="modalStatus('{{$o->id}}')"><img id="{{$o->id}}" src="/images/user-remove.png" style="width:25px; height: 25px;" onmouseover="onHover({{$o->id}});" onmouseout="offHover({{$o->id}});"/></a>
-                    </td>
+                    @if($o->user_id == Auth::user()->id)
+                      <td align="middle"><img id="{{$o->user_id}}" src="/images/user-remove.png" style="width:25px; height: 25px;cursor: not-allowed;" onmouseover="onHover({{$o->user_id}});" onmouseout="offHover({{$o->user_id}});"/>
+                      </td>
+                    @else
+                      <td align="middle"><a href="" id="statusBtn" data-toggle="modal" data-target = "#statusModal" onclick="modalStatus('{{$o->user_id}}')"><img id="{{$o->user_id}}" src="/images/user-remove.png" style="width:25px; height: 25px;" onmouseover="onHover({{$o->user_id}});" onmouseout="offHover({{$o->user_id}});"/></a>
+                      </td>
+                    @endif
                     <td>{{$o->l_name}}, {{$o->f_name}}</td>
                     <td>{{$o->fromMoYr}}</td>
                     <td>{{$o->toMoYr}}</td>
@@ -52,7 +57,11 @@ Admin List
                 @endforeach
               @elseif ($admins->count() > 0)
                 <tr>
-                  <td align="middle"><a href="" id="statusBtn" data-toggle="modal" data-target = "#change-status-modal" onclick="modalStatus('{{$admins[0]->id}}')"><img id="{{$admins[0]->id}}" src="/images/user-remove.png" style="width:25px; height: 25px;" onmouseover="onHover({{$admins[0]->id}});" onmouseout="offHove`r({{$admins[0]->id}});"/></a>
+                  @if($o->user_id == Auth::user()->id)
+                    <td align="middle"><img id="{{$admins[0]->user_id}}" src="/images/user-remove.png" style="width:25px; height: 25px;cursor: not-allowed;" onmouseover="onHover({{$admins[0]->user_id}});" onmouseout="offHove`r({{$admins[0]->user_id}});"/>
+                  @else
+                    <td align="middle"><a href="" id="statusBtn" data-toggle="modal" data-target = "#statusModal" onclick="modalStatus('{{$admins[0]->user_id}}')"><img id="{{$admins[0]->user_id}}" src="/images/user-remove.png" style="width:25px; height: 25px;" onmouseover="onHover({{$admins[0]->user_id}});" onmouseout="offHove`r({{$admins[0]->user_id}});"/></a>
+                  @endif
                   </td>
                   <td>{{$admins[0]->l_name}}, {{$admins[0]->f_name}}</td>
                   <td>{{$admins[0]->fromMoYr}}</td>
@@ -110,7 +119,8 @@ Admin List
     </div>
   </div>
 
-  <div id="myModal" class="modal custom-modal">
+  <div id="add-admin" class="modal fade custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
     <div class="modal-content custom-modal-content">
       <div class="modal-header">
         <button type="button" class="close close-add" data-dismiss="modal" aria-label="Close">
@@ -160,8 +170,10 @@ Admin List
       </div>
     </div>
   </div>
+  </div>
 
-  <div id="statusModal" class="modal custom-modal">
+  <div id="statusModal" class="modal fade custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
     <div class="modal-content custom-modal-content">
       <div class="modal-header">
         <button type="button" class="close stat-close" data-dismiss="modal" aria-label="Close">
@@ -189,6 +201,7 @@ Admin List
       </div>
     </div>
   </div>
+</div>
 </div>
 
 <script src="{{ asset('js/jquery.min.js') }}"></script>
@@ -248,21 +261,9 @@ Admin List
     // });
   });
 
-  // Get the modal
-  var modal = document.getElementById('myModal');
-  var statmodal = document.getElementById('statusModal');
-
-  // Get the button that opens the modal
-  var btn = document.getElementById("myBtn");
-  var statbtn = document.getElementById("statusBtn");
-
-  // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close")[0];
-  var statSpan = document.getElementsByClassName("stat-close")[0];
-
+  
   // When the user clicks on the button, open the modal 
-  btn.onclick = function() {
-      modal.style.display = "block";
+  function addAdmin() {
       $('#from-year').datetimepicker({
         format: "MMMM YYYY",
         viewMode: "months",
@@ -278,25 +279,6 @@ Admin List
       statmodal.style.display = "block";
 
       $('#admin-id').val(id);
-  }
-
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function() {
-      modal.style.display = "none";
-  }
-
-  statSpan.onclick = function() {
-      statmodal.style.display = "none";
-  }
-
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-      if (event.target == statmodal) {
-          statmodal.style.display = "none";
-      }
-      if (event.target == statmodal) {
-          statmodal.style.display = "none";
-      }
   }
 
   function onHover(idVal)

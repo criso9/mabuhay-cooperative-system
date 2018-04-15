@@ -73,6 +73,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
    Route::get('coop', array('as' => 'admin.coop','uses' => 'Admin\CoopController@index'));
    Route::post('coop', array('as' => 'admin.coop','uses' => 'Admin\CoopController@store'));
 
+   Route::post('coop/add', array('as' => 'admin.coop.store','uses' => 'Admin\CoopController@addImage'));
+   Route::put('coop/delete', array('as' => 'admin.coop.delete','uses' => 'Admin\CoopController@deleteImage'));
+
+   Route::post('coop/addFile', array('as' => 'admin.coop.store.file','uses' => 'Admin\CoopController@addFile'));
+   Route::put('coop/deleteFile', array('as' => 'admin.coop.delete.file','uses' => 'Admin\CoopController@deleteFile'));
+
    Route::get('users/pending', array('as' => 'admin.pending.index','uses' => 'Admin\UserController@indexPending'));
    Route::post('users/pending', array('as' => 'admin.pending.index.type','uses' => 'Admin\UserController@indexPendingType'));
 

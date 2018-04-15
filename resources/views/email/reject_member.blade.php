@@ -7,7 +7,7 @@
 <h4>Hello {{$user->f_name}},</h4>
 
 <p>Good day!</p>
-<p>Thank you for the interest in joining the {{$coop->name}}</p>
+<p>Thank you for the interest in joining the {{$coop->coop_name}}</p>
 <p>We regret to inform you that your membership request was rejected.</p>
 
 <br/>

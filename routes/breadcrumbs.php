@@ -12,8 +12,8 @@ Breadcrumbs::register('admin.member.index', function ($breadcrumbs) {
 });
 
 Breadcrumbs::register('admin.member.show', function ($breadcrumbs) {
-	$breadcrumbs->parent('admin.index');
-    $breadcrumbs->push('Profile', route('admin.member.show'));
+	$breadcrumbs->parent('admin.member.index');
+    $breadcrumbs->push('Profile', url('users/member/show/{member}'));
 });
 
 Breadcrumbs::register('admin.officer.index', function ($breadcrumbs) {

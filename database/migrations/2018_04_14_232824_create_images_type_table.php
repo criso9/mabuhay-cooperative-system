@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCarouselsTable extends Migration
+class CreateImagesTypeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateCarouselsTable extends Migration
      */
     public function up()
     {
-        Schema::create('carousels', function (Blueprint $table) {
+         Schema::create('images_type', function (Blueprint $table) {
             $table->increments('id');
-            $table->String('path');
-            $table->bigInteger('added_by')->unsigned();
+            $table->string('type', 100);
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreateCarouselsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('carousels');
+        Schema::dropIfExists('images_type');
     }
 }

@@ -13,7 +13,14 @@
 
   <div class="aboutus">
     <div class="container">
-      <h3>About BNHS Cooperative</h3>
+      <h3>About 
+        @if($coop)
+          {{ $coop->coop_name }}
+        @else
+          [COOP Name here]
+        @endif
+        Cooperative
+      </h3>
       <hr>
       <div class="col-md-7 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="300ms">
         <img src="images/MBNHS.jpg" class="img-responsive">
@@ -47,6 +54,7 @@
   <div class="our-team">
     <div class="container">
       <h3>List of Officers</h3>
+      <a href="#" title="Officers" id="prevOfficers" data-toggle="modal" data-trigger="hover" data-target = "#previousOfficersModal">Previous Officers</a> 
       <div class="text-center">
         <div class="col-md-4 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
           <img src="images/boy.png" alt="" style="height:225px; width:225px;">
@@ -66,5 +74,66 @@
       </div>
     </div>
   </div>
+
+  <div id="previousOfficersModal" class="modal fade custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content custom-modal-content">
+      <div class="modal-header">
+        <button type="button" id="reject-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="statusModalLabel">List of Previous Officers</h4>
+      </div>
+      <div class="modal-body">
+        <!-- History of officers -->
+        <div>
+          <table class="table table-bordered" style="color: black;font-size: 14px;">
+            <thead>
+              <tr>
+                <th> Position </th>
+                <th> Name </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td> President </td>
+                <td> Reynaldo Ranuco </td>
+              </tr>
+              <td> Vice President </td>
+              <td> Richard Lunjas</td>
+            </tr>
+            <tr>
+                <td> Secretary </td>
+                <td> Ma. Teresa Navarroza </td>
+              </tr>
+              <td> Treasurer </td>
+              <td> Melodina Vales</td>
+            </tr>
+             <tr>
+                <td> Asst. Treasurer </td>
+                <td> Mary Jane Bacalso</td>
+              </tr>
+              <td> Auditor </td>
+              <td> Virgenia Lor</td>
+            </tr>
+             </a>
+            </tbody>
+          </table>
+        </div>
+        <!-- End of history -->
+      </div>
+    </div>
+  </div>
+  </div>
+
+<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
+<script type="text/javascript">
+  $("#prevOfficers").hover(function () {
+    $('#previousOfficersModal').modal({
+        show: true,
+        backdrop: false
+    })
+});
+</script>
 
 @stop

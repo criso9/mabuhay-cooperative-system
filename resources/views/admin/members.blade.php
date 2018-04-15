@@ -14,23 +14,15 @@
         	<div class="clearfix"></div>
       	</div>
       	<div class="x_content">
-              	<div class="col-md-2 col-sm-2 col-xs-12 form-group pull-right" style="width: auto;padding-right: 0px;">
+              	<div class="col-md-2 col-sm-2 col-xs-12 form-group pull-right" style="width: auto;padding-right: 0px;margin-bottom: 15px;">
                 	<a href="{{route('admin.member.create')}}" class="btn btn-round btn-info">Add Member</a>
                 </div>
-                <div class="col-md-3 col-sm-3 col-xs-12 form-group pull-right top_search">
-                  <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search for...">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default" type="button">Go!</button>
-                    </span>
-                  </div>
-                </div>
-
+                
             <div class="clearfix"></div>
 
 			<div class="row" style="margin-bottom: 30px;">
           		<div class="col-md-12 col-sm-12 col-xs-12 text-center">
-          			{{ Form::open(array('route' => 'member.loan.index.filter', 'method' => 'post', 'class' => 'form-horizontal form-label-left pending-type', 'style' => 'width: 22%;float: right; right: -15px;top: 0px;')) }}
+          			{{ Form::open(array('route' => 'admin.member.index.filter', 'method' => 'post', 'class' => 'form-horizontal form-label-left pending-type', 'style' => 'width: 22%;float: right; right: -15px;top: 0px;')) }}
 			          <input type="hidden" name="_token" value="{{ csrf_token() }}">
 			          <div class="form-group">
 			            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-weight: normal;margin-right: -10px;">Status:</label>
@@ -70,20 +62,20 @@
 
 				@if ($members->count() > 1)
 				    @foreach($members as $member)
-				        <div class="col-md-3 col-sm-3 col-xs-12 profile_details">
+				        <div class="col-md-4 col-sm-4 col-xs-12 profile_details">
 				            <div class="well profile_view">
 				              <div class="col-sm-12">
 				                <h5 class="brief"><i>{{$member->description}}</i></h5>
-				                <div class="left col-xs-7">
+				                <div class="left col-xs-9">
 				                  <h4 style="text-transform: capitalize;">{{ $member->l_name }}, {{ $member->f_name }}</h4>
-				                  <p><strong>About: </strong> Member since 2017 </p>
+				                  <p><strong>About: </strong> Member since {{$member->activated_at}} </p>
 				                  <ul class="list-unstyled">
 				                    <li><i class="fa fa-building"></i> Address: {{ $member->address }}</li>
 				                    <li><i class="fa fa-phone"></i> Phone: {{ $member->phone }}</li>
 				                    <li><i class="fa fa-user"></i> Status: <span style="color:{{ $member->status == "inactive" ? "red" : "inherit" }};">{{ $member->status }}</span></li>
 				                  </ul>
 				                </div>
-				                <div class="right col-xs-5 text-center">
+				                <div class="right col-xs-3 text-center">
 				                  <img src="/images/{{ $member->avatar }}" alt="" class="img-circle img-responsive">
 				                </div>
 				              </div>
@@ -101,11 +93,11 @@
 				          </div>
 				    @endforeach
 				@elseif ($members->count() > 0)
-				    <div class="col-md-3 col-sm-3 col-xs-12 profile_details">
+				    <div class="col-md-4 col-sm-4 col-xs-12 profile_details">
 				            <div class="well profile_view">
 				              <div class="col-sm-12">
 				                <h5 class="brief"><i>{{$members[0]->description}}</i></h5>
-				                <div class="left col-xs-7">
+				                <div class="left col-xs-9">
 				                  <h4 style="text-transform: capitalize;">{{ $members[0]->l_name }}, {{ $members[0]->f_name }}</h4>
 				                  <p><strong>About: </strong> Member since 2017 </p>
 				                  <ul class="list-unstyled">
@@ -114,7 +106,7 @@
 				                     <li><i class="fa fa-user"></i> Status: <span style="color:{{ $members[0]->status == "inactive" ? "red" : "inherit" }};">{{ $members[0]->status }}</span></li>
 				                  </ul>
 				                </div>
-				                <div class="right col-xs-5 text-center">
+				                <div class="right col-xs-3 text-center">
 				                  <img src="/images/{{ $members[0]->avatar }}" alt="" class="img-circle img-responsive">
 				                </div>
 				              </div>

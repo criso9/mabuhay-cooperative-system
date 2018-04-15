@@ -219,7 +219,7 @@
                 </div> 
                 <span>
                   @if($coop)
-                    {{ $coop->name }}
+                    {{ $coop->coop_name }}
                   @else
                     [COOP Name here]
                   @endif
