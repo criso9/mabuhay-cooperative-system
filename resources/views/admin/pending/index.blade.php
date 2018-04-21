@@ -102,7 +102,8 @@ Pending for Approval
             </table>
         </div>
         
-        <div id="approveModal" class="modal custom-modal">
+        <div id="approveModal" class="modal fade custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog" role="document">
           <div class="modal-content custom-modal-content">
             <div class="modal-header">
               <button type="button" id="approve-close" class="close" data-dismiss="modal" aria-label="Close">
@@ -128,9 +129,11 @@ Pending for Approval
             </div>
           </div>
         </div>
+        </div>
 
 
-        <div id="rejectModal" class="modal custom-modal">
+        <div id="rejectModal" class="modal fade custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog" role="document">
           <div class="modal-content custom-modal-content">
             <div class="modal-header">
               <button type="button" id="reject-close" class="close" data-dismiss="modal" aria-label="Close">
@@ -159,6 +162,7 @@ Pending for Approval
               {{ Form::close() }}
             </div>
           </div>
+        </div>
         </div>
 
       </div>

@@ -16,7 +16,7 @@ Monthly Contributions
 
         <h2>Monthly Contributions <small></small></h2>
         <div class="col-md-2 col-sm-2 col-xs-12 form-group pull-right" style="width: 143px;">
-          <button type="button" id="myBtn" class="btn btn-primary" data-toggle="modal" data-target = "#change-status-modal"> Add Contribution</button>
+          <a href="" id="myBtn" class="btn btn-round btn-info" data-toggle="modal" data-target = "#add-contribution" onclick="addContribution()">Add Contribution</a>
         </div>
         <div class="clearfix"></div>
       </div>
@@ -86,278 +86,78 @@ Monthly Contributions
                   @if ($selected_month != "All" && $selected_month != "")
                     <td>
                       {{$cont->$selected_month}}
-                      <div class="info-month-cont">
-                      <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                      <div class="info-popup">
-                        <table>
-                          <tr>
-                            <td>Payment:</td>
-                            <td>{{$cont->payment_type}}</td>
-                          <tr>
-                            <td>Reference No:</td>
-                            <td>{{$cont->receipt_no}}</td>
-                          </tr>
-                          <tr>
-                            <td>Date Paid:</td>
-                            <td>{{$cont->date}}</td>
-                          </tr>
-                        </table>
-                      </div>
-                      </div>
                     </td>
                   @else
-                    <td>
+                    @if (count($months) > 1)
+                      @foreach($months as $p)
+                        <?php
+                          if($p == 'January'){echo '<td>'.$cont->January.'</td>';}
+                          elseif($p == 'February'){echo '<td>'.$cont->February.'</td>';}
+                          elseif($p == 'March'){echo '<td>'.$cont->March.'</td>';}
+                          elseif($p == 'April'){echo '<td>'.$cont->April.'</td>';}
+                          elseif($p == 'May'){echo '<td>'.$cont->May.'</td>';}
+                          elseif($p == 'June'){echo '<td>'.$cont->June.'</td>';}
+                          elseif($p == 'July'){echo '<td>'.$cont->July.'</td>';}
+                          elseif($p == 'August'){echo '<td>'.$cont->August.'</td>';}
+                          elseif($p == 'September'){echo '<td>'.$cont->September.'</td>';}
+                          elseif($p == 'October'){echo '<td>'.$cont->October.'</td>';}
+                          elseif($p == 'November'){echo '<td>'.$cont->November.'</td>';}
+                          elseif($p == 'December'){echo '<td>'.$cont->December.'</td>';}
+                        ?>
+                      @endforeach
+                    @elseif (count($months) > 0)
+                      <?php
+                          if($months[0] == 'January'){echo '<td>'.$cont->January.'</td>';}
+                          elseif($months[0] == 'February'){echo '<td>'.$cont->February.'</td>';}
+                          elseif($months[0] == 'March'){echo '<td>'.$cont->March.'</td>';}
+                          elseif($months[0] == 'April'){echo '<td>'.$cont->April.'</td>';}
+                          elseif($months[0] == 'May'){echo '<td>'.$cont->May.'</td>';}
+                          elseif($months[0] == 'June'){echo '<td>'.$cont->June.'</td>';}
+                          elseif($months[0] == 'July'){echo '<td>'.$cont->July.'</td>';}
+                          elseif($months[0] == 'August'){echo '<td>'.$cont->August.'</td>';}
+                          elseif($months[0] == 'September'){echo '<td>'.$cont->September.'</td>';}
+                          elseif($months[0] == 'October'){echo '<td>'.$cont->October.'</td>';}
+                          elseif($months[0] == 'November'){echo '<td>'.$cont->November.'</td>';}
+                          elseif($months[0] == 'December'){echo '<td>'.$cont->December.'</td>';}
+                        ?>
+                    @endif
+
+                    <!-- <td>
                       {{$cont->January}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$cont->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$cont->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$cont->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
                     </td>
                     <td>
                       {{$cont->February}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$cont->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$cont->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$cont->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
                     </td>
                     <td>
                       {{$cont->March}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$cont->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$cont->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$cont->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
                     </td>
                     <td>
                       {{$cont->April}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$cont->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$cont->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$cont->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
                     </td>
                     <td>
                       {{$cont->May}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$cont->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$cont->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$cont->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
                     </td>
                     <td>
                       {{$cont->June}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$cont->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$cont->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$cont->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
                     </td>
                     <td>
                       {{$cont->July}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$cont->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$cont->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$cont->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
                     </td>
                     <td>
                       {{$cont->August}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$cont->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$cont->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$cont->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
                     </td>
                     <td>
                       {{$cont->September}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$cont->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$cont->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$cont->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
                     </td>
                     <td>
                       {{$cont->October}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$cont->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$cont->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$cont->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
                     </td>
                     <td>
                       {{$cont->November}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$cont->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$cont->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$cont->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
                     </td>
                     <td>
                       {{$cont->December}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$cont->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$cont->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$cont->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                    </td>
+                    </td> -->
                   @endif
                 </tr>
               @endforeach
@@ -367,278 +167,41 @@ Monthly Contributions
                 @if ($selected_month != "All" && $selected_month != "")
                     <td>
                       {{$contributions[0]->$selected_month}}
-                      <div class="info-month-cont">
-                      <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                      <div class="info-popup">
-                        <table>
-                          <tr>
-                            <td>Payment:</td>
-                            <td>{{$contributions[0]->payment_type}}</td>
-                          <tr>
-                            <td>Reference No:</td>
-                            <td>{{$contributions[0]->receipt_no}}</td>
-                          </tr>
-                          <tr>
-                            <td>Date Paid:</td>
-                            <td>{{$contributions[0]->date}}</td>
-                          </tr>
-                        </table>
-                      </div>
-                      </div>
                     </td>
                   @else
-                    <td>
-                      {{$contributions[0]->January}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$contributions[0]->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$contributions[0]->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$contributions[0]->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      {{$contributions[0]->February}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$contributions[0]->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$contributions[0]->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$contributions[0]->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      {{$contributions[0]->March}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$contributions[0]->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$contributions[0]->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$contributions[0]->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      {{$contributions[0]->April}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$contributions[0]->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$contributions[0]->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$contributions[0]->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      {{$contributions[0]->May}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$contributions[0]->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$contributions[0]->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$contributions[0]->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      {{$contributions[0]->June}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$contributions[0]->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$contributions[0]->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$contributions[0]->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      {{$contributions[0]->July}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$contributions[0]->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$contributions[0]->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$contributions[0]->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      {{$contributions[0]->August}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$contributions[0]->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$contributions[0]->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$contributions[0]->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      {{$contributions[0]->September}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$contributions[0]->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$contributions[0]->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$contributions[0]->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      {{$contributions[0]->October}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$contributions[0]->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$contributions[0]->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$contributions[0]->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      {{$contributions[0]->November}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$contributions[0]->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$contributions[0]->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$contributions[0]->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      {{$contributions[0]->December}}
-                      <div class="info-month-cont">
-                        <a href=""><img src="/images/icon-info.png" alt="info" align="middle"></a>
-                        <div class="info-popup">
-                          <table>
-                            <tr>
-                              <td>Payment:</td>
-                              <td>{{$contributions[0]->payment_type}}</td>
-                            <tr>
-                              <td>Reference No:</td>
-                              <td>{{$contributions[0]->receipt_no}}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Paid:</td>
-                              <td>{{$contributions[0]->date}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                    </td>
+                    @if (count($months) > 1)
+                      @foreach($months as $p)
+                        <?php
+                          if($p == 'January'){echo '<td>'.$contributions[0]->January.'</td>';}
+                          elseif($p == 'February'){echo '<td>'.$contributions[0]->February.'</td>';}
+                          elseif($p == 'March'){echo '<td>'.$contributions[0]->March.'</td>';}
+                          elseif($p == 'April'){echo '<td>'.$contributions[0]->April.'</td>';}
+                          elseif($p == 'May'){echo '<td>'.$contributions[0]->May.'</td>';}
+                          elseif($p == 'June'){echo '<td>'.$contributions[0]->June.'</td>';}
+                          elseif($p == 'July'){echo '<td>'.$contributions[0]->July.'</td>';}
+                          elseif($p == 'August'){echo '<td>'.$contributions[0]->August.'</td>';}
+                          elseif($p == 'September'){echo '<td>'.$contributions[0]->September.'</td>';}
+                          elseif($p == 'October'){echo '<td>'.$contributions[0]->October.'</td>';}
+                          elseif($p == 'November'){echo '<td>'.$contributions[0]->November.'</td>';}
+                          elseif($p == 'December'){echo '<td>'.$contributions[0]->December.'</td>';}
+                        ?>
+                      @endforeach
+                    @elseif (count($months) > 0)
+                      <?php
+                          if($months[0] == 'January'){echo '<td>'.$contributions[0]->January.'</td>';}
+                          elseif($months[0] == 'February'){echo '<td>'.$contributions[0]->February.'</td>';}
+                          elseif($months[0] == 'March'){echo '<td>'.$contributions[0]->March.'</td>';}
+                          elseif($months[0] == 'April'){echo '<td>'.$contributions[0]->April.'</td>';}
+                          elseif($months[0] == 'May'){echo '<td>'.$contributions[0]->May.'</td>';}
+                          elseif($months[0] == 'June'){echo '<td>'.$contributions[0]->June.'</td>';}
+                          elseif($months[0] == 'July'){echo '<td>'.$contributions[0]->July.'</td>';}
+                          elseif($months[0] == 'August'){echo '<td>'.$contributions[0]->August.'</td>';}
+                          elseif($months[0] == 'September'){echo '<td>'.$contributions[0]->September.'</td>';}
+                          elseif($months[0] == 'October'){echo '<td>'.$contributions[0]->October.'</td>';}
+                          elseif($months[0] == 'November'){echo '<td>'.$contributions[0]->November.'</td>';}
+                          elseif($months[0] == 'December'){echo '<td>'.$contributions[0]->December.'</td>';}
+                        ?>
+                    @endif
                   @endif
               </tr>
             @endif
@@ -651,7 +214,8 @@ Monthly Contributions
     </div>
   </div>
 
-  <div id="myModal" class="modal custom-modal">
+  <div id="add-contribution" class="modal fade custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
 		<div class="modal-content custom-modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -722,10 +286,11 @@ Monthly Contributions
 	             	<button class="btn btn-success">Save</button>
 	             </div>
 	             
-	         	</form>
+	         	{{Form::close()}}
 			</div>
 		</div>
 	</div>
+</div>
 </div>
 
 <script src="{{ asset('js/jquery.min.js') }}"></script>
@@ -787,7 +352,9 @@ Monthly Contributions
 
             // var logo = encodedBase;
 
-            var logo = 'data:image/jpeg;base64,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ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA=';
+            // var logo = "";
+
+            // var logo = 'data:image/jpeg;base64,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ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA=';
            
             // It's important to create enough space at the top for a header !!!
             doc.pageMargins = [20,60,20,30];
@@ -802,10 +369,10 @@ Monthly Contributions
             doc['header']=(function() {
               return {
                 columns: [
-                  {
-                    image: logo,
-                    width: 24
-                  },
+                  // {
+                  //   image: logo,
+                  //   width: 24
+                  // },
                   {
                     alignment: 'left',
                     italics: true,
@@ -882,10 +449,12 @@ Monthly Contributions
 
                 $(win.document.body)
                   .prepend(
-                      '<div style="text-align: center;font-size: 22px;color: black;margin-top: 10px;margin-bottom: 20px;height: 95px;line-height: 95px;"><div style="display: inline-block;vertical-align: middle;"><div style="display: inline; margin-right: 20px;"><img src="{{url('/uploads/')}}/{{ $coop->logo }}" style="width:100px;" /></div><h2 style="display: inherit;font-size:36px;">{{ $coop->coop_name }}</h2></div></div>'
+                      '<div style="text-align: center;font-size: 22px;color: black;margin-top: 10px;margin-bottom: 20px;height: 95px;line-height: 95px;"><div style="display: inline-block;vertical-align: middle;"><div style="display: inline; margin-right: 20px;"><img src="{{url('/uploads/')}}/{{ $coop->logo }}" style="width:100px;" /></div><h2 style="display: inherit;font-size:30px;">{{ $coop->coop_name }}</h2></div></div>'
                   );
 
-                $(win.document.body).find('h1').addClass('display').css('font-size', '28px');
+                $(win.document.body).find('h1').addClass('display').css('font-size', '20px');
+                $(win.document.body).find( 'table' )
+                        .addClass( 'print-table' );
 
                 //prepend Month and Year on the Title
                 if(monthVal == 'All'){
@@ -905,20 +474,7 @@ Monthly Contributions
     });
   });
 
-  
-  	// Get the modal
-	var modal = document.getElementById('myModal');
-
-	// Get the button that opens the modal
-	var btn = document.getElementById("myBtn");
-
-	// Get the <span> element that closes the modal
-	var span = document.getElementsByClassName("close")[0];
-
-	// When the user clicks on the button, open the modal 
-
-	btn.onclick = function() {
-	    modal.style.display = "block";
+	function addContribution() {
       $('#_year').val($('#year-contribution').find(":selected").text());
       $('#_month').val($('#month-contribution').find(":selected").text());
       $('#myDatepicker').datetimepicker({
@@ -931,18 +487,6 @@ Monthly Contributions
 
       var currentdate = moment().format('MMDDYYYY-HHmmssSS');
       $('#receiptno').val(currentdate);
-	}
-
-	// When the user clicks on <span> (x), close the modal
-	span.onclick = function() {
-	    modal.style.display = "none";
-	}
-
-	// When the user clicks anywhere outside of the modal, close it
-	window.onclick = function(event) {
-	    if (event.target == modal) {
-	        modal.style.display = "none";
-	    }
 	}
 
   function paymentMethod(val) {

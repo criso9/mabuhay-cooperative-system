@@ -206,7 +206,6 @@ class UserController extends BaseController
 			DB::raw("DATE_FORMAT(officers.to,'%Y %M') AS toMoYr"),
 			DB::raw("(SELECT CONCAT(users.f_name, '', users.l_name) FROM users WHERE users.id = officers.removed_by) AS rem_by"),
 			'officers.updated_at', 'officers.remarks')
-		->where('users.role_id', '=', '2')
 		->where('officers.status', '=', 'inactive')
 		->get();
 
@@ -238,8 +237,10 @@ class UserController extends BaseController
 
         $off->save();
 
-        $user->role_id = "2";
-        $user->update();
+        if($user->role_id != '1'){
+        	$user->role_id = "2";
+        	$user->update();
+        }
 
         return Redirect::route('admin.officer.index')->withFlashMessage('Officer was added');
 	}
@@ -310,7 +311,7 @@ class UserController extends BaseController
 		
 		//check if link is already expired (will expire after 7 days)
 		if (Carbon::now()->greaterThan($user->reviewed_at->addDays(7))) {
-	        return Redirect::route('login')->withFlashMessage('Sorry, the link has expired.');;
+	        return Redirect::route('login')->withFlashMessage('Sorry, the link has expired. Please contact the Cooperative.');;
 	    } else {
 	    	$user->status = "active";
 			$user->activated_at = date('Y-m-d H:i:s');
@@ -340,8 +341,6 @@ class UserController extends BaseController
 		->where('admins.status', '=', 'active')
 		->get();
 
-		// dd($admins);
-
 		$inactive = DB::table('admins')
 		->join('users', 'admins.user_id', '=', 'users.id')
 		->select('users.id', 'users.f_name', 'users.l_name', 'users.m_name',
@@ -349,7 +348,6 @@ class UserController extends BaseController
 			DB::raw("DATE_FORMAT(admins.to,'%Y %M') AS toMoYr"),
 			DB::raw("(SELECT CONCAT(users.f_name, '', users.l_name) FROM users WHERE users.id = admins.removed_by) AS rem_by"),
 			'admins.updated_at', 'admins.remarks')
-		// ->where('users.role_id', '=', '2')
 		->where('admins.status', '=', 'inactive')
 		->get();
 
@@ -394,7 +392,7 @@ class UserController extends BaseController
 		$user_id = Admin::select('user_id')->where('id', '=', $request->adminId)->first();
 		$officer = Officer::select('user_id')->where('user_id', '=', $user_id->user_id)->where('status', '=', 'active')->first();
 		$user = User::findOrFail($user_id->user_id);
-		
+
 		$ad->status = "inactive";
 		$ad->remarks = $request->remarks;
 		$ad->to = date('Y-m-d H:i:s');

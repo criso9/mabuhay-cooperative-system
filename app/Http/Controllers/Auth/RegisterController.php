@@ -27,13 +27,21 @@ class RegisterController extends BaseController
         $agree = $request['agree'];
         $gender = $request['gender'];
         $cStatus = $request['civil_status'];
+        $referral = $request['referral'];
+        $refRel = $request['ref_relation'];
 
         $validator = Validator::make($request = Input::all(), User::$reg_rules);
 
         $email = User::select('id')->where('email', '=', $request['email'])->count();
+        $fullName = User::select('id')
+        ->where('f_name', '=', $request['f_name'])
+        ->where('l_name', '=', $request['l_name'])
+        ->where('m_name', '=', $request['m_name'])
+        ->count();
 
+       
         //Add custom validation
-        $validator->after(function ($validator) use ($agree, $age, $gender, $cStatus, $email) {
+        $validator->after(function ($validator) use ($agree, $age, $gender, $cStatus, $email, $referral, $refRel, $fullName) {
             if($gender == 'Select Gender'){
                 $validator->errors()->add('gender', 'The gender field is required.');
             }if($cStatus == 'Select Status'){
@@ -47,6 +55,14 @@ class RegisterController extends BaseController
             }
             if($email > 0){
                 $validator->errors()->add('email', 'Email is already registered.');
+            }
+            if($fullName > 0){
+                $validator->errors()->add('f_name', 'Name is already registered (Last, First and Middle Name).');
+            }
+            if($referral != '' || $referral != null){
+                if($refRel == 'Select Relationship' || $refRel != null){
+                    $validator->errors()->add('ref_relation', 'The Referral Relationship field is required.');
+                }
             }
            
         });
@@ -78,7 +94,7 @@ class RegisterController extends BaseController
         $data->status = 'pending';
         $data->role_id = '3';
         $data->referral = $request['referral'];
-        $data->ref_relation = $request['ref_relation'];
+        $data->ref_relation = $refRel;
      
         $data->save();
 

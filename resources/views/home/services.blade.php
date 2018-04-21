@@ -4,14 +4,14 @@
 
 <div id="breadcrumb">
     <div class="container">
-      <div class="breadcrumb">
+      <div class="breadcrumb" style="padding: 0px;font-size: 14px;">
         <li><a href="{{url('/')}}">Home</a></li>
         <li>Services</li>
       </div>
     </div>
   </div>
 
-  <div class="services">
+  <div class="services" style="margin-top: 130px;">
     <div class="container">
       <h3>@if($coop)
           {{ $coop->coop_name }}

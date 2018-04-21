@@ -192,6 +192,18 @@ Business List
               <textarea name="remarks" placeholder="Enter text here" style="width: 100%;" required></textarea>
             </div>
           </div>
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Ended <span class="req">*</span>
+            </label>
+            <div class="col-md-5 col-sm-5 col-xs-12" style="height: 34px;">     
+              <div class="input-group date">
+                <input type="text" class="form-control" id="date_ended" name="date_ended" required />
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+              </div>
+            </div>
+          </div>
          <br/>
          <div style="float: right;">
             <button type="submit" class="btn btn-primary">Proceed</button>
@@ -259,6 +271,11 @@ Business List
 
   function deactivate(id) {
     $('#_id').val(id);
+
+    $('#date_ended').datetimepicker({
+        format: "MMMM DD, YYYY",
+        maxDate: moment().add(1, 'h')
+      });
   }
   
 

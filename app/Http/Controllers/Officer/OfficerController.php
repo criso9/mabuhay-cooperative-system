@@ -18,6 +18,7 @@ use App\User;
 use App\MonthlyContribution;
 use App\Loan;
 use App\Http\Controllers\BaseController;
+use App\LoanPayment;
 
 class OfficerController extends BaseController
 {
@@ -29,7 +30,7 @@ class OfficerController extends BaseController
 
 	public function monthlyContribution()
 	{
-		if($this->position != 'Treasurer' && Auth::user()->id != '1'){
+		if($this->position != 'Treasurer' && $this->position != 'President'){
 			return Redirect::route('forbidden');
 		}else{
 			$curr_year = new DateTime(date('Y-m-d'));
@@ -102,9 +103,13 @@ class OfficerController extends BaseController
 	       	}
 
 			//get list of years since COOP founded date
-			$start_year = new DateTime("2014-05-01");
+			$start_year = $date_founded;
 			$end_year = new DateTime(date('Y-m-d'));
-			$end_year->add(new DateInterval("P1Y"));
+
+			if ($curr_date->format('Y') != $date_founded->format('Y')){
+				$end_year->add(new DateInterval("P1Y"));
+			}
+
 			$interval_year = DateInterval::createFromDateString('1 year');
 			$period_year   = new DatePeriod($start_year, $interval_year, $end_year);
 
@@ -116,7 +121,7 @@ class OfficerController extends BaseController
 
 			rsort($years);
 	 	
-			//dd($contributions);
+			// dd($years);
 
 			return view('officer.contribution.monthly', compact('contributions', 'months', 'years', 'users', 'selected_year', 'selected_month', 'payment'));
 		}
@@ -125,7 +130,7 @@ class OfficerController extends BaseController
 
 	public function monthlyContributionYearSelected(Request $request)
 	{
-		if($this->position != 'Treasurer' && Auth::user()->id != '1'){
+		if($this->position != 'Treasurer' && $this->position != 'President'){
 			return Redirect::route('forbidden');
 		}else{
 			return Redirect::route('officer.contribution.monthly', ['y'=>$request->year, 'm'=>$request->month]);
@@ -134,7 +139,7 @@ class OfficerController extends BaseController
 
 	public function monthlyContributionInfo(Request $request)
 	{
-		if($this->position != 'Treasurer' && Auth::user()->id != '1'){
+		if($this->position != 'Treasurer' && $this->position != 'President'){
 			return Redirect::route('forbidden');
 		}else{
 			$data= $request->id;
@@ -144,7 +149,7 @@ class OfficerController extends BaseController
 
 	public function storeContribution(Request $request)
 	{
-		if($this->position != 'Treasurer' && Auth::user()->id != '1'){
+		if($this->position != 'Treasurer' && $this->position != 'President'){
 			return Redirect::route('forbidden');
 		}else{
 			$validator = Validator::make($data = Input::all(), MonthlyContribution::$rules);
@@ -185,13 +190,12 @@ class OfficerController extends BaseController
 	        } else if ($request->payment_id == '3') {
 
 	        }
-	    }
-		
+	    }	
 	} 
 
 	public function damayanContribution()
 	{
-		if($this->position != 'Treasurer' && Auth::user()->id != '1'){
+		if($this->position != 'Treasurer' && $this->position != 'President'){
 			return Redirect::route('forbidden');
 		}else{
 			
@@ -215,7 +219,7 @@ class OfficerController extends BaseController
 
 	public function sharecapitalContribution()
 	{
-		if($this->position != 'Treasurer' && Auth::user()->id != '1'){
+		if($this->position != 'Treasurer' && $this->position != 'President'){
 			return Redirect::route('forbidden');
 		}else{
 			// $coop = Cooperative::whereNotNull('id')->first();
@@ -255,38 +259,76 @@ class OfficerController extends BaseController
 
 	public function loan()
     {
-        $status_filter = Input::get('s');
-        $statFilter = array();
-        $cashLoan = "false";
-        $loanable = "false";
+    	if($this->position != 'Treasurer' && $this->position != 'President'){
+			return Redirect::route('forbidden');
+		}else{
+	        $status_filter = Input::get('s');
+	        $statFilter = array();
+	        $cashLoan = "false";
+	        $loanable = "false";
 
-        $stat = DB::table('loans')
-        ->select(DB::raw("DISTINCT status"))
-        ->pluck('status');
+	        $stat = DB::table('loans')
+	        ->select(DB::raw("DISTINCT status"))
+	        ->pluck('status');
 
-        // dd($stat);
+	        // dd($stat);
 
-        if($status_filter == 'all' || $status_filter == ''){
-            foreach($stat as $s) {
-                array_push($statFilter, $s);
-            }
-        }else{
-            array_push($statFilter,  $status_filter);
-        }
+	        if($status_filter == 'all' || $status_filter == ''){
+	            foreach($stat as $s) {
+	                array_push($statFilter, $s);
+	            }
+	        }else{
+	            array_push($statFilter,  $status_filter);
+	        }
 
-        $loans = DB::table('loans')
-        ->join('users', 'loans.user_id', '=', 'users.id')
-        ->select('loans.user_id', 'users.f_name', 'users.l_name', 'loans.transaction_no', 'loans.date_applied', 'loans.status', 'loans.amount_loan', 'loans.amount_paid', 'loans.remaining_balance', 'loans.due_date', 'loans.id')
-        ->where('user_id', '!=', Auth::user()->id)
-        ->whereIn('loans.status', $statFilter)
-        ->get();
+	         if($this->position == 'Treasurer'){
+	         	$userPres = DB::table('loans')
+		        ->join('users', 'loans.user_id', '=', 'users.id')
+		        ->leftJoin('officers', 'loans.user_id', '=', 'officers.user_id')
+		        ->leftJoin('positions', 'officers.position_id', '=', 'positions.id')
+		        ->select('officers.user_id')
+		    	->where('positions.position', 'President')
+		        ->where('officers.status', 'active')
+		        ->where('loans.status', 'pending')
+		        ->first();
 
-        return view('officer.loan.index', compact('loans', 'stat', 'status_filter'));
+		        if($userPres != '' || $userPres != null){
+		        	$allowedId = $userPres->user_id;
+		        }else{
+		        	$allowedId = '0';
+		        }
+	        }
+
+	        $loans = DB::table('loans')
+	        ->join('users', 'loans.user_id', '=', 'users.id')
+	        ->select('loans.user_id', 'users.f_name', 'users.l_name', 'loans.transaction_no', 'loans.date_applied', 'loans.status', 'loans.amount_loan', 'loans.amount_paid', 'loans.remaining_balance', 'loans.due_date', 'loans.id', 'loans.interest_amount', 'loans.reviewed_at', 'loans.remarks',
+	        	DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE loans.reviewed_by = users.id) AS reviewed_by")
+	    	)
+	        ->where('loans.user_id', '!=', Auth::user()->id)
+	        ->whereIn('loans.status', $statFilter)
+	        ->get();
+
+	        $transNo = DB::table('loans')
+	        ->select('transaction_no','transaction_no')
+	        ->where('status', 'Active')
+	        ->whereNotIn('id', [Auth::user()->id])
+	        ->orderBy('transaction_no')
+	        ->pluck('transaction_no', 'transaction_no');
+
+
+	        // dd($allowedId);
+
+	        return view('officer.loan.index', compact('loans', 'stat', 'status_filter', 'transNo', 'allowedId'));
+	    }
     }
 
     public function loanFilter(Request $request)
     {
-        return Redirect::route('officer.loan.index', ['s'=>$request->statusFilter]);
+    	if($this->position != 'Treasurer' && $this->position != 'President'){
+			return Redirect::route('forbidden');
+		}else{
+       		return Redirect::route('officer.loan.index', ['s'=>$request->statusFilter]);
+       	}
     }
 
     public function loanApproval(Request $request){
@@ -317,4 +359,169 @@ class OfficerController extends BaseController
 
   //       return Redirect::route('officer.loan.index')->withFlashMessage($msg);
     }
+
+    public function loanPayment(Request $request){
+    	if($this->position != 'Treasurer' && $this->position != 'President'){
+			return Redirect::route('forbidden');
+		}else{
+			$validator = Validator::make($data = Input::all(), LoanPayment::$rules);
+			if ($validator->fails())
+			{
+				return Redirect::back()->withErrors($validator)->withInput();
+			}
+
+			$loanPay = new LoanPayment;
+
+			// dd($request->transaction_no);
+
+	        $loanPay->transaction_no = $request->transaction_no;
+	        $loanPay->amount = $request->amount;
+	        $loanPay->interest_amount = $request->interest_amount;
+	        $loanPay->date_paid = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->date_paid)));
+	        $loanPay->payment_type = $request->payment_type;
+	        $loanPay->receipt_no = $request->receipt_no;
+	        $loanPay->updated_by = Auth::user()->id;
+
+	        $loanPay->save();
+
+	       	$loanInfo = DB::table('loans')
+        	->select('amount_paid', 'interest_amount', 'id')
+        	->where('transaction_no', $request->transaction_no)
+        	->first();
+
+        	$loan = Loan::findOrFail($loanInfo->id);
+
+        	if($loanInfo->amount_paid > 0){
+        		$amount_paid = $loanInfo->amount_paid + $request->amount;
+        	}else{
+        		$amount_paid = $request->amount;
+        	}
+
+        	if($request->interest_amount != '' || $request->interest_amount != null){
+        		if($loanInfo->interest_amount > 0){
+	        		$intAmount = $loanInfo->interest_amount + $request->interest_amount;
+	        	}else{
+	        		$intAmount = $request->interest_amount;
+	        	}
+
+	        	$loan->interest_amount = $intAmount;
+        	}
+        	
+        	$loan->amount_paid = $amount_paid;
+
+        	$loan->update();
+	        
+	        return Redirect::route('officer.loan.index')->withFlashMessage('Payment was added');
+	    }
+    }
+
+    public function businessList(){
+    	$status_filter = Input::get('s');
+        $statFilter = array();
+
+        $stat = DB::table('businesses')
+        ->select(DB::raw("DISTINCT status"))
+        ->pluck('status');
+
+        if($status_filter == 'all' || $status_filter == ''){
+            foreach($stat as $s) {
+                array_push($statFilter, $s);
+            }
+        }else{
+            array_push($statFilter,  $status_filter);
+        }
+
+        $business = DB::table('businesses')
+         ->select('id', 'name', 'description', 'businesses.status', 'capital', 'interest', 'date_started', 
+            DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE businesses.added_by = users.id) AS added_by"),
+            'date_ended',
+            DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE businesses.removed_by = users.id) AS removed_by"),
+            'remarks'
+        )
+        ->whereIn('status', $statFilter)
+        -> get();
+
+        return view('officer.business.index', compact('business', 'stat', 'status_filter'));
+    }
+
+    public function businessFilter(Request $request)
+    {
+        return Redirect::route('officer.business.index', ['s'=>$request->statusFilter]);
+    }
+
+    public function indexMember()
+	{
+		$selected_filter = Input::get('f');
+		$status_filter = Input::get('s');
+		$members = '';
+		$statFilter = array();
+
+		if($status_filter == 'all' || $status_filter == ''){
+			array_push($statFilter,  "active");
+			array_push($statFilter,  "inactive");
+		}else{
+			array_push($statFilter,  $status_filter);
+		}
+
+		if ($selected_filter != '') {
+			$members = DB::table('users')
+			->select('users.id', 'f_name', 'l_name', 'm_name', 'phone', 'address', 'status', 'role_id', 'avatar',
+				DB::raw("(CASE role_id 
+						WHEN 1 THEN 'Admin' 
+						WHEN 3 THEN 'Member' 
+						WHEN 2 THEN 
+							(CASE (SELECT o.status FROM officers o WHERE o.status = 'active' AND user_id = users.id) 
+							WHEN 'active'
+							THEN (SELECT p.position FROM officers o JOIN positions p ON o.position_id = p.id WHERE o.status = 'active' AND o.user_id = users.id)
+							END)
+						END) AS description"),
+				DB::raw("YEAR(activated_at) as activated_at")
+	        )
+			->where('l_name', 'like', $selected_filter.'%')
+			->whereIn('users.status', $statFilter)
+			->orderBy('l_name', 'asc')
+			->get();
+        } else {
+			$members = DB::table('users')
+			->select('users.id', 'f_name', 'l_name', 'm_name', 'phone', 'address', 'status', 'role_id', 'avatar',
+				DB::raw("(CASE role_id 
+						WHEN 1 THEN 'Admin' 
+						WHEN 3 THEN 'Member' 
+						WHEN 2 THEN 
+							(CASE (SELECT o.status FROM officers o WHERE o.status = 'active' AND user_id = users.id) 
+							WHEN 'active'
+							THEN (SELECT p.position FROM officers o JOIN positions p ON o.position_id = p.id WHERE o.status = 'active' AND o.user_id = users.id)
+							END)
+						END) AS description"),
+				DB::raw("YEAR(activated_at) as activated_at")
+			)
+			->whereIn('users.status', $statFilter)
+			->orderBy('l_name', 'asc')
+			->get();
+        }
+
+		$filters = range('A', 'Z');
+
+		return view('officer.member.index', compact('members', 'filters', 'selected_filter', 'status_filter'));
+	}
+
+	public function showMember($id)
+	{
+		
+		$member = DB::table('users')
+			->join('roles', 'users.role_id', '=', 'roles.id')
+			->select('users.id', 'f_name', 'l_name', 'm_name', 'phone','gender', 'address', 'civil_status', 'email', 'avatar', 'status', 'roles.role_name',
+				DB::raw("DATE_FORMAT(activated_at, '%M %d, %Y') as activated_at"),
+				DB::raw("DATE_FORMAT(b_date, '%M %d, %Y') as b_date")
+			)
+			->where('users.id', '=', $id)
+			->first();
+		
+		return view('officer.member.show', compact('member'));
+	}
+
+	public function memberFilter(Request $request)
+	{
+		return Redirect::route('officer.member.index', ['f'=>$request->filter, 's'=>$request->statusFilter]);
+	}
 }

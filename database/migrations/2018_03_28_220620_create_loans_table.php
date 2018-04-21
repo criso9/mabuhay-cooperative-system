@@ -21,10 +21,11 @@ class CreateLoansTable extends Migration
             $table->dateTime('date_applied');
             $table->float('amount_loan');
             $table->float('amount_paid')->nullable();
+            $table->float('interest_amount')->nullable();
             $table->float('remaining_balance')->nullable();
             $table->dateTime('due_date')->nullable();
             $table->bigInteger('reviewed_by')->unsigned()->nullable();
-            $table->bigInteger('reviewed_at')->unsigned()->nullable();
+            $table->dateTime('reviewed_at')->nullable();
             $table->String('remarks')->nullable();
             $table->timestamps();
         });

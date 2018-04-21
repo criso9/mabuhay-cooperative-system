@@ -22,7 +22,19 @@ class MemberController extends BaseController
 {
     public function index()
 	{
-		return view('member.index');
+
+		$contributions = DB::table('users')
+			->join('contributions', 'users.id', '=', 'contributions.user_id')
+            ->select('contributions.amount',
+            	DB::raw('monthname(contributions.date) AS month'))
+           	->whereYear('contributions.date', '=', '2018')
+           	->where('contributions.user_id', '=', Auth::user()->id)
+           	->orderBy(DB::raw('month(contributions.date)'), 'asc')
+            ->get();
+
+            // dd($contributions);
+
+		return view('member.index', compact('contributions'));
 	}
 
 	public function monthlyContribution()
@@ -73,7 +85,7 @@ class MemberController extends BaseController
 
        	$months = array();
 
-       	if ($curr_date->format('Y') == $date_founded->format('Y')) {
+       	if ($curr_date->format('Y') == $date_founded->format('Y') || $selected_year == $date_founded->format('Y')) {
        		//get list of months for the year founded
        		$end_month = new DateTime($date_founded->format('Y').'-12-31');
        		$interval_month = DateInterval::createFromDateString('1 month');
@@ -90,9 +102,13 @@ class MemberController extends BaseController
        	}
 
 		//get list of years since COOP founded date
-		$start_year = new DateTime("2014-05-01");
+		$start_year = $date_founded;
 		$end_year = new DateTime(date('Y-m-d'));
-		$end_year->add(new DateInterval("P1Y"));
+
+		if ($curr_date->format('Y') != $date_founded->format('Y')){
+			$end_year->add(new DateInterval("P1Y"));
+		}
+		
 		$interval_year = DateInterval::createFromDateString('1 year');
 		$period_year   = new DatePeriod($start_year, $interval_year, $end_year);
 
@@ -103,6 +119,7 @@ class MemberController extends BaseController
 		}
 
 		rsort($years);
+
 
 		return view('member.contribution.monthly', compact('contributions', 'months', 'years', 'selected_year', 'selected_month'));
 	}
@@ -141,8 +158,11 @@ class MemberController extends BaseController
 		}
 
 		$loans = DB::table('loans')
+		->select('loans.user_id', 'loans.transaction_no', 'loans.date_applied', 'loans.status', 'loans.amount_loan', 'loans.amount_paid', 'loans.remaining_balance', 'loans.due_date', 'loans.id', 'loans.interest_amount', 'loans.reviewed_at', 'loans.remarks',
+			DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE loans.reviewed_by = users.id) AS reviewed_by")
+		)
 		->where('user_id', '=', Auth::user()->id)
-		->whereIn('status', $statFilter)
+		->whereIn('loans.status', $statFilter)
 		->get();
 
 		$user = User::where('status', 'active')->where('id', [Auth::user()->id])->first();
@@ -166,14 +186,17 @@ class MemberController extends BaseController
 		->where('status', '=', 'active')
 		->first();
 
-		if($activeLoan->balance >= $contribution->loan_limit){
+		if($contribution->amount != null){
+			if($activeLoan->balance >= $contribution->loan_limit){
+				$cashLoan = "false";
+			} else {
+				$cashLoan = "true";
+				$loanable = abs($contribution->loan_limit - $activeLoan->balance);
+			}
+		}else{
 			$cashLoan = "false";
-		} else {
-			$cashLoan = "true";
-			$loanable = abs($contribution->loan_limit - $activeLoan->balance);
+			$loanable = 0;
 		}
-
-		// dd($cashLoan);
 
 		return view('member.loan.index', compact('loans', 'stat', 'status_filter', 'user', 'contribution', 'interest', 'cashLoan', 'activeLoan', 'loanable'));
 	}

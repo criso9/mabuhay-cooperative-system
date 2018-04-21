@@ -11,7 +11,7 @@
 			<div class="x_title">
 				<h2>List of Applied Loans <small></small></h2>
 				<div class="col-md-2 col-sm-2 col-xs-12 form-group pull-right" style="width: 143px;">
-		          <button type="button" id="cash-loan" class="btn btn-primary"> Apply Cash Loan</button>
+		          <button type="button" id="cash-loan" class="btn btn-round btn-info" data-toggle="modal" data-target="#cashLoanModal" onclick="applyCashLoan()"> Apply Cash Loan</button>
 		        </div>
 				<div class="clearfix"></div>
 			</div>
@@ -39,10 +39,14 @@
               <td>Transaction No.</td>
               <td>Date Applied</td>
               <td>Status</td>
+              <td>Date Reviewed</td>
+              <td>Reviewed By</td>
               <td>Amount Loan</td>
               <td>Amount Paid</td>
+              <td>Interest Paid</td>
               <td>Remaining Balance</td>
               <td>Due Date</td>
+              <td>Remarks</td>
             </tr>
             </thead>
             <tbody>
@@ -52,10 +56,14 @@
 	                    <td>{{$l->transaction_no}}</td>
 	                    <td>{{$l->date_applied}}</td>
 	                    <td>{{$l->status}}</td>
+	                    <td>{{$l->reviewed_at}}</td>
+	                    <td>{{$l->reviewed_by}}</td>
 	                    <td>{{$l->amount_loan}}</td>
 	                    <td>{{$l->amount_paid}}</td>
+	                    <td>{{$l->interest_amount}}</td>
 	                    <td>{{$l->remaining_balance}}</td>
 	                    <td>{{$l->due_date}}</td>
+	                    <td>{{$l->remarks}}</td>
 	                  </tr>
 	                @endforeach
 	              @elseif ($loans->count() > 0)
@@ -63,10 +71,14 @@
 						<td>{{$loans[0]->transaction_no}}</td>
 						<td>{{$loans[0]->date_applied}}</td>
 						<td>{{$loans[0]->status}}</td>
+						<td>{{$loans[0]->reviewed_at}}</td>
+						<td>{{$loans[0]->reviewed_by}}</td>
 						<td>{{$loans[0]->amount_loan}}</td>
 						<td>{{$loans[0]->amount_paid}}</td>
+						<td>{{$loans[0]->interest_amount}}</td>
 						<td>{{$loans[0]->remaining_balance}}</td>
 						<td>{{$loans[0]->due_date}}</td>
+						<td>{{$loans[0]->remarks}}</td>
 	                </tr>
 	              @endif
             </tbody>
@@ -77,8 +89,9 @@
 	</div>
 </div>
 
-<div id="cashLoanModal" class="modal custom-modal">
-    <div class="modal-content custom-modal-content" style="width: 70%;">
+<div id="cashLoanModal" class="modal fade custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog" role="document" style="width: 65%;">
+    <div class="modal-content custom-modal-content">
       <div class="modal-header">
         <button type="button" class="close stat-close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -161,7 +174,7 @@
 		      			<td colspan="4">&#8369;{{number_format($loanable, 2)}}</td>
 		      		</tr>
 		      		<tr>
-		      			<td colspan="2">Loan Amount:</td>
+		      			<td colspan="2">Loan Amount:</td>	
 		      			<td colspan="4">
 		      				<input type="number" id="amount_loan" name="amount_loan" min="1" max="{{$loanable}}" required />
 		      			</td>
@@ -180,14 +193,16 @@
 		      			<td colspan="6" align="right">
 		      				<button type="submit" class="btn btn-primary">Submit</button>
 		      				<input type="hidden" id="confirm" name="confirm"/>
+		      				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 		      			</td>
 		      		</tr>
 		      	</table>
 		      </div>
 		     
-         </form>
+         {{Form::close()}}
       </div>
     </div>
+</div>
   </div>
 
 
@@ -221,31 +236,11 @@ $(document).ready(function() {
 
 });
 
-  // Get the modal
-  var modal = document.getElementById('cashLoanModal');
-
-  // Get the button that opens the modal
-  var btn = document.getElementById("cash-loan");
- 
-  // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close")[0];
-
   // When the user clicks on the button, open the modal 
-  btn.onclick = function() {
-      modal.style.display = "block";
+  function applyCashLoan() {
       var currentdate = moment().format('YYYYDDMM-HHmmssSS-{{Auth::user()->id}}');
       $('#transNo').text(currentdate);
       $('#_transNo').val(currentdate);
-  }
-
-  span.onclick = function() {
-      modal.style.display = "none";
-  }
-
-  window.onclick = function(event) {
-      if (event.target == modal) {
-          modal.style.display = "none";
-      }
   }
 
   function validate(form) {

@@ -108,10 +108,20 @@ Route::group(['prefix' => 'officer', 'middleware' => 'officer'], function () {
 	 // Route::get('contribution/add', array('as' => 'officer.contribution.add','uses' => 'Officer\OfficerController@addContribution'));
 	 Route::post('contribution/add', array('as' => 'officer.contribution.store','uses' => 'Officer\OfficerController@storeContribution'));
 
-	 Route::get('/loan', array('as' => 'officer.loan.index','uses' => 'Officer\OfficerController@loan'));
+	  Route::get('/loan', array('as' => 'officer.loan.index','uses' => 'Officer\OfficerController@loan'));
      Route::post('/loan', array('as' => 'officer.loan.index.filter','uses' => 'Officer\OfficerController@loanFilter'));
 
      Route::post('/loan/approval', array('as' => 'officer.loan.approval', 'uses' => 'Officer\OfficerController@loanApproval'));
+
+     Route::post('/loan/payment', array('as' => 'officer.loan.store','uses' => 'Officer\OfficerController@loanPayment'));
+
+     Route::get('/business', array('as' => 'officer.business.index','uses' => 'Officer\OfficerController@businessList'));
+     Route::post('/business', array('as' => 'officer.business.index.filter','uses' => 'Officer\OfficerController@businessFilter'));
+
+     Route::get('/member', array('as' => 'officer.member.index','uses' => 'Officer\OfficerController@indexMember'));
+   Route::post('/member', array('as' => 'officer.member.index.filter','uses' => 'Officer\OfficerController@memberFilter'));
+
+   Route::get('/member/show/{member}', array('as' => 'officer.member.show','uses' => 'Officer\OfficerController@showMember'));
 	
 });
 

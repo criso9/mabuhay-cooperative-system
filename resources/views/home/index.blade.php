@@ -58,12 +58,14 @@
                 if($i == 0){
                   echo '<div class="item active">';
                   echo '<a href="'.url($c->url).'">';
-                  echo '<img src="'.url($c->path).'" alt="image" style="width:200%;height:650px!important"></a>';
+                  echo '<img src="'.url($c->path).'" alt="image" style="height: 570px!important;
+    max-width: 100%;margin:auto;"></a>';
                   echo '</div>';
                 }else{
                   echo '<div class="item">';
                   echo '<a href="'.url($c->url).'">';
-                  echo '<img src="'.url($c->path).'" alt="image" style="width:200%;height:650px!important"></a>';
+                  echo '<img src="'.url($c->path).'" alt="image" style="height: 570px!important;
+    max-width: 100%;margin:auto;"></a>';
                   echo '</div>';
                 }
                 $i++;

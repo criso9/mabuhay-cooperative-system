@@ -4,7 +4,7 @@
  
   <div id="breadcrumb">
     <div class="container">
-      <div class="breadcrumb">
+      <div class="breadcrumb" style="padding: 0px;font-size: 14px;">
         <li><a href="{{url('/')}}">Home</a></li>
         <li>Contact</li>
       </div>

@@ -23,7 +23,38 @@ class AdminController extends BaseController
 {
     public function index()
 	{
-		return view('admin.index');
+        $users = DB::table('users')
+        ->select('id')
+        ->count();
+
+        $active = DB::table('users')
+        ->select('id')
+        ->where('status', 'active')
+        ->count();
+
+        $inactive = DB::table('users')
+        ->select('id')
+        ->where('status', 'inactive')
+        ->count();
+
+        $pending = DB::table('users')
+        ->select('id')
+        ->where('status', 'pending')
+        ->count();
+
+        $waiting = DB::table('users')
+        ->select('id')
+        ->where('status', 'waiting')
+        ->count();
+
+        $rejected = DB::table('users')
+        ->select('id')
+        ->where('status', 'rejected')
+        ->count();
+
+        // dd($users);
+
+		return view('admin.index', compact('users', 'active', 'inactive', 'rejected', 'pending', 'waiting'));
 	}
 
 	public function backupDB()

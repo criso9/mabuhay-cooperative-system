@@ -472,3 +472,18 @@ form span.req{
 .profile_details:nth-child(3n) {
     clear: both;
 }
+
+.print-table tr th, .print-table tr td {
+    background-color: transparent;
+}   
+
+.print-table{
+    font-size: 13px;
+}
+
+.container-login100 {min-height: 0;}
+
+.about-link:hover, .about-link:focus{
+    color: blue;
+    text-decoration: underline;
+}
