@@ -1,3 +1,36 @@
+.preloader{
+    position: fixed;
+    top:0;
+    left:0;
+    bottom: 0;
+    right: 0;
+    background: #eee;
+    opacity: 0.9;
+    z-index: 99999;
+}
+
+.preloader .preloader-gif{
+    display: block;
+    width: 295px;
+    height: 294px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -147px 0 0 -147px;
+    background: url("../images/page-loader.gif") no-repeat;   
+    background-position: center;
+}
+
+
+.top-menu ul li a {
+    font-size: 20px;
+    padding-left: 10px;
+}
+
+.top-menu .login-menu a {
+    font-size: 16px;
+}
+
 .nav-md .container.body .right_col {padding: 0px;}
 .custom-breadcrumb .breadcrumb {
     list-style: none;
@@ -36,7 +69,7 @@
 }
 
 /*Panel*/
-.top_nav .navbar-right {width: 40%;}
+.top_nav .navbar-right {width: auto;}
 .logo-panel {margin-right: 10px;float: left;}
 .logo-img {
 	width: 35px;
@@ -471,4 +504,23 @@ form span.req{
 
 .profile_details:nth-child(3n) {
     clear: both;
+}
+
+.print-table tr th, .print-table tr td {
+    background-color: transparent;
+}   
+
+.print-table{
+    font-size: 13px;
+}
+
+.container-login100 {min-height: 0;}
+
+.about-link:hover, .about-link:focus{
+    color: blue;
+    text-decoration: underline;
+}
+
+.sub-services, .our-team{
+    padding: 20px 0 0 0;
 }

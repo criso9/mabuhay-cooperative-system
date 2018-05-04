@@ -29,7 +29,7 @@
 	        <div id="wizard" class="form_wizard wizard_horizontal">
 	        	<ul class="wizard_steps">
 		            <li>
-		              <a href="#step-1">
+		              <a href="#step1">
 		                <span class="step_no">1</span>
 		                <span class="step_descr">
 	                      Step 1<br />
@@ -38,7 +38,7 @@
 		              </a>
 		            </li>
 		            <li>
-		              <a href="#step-2">
+		              <a href="#step2">
 		                <span class="step_no">2</span>
 		                <span class="step_descr">
 							Step 2<br />
@@ -47,7 +47,7 @@
 		              </a>
 		            </li>
 		            <li>
-		              <a href="#step-3">
+		              <a href="#step3">
 		                <span class="step_no">3</span>
 		                <span class="step_descr">
 							Step 3<br />
@@ -56,7 +56,7 @@
 		              </a>
 		            </li>
 		            <li>
-		              <a href="#step-4">
+		              <a href="#step4">
 		                <span class="step_no">4</span>
 		                <span class="step_descr">
 							Step 4<br />
@@ -65,13 +65,11 @@
 		              </a>
 		            </li>
 	          	</ul>
-				<div id="step-1">
+				<div id="step1">
 				  	<div class="form-group">
 				        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="coop-name">Cooperative Name <span class="req">*</span>
 				        </label>
 				        <div class="col-md-6 col-sm-6 col-xs-12">
-				        	<!-- <input type="text" id="name" name="name" required="required" class="form-control col-md-7 col-xs-12">
-				      		</input> -->
 				      		@if ($coop)
 								{{ Form::input('text', 'coop_name', $coop->coop_name, array('class' => 'form-control col-md-7 col-xs-12', 'required' => 'required')) }}
 							@else
@@ -124,7 +122,7 @@
 				        </div>
 				  	</div>
 				</div>
-				<div id="step-2">
+				<div id="step2">
 					<h2 class="StepTitle">Home Page - Slideshow of Pictures</h2>
 					<div style="margin-bottom: 10px;float: right;">
 						<a href="" class="btn btn-round btn-info" data-toggle="modal" data-target="#add-carousel-modal" onclick="addCarousel()">Add Carousel Image</a>
@@ -172,7 +170,7 @@
 			          </table>
 			        </div>
 				</div>
-				<div id="step-3">
+				<div id="step3">
 					<h2 class="StepTitle">Upload the following documents</h2>
 					 <div style="margin-bottom: 10px;float: right;">
 						<a href="" class="btn btn-round btn-info" data-toggle="modal" data-target="#add-file-modal" onclick="addCarousel()">Add Files</a>
@@ -221,7 +219,7 @@
 					</div>
 				          
 				</div>
-				<div id="step-4">
+				<div id="step4">
 					<h2 class="StepTitle">Cash Loan Interest Rate</h2>
 						<div class="form-group">
 					        <label class="control-label col-md-3 col-sm-3 col-xs-12">Member <span class="req">*</span>

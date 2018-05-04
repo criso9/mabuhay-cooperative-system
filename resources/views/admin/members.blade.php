@@ -21,11 +21,11 @@
             <div class="clearfix"></div>
 
 			<div class="row" style="margin-bottom: 30px;">
-          		<div class="col-md-12 col-sm-12 col-xs-12 text-center">
-          			{{ Form::open(array('route' => 'admin.member.index.filter', 'method' => 'post', 'class' => 'form-horizontal form-label-left pending-type', 'style' => 'width: 22%;float: right; right: -15px;top: 0px;')) }}
+          		<div class="col-md-3 col-sm-3 col-xs-3" style="float: right;">
+          			{{ Form::open(array('route' => 'admin.member.index.filter', 'method' => 'post', 'class' => 'form-horizontal form-label-left pending-type', 'style' => 'top: 0px;')) }}
 			          <input type="hidden" name="_token" value="{{ csrf_token() }}">
 			          <div class="form-group">
-			            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-weight: normal;margin-right: -10px;">Status:</label>
+			            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-weight: normal;">Status:</label>
 			            <div class="col-md-9 col-sm-9 col-xs-12">
 			              <select id="status-type" name="statusFilter" class="form-control" style="height: 30.5px;font-size: 12px;" onchange="this.form.submit()">
 			                  <option value="all" {{ 'all' == $status_filter ? "selected" : "" }}>All</option>

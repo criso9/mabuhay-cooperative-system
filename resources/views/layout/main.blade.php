@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{$coop->coop_name}}</title>
 
   <link rel="icon" href="{{url('/uploads/'.$coop->icon)}}"/>
@@ -21,12 +21,13 @@
   <link href="{{ asset('css/prettyPhoto.css') }}" rel="stylesheet">
   <link href="{{ asset('css/style-home.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/custom.css') }}" rel="stylesheet" type="text/css" />
+  <link href="{{ asset('css/responsive.css') }}" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
   <header style="margin-bottom: 100px;">
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-      <div class="navigation">
+      <!--<div class="navigation">-->
         <div class="container">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse.collapse">
@@ -35,28 +36,27 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <div class="navbar-brand">
+            <div class="nav navbar-brand">
               <a href="{{url('/')}}"><h1>
                 @if($coop)
+                  <img src="{{url('/uploads/'.$coop->logo)}}" alt="..." class="img-circle logo-img" id="coop-logo">
                   <span>{{ $coop->coop_name }}</span>
                 @else
+                  <img src="{{url('/images/na.png')}}" alt="..." class="img-circle logo-img">
                   <span>[COOP Name here] </span>
                 @endif
               </h1></a>
             </div>
           </div>
-
           <div class="navbar-collapse collapse">
-            <div class="menu">
-              <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation"><a href="{{url('/')}}" class="active">Home</a></li>
+            <div class="top-menu">
+              <ul class="nav nav-tabs navbar-nav" role="tablist">
+                <li role="presentation"><a href="{{url('/')}}">Home</a></li>
                 <li role="presentation"><a href="{{url('/about')}}">About Us</a></li>
                 <li role="presentation"><a href="{{url('/services')}}">Services</a></li>
                 <li role="presentation"><a href="{{url('/contacts')}}">Contact Us</a></li>
               </ul>
-            </div>
-            <div class="login-home">
-              <ul class="nav nav-tabs">
+              <ul class="nav nav-tabs navbar-nav navbar-right login-menu">
                 <li>
                     @if(Auth::check())
                       @if(Auth::user()->role_id == 1)
@@ -81,10 +81,10 @@
             </div>
           </div>
         </div>
-      </div>
+      <!--</div>-->
     </nav>
   </header>
-
+        <div class="preloader"><span class="preloader-gif"></span></div>
         <!-- page content -->
         <div>
           @yield('content')
@@ -92,7 +92,8 @@
         <!-- /page content -->
 
   <!--===============================================================================================-->
-  <script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
+  <!-- <script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script> -->
+  <script src="{{ asset('js/jquery.min.js') }}"></script>
   <!--===============================================================================================-->
     <script src="{{ asset('js/animsition.min.js') }}"></script>
   <!--===============================================================================================-->
@@ -108,7 +109,24 @@
   <script src="js/jquery.prettyPhoto.js"></script>
   <script src="js/jquery.isotope.min.js"></script>
   <script src="js/wow.min.js"></script>
-  <script src="js/functions.js"></script>
+  <!-- <script src="js/functions.js"></script> -->
+  <script src="{{ asset('js/loader.js') }}"></script>
+  <script type="text/javascript">
+ 
+    $(document).ready(function () {
+
+        var url = window.location;
+        $('ul.nav a[href="'+ url +'"]').addClass('active');
+        $('ul.nav a').filter(function() {
+             return this.href == url;
+        }).addClass('active');
+
+
+    });
+  
+  </script>
+
+  
 
 </body>
 

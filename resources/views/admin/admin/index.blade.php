@@ -42,10 +42,10 @@ Admin List
                 @foreach($admins as $o)
                   <tr>
                     @if($o->user_id == Auth::user()->id)
-                      <td align="middle"><img id="{{$o->user_id}}" src="/images/user-remove.png" style="width:25px; height: 25px;cursor: not-allowed;" onmouseover="onHover({{$o->user_id}});" onmouseout="offHover({{$o->user_id}});"/>
+                      <td align="middle"><img id="{{$o->id}}" src="/images/user-remove.png" style="width:25px; height: 25px;cursor: not-allowed;" onmouseover="onHover({{$o->id}});" onmouseout="offHover({{$o->id}});"/>
                       </td>
                     @else
-                      <td align="middle"><a href="" id="statusBtn" data-toggle="modal" data-target = "#statusModal" onclick="modalStatus('{{$o->user_id}}')"><img id="{{$o->user_id}}" src="/images/user-remove.png" style="width:25px; height: 25px;" onmouseover="onHover({{$o->user_id}});" onmouseout="offHover({{$o->user_id}});"/></a>
+                      <td align="middle"><a href="" id="statusBtn" data-toggle="modal" data-target = "#statusModal" onclick="modalStatus('{{$o->id}}')"><img id="{{$o->id}}" src="/images/user-remove.png" style="width:25px; height: 25px;" onmouseover="onHover({{$o->id}});" onmouseout="offHover({{$o->id}});"/></a>
                       </td>
                     @endif
                     <td>{{$o->l_name}}, {{$o->f_name}}</td>
@@ -57,10 +57,10 @@ Admin List
                 @endforeach
               @elseif ($admins->count() > 0)
                 <tr>
-                  @if($o->user_id == Auth::user()->id)
-                    <td align="middle"><img id="{{$admins[0]->user_id}}" src="/images/user-remove.png" style="width:25px; height: 25px;cursor: not-allowed;" onmouseover="onHover({{$admins[0]->user_id}});" onmouseout="offHove`r({{$admins[0]->user_id}});"/>
+                  @if($admins[0]->user_id == Auth::user()->id)
+                    <td align="middle"><img id="{{$admins[0]->id}}" src="/images/user-remove.png" style="width:25px; height: 25px;cursor: not-allowed;" onmouseover="onHover({{$admins[0]->id}});" onmouseout="offHover({{$admins[0]->id}});"/>
                   @else
-                    <td align="middle"><a href="" id="statusBtn" data-toggle="modal" data-target = "#statusModal" onclick="modalStatus('{{$admins[0]->user_id}}')"><img id="{{$admins[0]->user_id}}" src="/images/user-remove.png" style="width:25px; height: 25px;" onmouseover="onHover({{$admins[0]->user_id}});" onmouseout="offHove`r({{$admins[0]->user_id}});"/></a>
+                    <td align="middle"><a href="" id="statusBtn" data-toggle="modal" data-target = "#statusModal" onclick="modalStatus('{{$admins[0]->id}}')"><img id="{{$admins[0]->id}}" src="/images/user-remove.png" style="width:25px; height: 25px;" onmouseover="onHover({{$admins[0]->id}});" onmouseout="offHover({{$admins[0]->id}});"/></a>
                   @endif
                   </td>
                   <td>{{$admins[0]->l_name}}, {{$admins[0]->f_name}}</td>
@@ -276,8 +276,6 @@ Admin List
   }
 
   function modalStatus(id) {
-      statmodal.style.display = "block";
-
       $('#admin-id').val(id);
   }
 

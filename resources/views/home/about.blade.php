@@ -4,14 +4,14 @@
 
   <div id="breadcrumb">
     <div class="container">
-      <div class="breadcrumb">
+      <div class="breadcrumb" style="padding: 0px;font-size: 14px;">
         <li><a href="{{url('/')}}">Home</a></li>
         <li>About Us</li>
       </div>
     </div>
   </div>
 
-  <div class="aboutus">
+  <div class="aboutus" style="margin-top: 130px;">
     <div class="container">
       <h3>About 
         @if($coop)
@@ -27,9 +27,10 @@
         <h4>If we hold on together...Our dreams come true. </h4>
         <p>Bung-aw National High School is a secondary public school located in the municipality of Hilongos, Leyte. It was established on 1977.
 
-        Mabuhay BNHS Cooperative is one of the cooperatives that has been formed and was founded by Mr. Reynaldo Ranuco and his batch mates. Mostly, the members of this cooperative was from BNHS. They did not accept members easily, to accept you in our cooperative, you should have referral. 
+        Mabuhay BNHS Cooperative is one of the cooperatives that has been formed and was founded by Mr. Reynaldo Ranuco and his batch mates. Mostly, the members of this cooperative was from BNHS.
        </p>
-        <p>The cooperative aims to help the members by giving small interest of their loans, give opportunity to have business and if the member or its beneficiary got accident, he/she will received a financial support from the cooperative. </p>
+        <p>The cooperative aims to help the members by giving small interest of their loans, give opportunity to have business and if the member or its beneficiary got accident, he/she will received a financial support from the cooperative.  </p>
+        <p><a href="{{url('/register')}}" class="about-link">Register here.</a></p>
       </div>
       <div class="col-md-5 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
           <img src="images/coop.png" class="img-responsive">
@@ -54,9 +55,11 @@
   <div class="our-team">
     <div class="container">
       <h3>List of Officers</h3>
-      <a href="#" title="Officers" id="prevOfficers" data-toggle="modal" data-trigger="hover" data-target = "#previousOfficersModal">Previous Officers</a> 
       <div class="text-center">
-        <div class="col-md-4 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
+        <div class="col-md-12 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
+          <img src="{{url('images/ListOfOfficers.png')}}" alt="" style="height: auto; max-width: 100%;margin-top: 0px;">
+        </div>
+        <!-- <div class="col-md-4 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
           <img src="images/boy.png" alt="" style="height:225px; width:225px;">
               <h4>Reynaldo Ranuco Sr. </h4>
               <p>President</p>
@@ -70,8 +73,9 @@
           <img src="images/woman.png" alt="">
           <h4>Ma. Teresa Navarroza</h4>
           <p>Secretary</p>
-        </div>
+        </div> -->
       </div>
+      <div> <a href="#" title="Officers" id="prevOfficers" data-toggle="modal" data-trigger="hover" data-target = "#previousOfficersModal" style="color:blue; text-decoration: underline;font-size: 18px;">Previous Officers</a> </div>
     </div>
   </div>
 

@@ -103,16 +103,173 @@ Monthly Contributions
 
 <script type="text/javascript">
   $(document).ready(function() {
+    @if (Session::has('flash_message'))
+      Snackbar.show({
+        pos: 'top-right', 
+        text: '{{ Session::get('flash_message') }}',
+      });
+    @endif
+
+    var year = document.getElementById("year-contribution");
+    var month = document.getElementById("month-contribution");
+    
+    var yearVal = year.options[year.selectedIndex].value;
+    var monthVal = month.options[month.selectedIndex].value;
+    var fName = "";
+
+    //prepend Month and Year on the fileName
+    if(monthVal == 'All'){
+      fName = yearVal + ' Monthly Contributions - ' + '{{Auth::user()->f_name}}' + ' ' + '{{Auth::user()->l_name}}';
+    } else {
+      fName = yearVal +  ' ' + monthVal + ' Contributions - ' + '{{Auth::user()->f_name}}' + ' ' + '{{Auth::user()->l_name}}';
+    }
+
     $('#member-m-cont').DataTable({
       dom: 'B<"clear">lfrtip',
+      // buttons: [
+      //   'copy', 'csv', 'excel', 'pdf', 'print'
+      // ],
       buttons: [
-        'copy', 'csv', 'excel', 'pdf', 'print'
-      ],
+        'copy',
+        {
+            extend: 'csv',
+            filename: fName,
+        },
+        {
+            extend: 'excel',
+            filename: fName,
+        },
+        {
+            extend: 'pdfHtml5',
+            orientation: 'landscape',
+            filename: fName,
+            customize: function(doc)
+            {
+              var img = new Image();
+              img.src = '{{url('/uploads/')}}/{{ $coop->logo }}';
+              
+            //Remove the title created by datatTables
+            doc.content.splice(0,1);
+            //Create a date string that we use in the footer. Format is dd-mm-yyyy
+            var now = new Date();
+            var jsDate = now.getDate()+'-'+(now.getMonth()+1)+'-'+now.getFullYear();
+            // It's important to create enough space at the top for a header !!!
+            doc.pageMargins = [20,60,20,30];
+            // Set the font size fot the entire document
+            doc.defaultStyle.fontSize = 7;
+            // Set the fontsize for the table header
+            doc.styles.tableHeader.fontSize = 7;
+            // Create a header object with 3 columns
+            // Left side: Logo
+            // Middle: brandname
+            // Right side: A document title
+            doc['header']=(function() {
+              return {
+                columns: [
+                  // {
+                  //   image: logo,
+                  //   width: 24
+                  // },
+                  {
+                    alignment: 'left',
+                    italics: true,
+                    text: '{{ $coop->coop_name }}',
+                    fontSize: 18,
+                    margin: [10,0]
+                  },
+                  {
+                    alignment: 'right',
+                    fontSize: 14,
+                    text: fName
+                  }
+                ],
+                margin: 20
+              }
+            });
+            // Create a footer object with 2 columns
+            // Left side: report creation date
+            // Right side: current page and total pages
+            doc['footer']=(function(page, pages) {
+              return {
+                columns: [
+                  {
+                    alignment: 'left',
+                    text: ['Created on: ', { text: jsDate.toString() }]
+                  },
+                  {
+                    alignment: 'right',
+                    text: ['page ', { text: page.toString() },  ' of ', { text: pages.toString() }]
+                  }
+                ],
+                margin: 20
+              }
+            });
+            // Change dataTable layout (Table styling)
+            // To use predefined layouts uncomment the line below and comment the custom lines below
+            // doc.content[0].layout = 'lightHorizontalLines'; // noBorders , headerLineOnly
+            var objLayout = {};
+            objLayout['hLineWidth'] = function(i) { return .5; };
+            objLayout['vLineWidth'] = function(i) { return .5; };
+            objLayout['hLineColor'] = function(i) { return '#aaa'; };
+            objLayout['vLineColor'] = function(i) { return '#aaa'; };
+            objLayout['paddingLeft'] = function(i) { return 4; };
+            objLayout['paddingRight'] = function(i) { return 4; };
+            doc.content[0].layout = objLayout;
+          }
+        },
+        {
+            extend: 'print',
+            customize: function(win)
+            {
+ 
+                var last = null;
+                var current = null;
+                var bod = [];
+ 
+                var css = '@page { size: landscape; }',
+                    head = win.document.head || win.document.getElementsByTagName('head')[0],
+                    style = win.document.createElement('style');
+ 
+                style.type = 'text/css';
+                style.media = 'print';
+ 
+                if (style.styleSheet)
+                {
+                  style.styleSheet.cssText = css;
+                }
+                else
+                {
+                  style.appendChild(win.document.createTextNode(css));
+                }
+ 
+                head.appendChild(style);
+
+                $(win.document.body)
+                  .prepend(
+                      '<div style="text-align: center;font-size: 22px;color: black;margin-top: 10px;margin-bottom: 20px;height: 95px;line-height: 95px;"><div style="display: inline-block;vertical-align: middle;"><div style="display: inline; margin-right: 20px;"><img src="{{url('/uploads/')}}/{{ $coop->logo }}" style="width:100px;" /></div><h2 style="display: inherit;font-size:30px;">{{ $coop->coop_name }}</h2></div></div>'
+                  );
+
+                $(win.document.body).find('h1').addClass('display').css('font-size', '20px');
+                $(win.document.body).find( 'table' )
+                        .addClass( 'print-table' );
+
+                //prepend Month and Year on the Title
+                if(monthVal == 'All'){
+                  $(win.document.body).find('h1').prepend(yearVal + ' ');
+                } else {
+                  $(win.document.body).find('h1').text(monthVal + ' ' + yearVal + ' Contributions');
+                }
+
+                $(win.document.body).find('h1').append(' - ' + '{{Auth::user()->f_name}} {{Auth::user()->l_name}}');
+                
+            }
+        },
+        
+    ],
       fixedHeader: {
         header: true,
         footer: false
-      },
-      "order": [[ 2, "asc" ]]
+      }
     });
   });
 </script>

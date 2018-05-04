@@ -14,7 +14,7 @@
   @endif
 
   <div style="color: #333;">
-    <h3 style="text-align: center;"> Member's Registration Form </h3>
+    <h3 style="text-align: center;"> Member's Registration Form</h3>
 
     <div>
       {{ Form::open(array('route' => 'register.post', 'id' => 'registrationForm')) }}
@@ -37,7 +37,7 @@
             <td>Contact No. <span class="req">*</span></td>
             <td colspan="2"><input type="text" name="phone" required value="{{ old('phone') }}" class="form-control"/></td> 
             <td>Birth date <span class="req">*</span></td>
-            <td colspan="2"><input type="date" name="b_date" required value="{{ old('b_date') }}" class="form-control"/></td> 
+            <td colspan="2"><input type="date" name="b_date" required value="{{ old('b_date') }}" class="form-control" /></td> 
           </tr>
           <tr>
             <td>Gender <span class="req">*</span></td>
@@ -61,11 +61,11 @@
           </tr>
           <tr>
             <td>Referred by</td>
-            <td colspan="2"><input id="referral" type="text" name="referral" value="{{ old('referral') }}" class="form-control"/></td>
-            <td>Relationship</td>
+            <td colspan="2"><input id="referral" type="text" name="referral" value="{{ old('referral') }}" class="form-control" onchange="refRelationship(this)" /></td>
+            <td id="ref_relation_label">Relationship </td>
             <td colspan="2">
-              <select class="form-control" name="ref_relation" value="{{ old('ref_relation') }}">
-                <option>Select Relationship </option>
+              <select class="form-control" name="ref_relation" id="ref_relation" value="{{ old('ref_relation') }}" disabled>
+                <option value="select">Select Relationship </option>
                 <option>Family</option>
                 <option>Friends</option>
                 <option>Classmate/Batchmate</option>
@@ -80,7 +80,7 @@
           </tr>
           <tr>
             <td>Password <span class="req">*</span></td>
-            <td colspan="2"> <input type="password" name="password" required class="form-control"/></td> 
+            <td colspan="2"> <input type="password" name="password" required class="form-control" placeholder="Minimum of 8 characters" /></td> 
             <td>Confirm Password <span class="req">*</span></td>
             <td colspan="2"><input type="password" name="password_confirmation" placeholder="Re-type password" required class="form-control"/></td> 
           </tr>
@@ -88,6 +88,7 @@
             <td colspan="2">
               <button type="button" class="btn btn-default btn-block" style="width: auto;" data-toggle="modal" data-target="#termsModal">Agree with the terms and conditions</button>
               <input type="hidden" id="agree" name="agree" value="no" />
+              <small><span id="termsNote" style="color: red;">You must agree with the terms and conditions</span></small>
             </td>
           </tr>
           <br/>
@@ -112,16 +113,12 @@
                   </div>
 
                   <div class="modal-body">
-                      <p>Lorem ipsum dolor sit amet, veniam numquam has te. No suas nonumes recusabo mea, est ut graeci definitiones. His ne melius vituperata scriptorem, cum paulo copiosae conclusionemque at. Facer inermis ius in, ad brute nominati referrentur vis. Dicat erant sit ex. Phaedrum imperdiet scribentur vix no, ad latine similique forensibus vel.</p>
-                      <p>Dolore populo vivendum vis eu, mei quaestio liberavisse ex. Electram necessitatibus ut vel, quo at probatus oportere, molestie conclusionemque pri cu. Brute augue tincidunt vim id, ne munere fierent rationibus mei. Ut pro volutpat praesent qualisque, an iisque scripta intellegebat eam.</p>
-                      <p>Lorem ipsum dolor sit amet, veniam numquam has te. No suas nonumes recusabo mea, est ut graeci definitiones. His ne melius vituperata scriptorem, cum paulo copiosae conclusionemque at. Facer inermis ius in, ad brute nominati referrentur vis. Dicat erant sit ex. Phaedrum imperdiet scribentur vix no, ad latine similique forensibus vel.</p>
-                      <p>Dolore populo vivendum vis eu, mei quaestio liberavisse ex. Electram necessitatibus ut vel, quo at probatus oportere, molestie conclusionemque pri cu. Brute augue tincidunt vim id, ne munere fierent rationibus mei. Ut pro volutpat praesent qualisque, an iisque scripta intellegebat eam.</p>
-                      <p>Lorem ipsum dolor sit amet, veniam numquam has te. No suas nonumes recusabo mea, est ut graeci definitiones. His ne melius vituperata scriptorem, cum paulo copiosae conclusionemque at. Facer inermis ius in, ad brute nominati referrentur vis. Dicat erant sit ex. Phaedrum imperdiet scribentur vix no, ad latine similique forensibus vel.</p>
-                      <p>Dolore populo vivendum vis eu, mei quaestio liberavisse ex. Electram necessitatibus ut vel, quo at probatus oportere, molestie conclusionemque pri cu. Brute augue tincidunt vim id, ne munere fierent rationibus mei. Ut pro volutpat praesent qualisque, an iisque scripta intellegebat eam.</p>
-                      <p>Lorem ipsum dolor sit amet, veniam numquam has te. No suas nonumes recusabo mea, est ut graeci definitiones. His ne melius vituperata scriptorem, cum paulo copiosae conclusionemque at. Facer inermis ius in, ad brute nominati referrentur vis. Dicat erant sit ex. Phaedrum imperdiet scribentur vix no, ad latine similique forensibus vel.</p>
-                      <p>Dolore populo vivendum vis eu, mei quaestio liberavisse ex. Electram necessitatibus ut vel, quo at probatus oportere, molestie conclusionemque pri cu. Brute augue tincidunt vim id, ne munere fierent rationibus mei. Ut pro volutpat praesent qualisque, an iisque scripta intellegebat eam.</p>
-                      <p>Lorem ipsum dolor sit amet, veniam numquam has te. No suas nonumes recusabo mea, est ut graeci definitiones. His ne melius vituperata scriptorem, cum paulo copiosae conclusionemque at. Facer inermis ius in, ad brute nominati referrentur vis. Dicat erant sit ex. Phaedrum imperdiet scribentur vix no, ad latine similique forensibus vel.</p>
-                      <p>Dolore populo vivendum vis eu, mei quaestio liberavisse ex. Electram necessitatibus ut vel, quo at probatus oportere, molestie conclusionemque pri cu. Brute augue tincidunt vim id, ne munere fierent rationibus mei. Ut pro volutpat praesent qualisque, an iisque scripta intellegebat eam.</p>
+                    <p style="text-align: center;"><b>Mabuhay BNHS Cooperative</b></p>
+                    <p>To all board and coop members, this is our Rules and Regulations.</p>
+                    <p>1. In every meeting of our Cooperative, we need to attend.</p>
+                    <p>2. We all need to be updated for paying our 'monthly savings' which is P300 per month.</p>
+                    <p>3. Members can apply for a loan based on the amount of the savings.</p>
+                    <p>4. We encourage to pay the 'Damayan' and 'Share Capital' in the cooperative.</p>
                   </div>
 
                   <div class="modal-footer">
@@ -143,11 +140,41 @@
   
   $('#agreeButton').click(function(){
     $('#agree').val('yes');
+     document.getElementById('termsNote').innerHTML = "Agreed on terms and conditions";
+     document.getElementById('termsNote').style.color = "green";
   });
 
   $('#disagreeButton').click(function(){
     $('#agree').val('no');
+    document.getElementById('termsNote').innerHTML = "You must agree with the terms and conditions";
+    document.getElementById('termsNote').style.color = "red";
   });
+
+  function refRelationship(val) {
+    if(val.value != ''){
+      var element = document.getElementById('ref_relation');
+      element.value = 'select';
+
+      document.getElementById("ref_relation").required = true;
+      document.getElementById("ref_relation").disabled=false;
+     
+      var span = document.createElement('span');
+      span.className = 'req';
+
+      document.getElementById('ref_relation_label').appendChild(span);
+    }else{
+      var element = document.getElementById('ref_relation');
+      element.value = 'select';
+      
+      document.getElementById("ref_relation").required = false;
+      document.getElementById("ref_relation").disabled = true;
+     
+      var span = document.createElement('span');
+      span.className = '';
+
+      document.getElementById('ref_relation_label').appendChild(span);
+    }
+  }
 
   </script>
  

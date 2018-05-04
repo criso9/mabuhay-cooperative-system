@@ -53,7 +53,7 @@ return [
              * The disk names on which the backups will be stored.
              */
             'disks' => [
-                'local',
+                'custom',
             ],
         ],
     ],
@@ -108,7 +108,7 @@ return [
     'monitorBackups' => [
         [
             'name' => env('APP_URL'),
-            'disks' => ['local'],
+            'disks' => ['custom'],
             'newestBackupsShouldNotBeOlderThanDays' => 1,
             'storageUsedMayNotBeHigherThanMegabytes' => 5000,
         ],
@@ -151,8 +151,8 @@ return [
          * Here you can specify how emails should be sent.
          */
         'mail' => [
-            'from' => 'your@email.com',
-            'to' => 'your@email.com',
+            'from' => 'administrator@mabuhaybnhs.com',
+            'to' => 'administrator@mabuhaybnhs.com',
         ],
 
         /*

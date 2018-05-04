@@ -5,7 +5,7 @@
 		<div>
 	  		@if (count($errors) > 0)
 				<div class="alert alert-danger">
-					<strong>Whoops!</strong> There were some problems with your input.<br><br>
+					<strong>Whoops!</strong> There were some problems with your input.<br>
 					<ul>
 						@foreach ($errors->all() as $error)
 							<li>{{ $error }}</li>
@@ -68,10 +68,9 @@
 		</div>
 	</div>
 
-	<!-- Modal for Terms and Conditions as a Member -->
-    <div class="modal fade" id="msgModal" tabindex="-1" role="dialog" aria-labelledby="Message" aria-hidden="true">
-      <div class="modal-dialog">
-          <div class="modal-content">
+    <div id="msgModal" class="modal fade custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content custom-modal-content">
               <div class="modal-header">
                   <h3 class="modal-title">Message</h3>
               </div>
@@ -94,7 +93,6 @@
 		$(document).ready(function() {
 			@if (Session::has('flash_message'))
 		      $('#msgModal').modal('show');
-		      console.log('gumana!');
 		    @endif
 		});
 	</script>

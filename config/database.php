@@ -52,13 +52,9 @@ return [
             'prefix' => '',
             'strict' => false,
             'engine' => null,
-            'dump' => [
-               'dump_binary_path' => 'C:\\xampp\\mysql\\bin', 
-               'use_single_transaction',
-               'timeout' => 60 * 5, // 5 minute timeout
-               // 'exclude_tables' => ['table1', 'table2'],
-               // 'add_extra_option' => '--optionname=optionvalue', 
-            ]
+            'dump_command_path' => '\mysql\bin',
+            'dump_command_timeout' => 60 * 5,
+            'dump_using_single_transaction' => true,
         ],
 
         'pgsql' => [

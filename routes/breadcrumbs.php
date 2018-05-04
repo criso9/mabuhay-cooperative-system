@@ -72,6 +72,21 @@ Breadcrumbs::register('officer.loan.index', function ($breadcrumbs) {
     $breadcrumbs->push('Loan Approval', route('officer.loan.index'));
 });
 
+Breadcrumbs::register('officer.business.index', function ($breadcrumbs) {
+    $breadcrumbs->parent('officer.index');
+    $breadcrumbs->push('Business', route('officer.business.index'));
+});
+
+Breadcrumbs::register('officer.member.index', function ($breadcrumbs) {
+    $breadcrumbs->parent('officer.index');
+    $breadcrumbs->push('Members', route('officer.member.index'));
+});
+
+Breadcrumbs::register('officer.member.show', function ($breadcrumbs) {
+    $breadcrumbs->parent('officer.member.index');
+    $breadcrumbs->push('Profile', url('/officer/member/show/{member}'));
+});
+
 // Member
 
 Breadcrumbs::register('member.index', function ($breadcrumbs) {

@@ -33,6 +33,7 @@
   <!-- Custom Styles-->
   <link href="{{ asset('css/admin-panel.min.css') }}" rel="stylesheet" type="text/css" />
    <link href="{{ asset('css/jquery.mCustomScrollbar.min.css') }}" rel="stylesheet"/>
+   <link href="{{ asset('css/responsive.css') }}" rel="stylesheet" type="text/css" />
 
 
 
@@ -54,6 +55,7 @@
 
 </head>
 <body class="nav-md">
+
    <div class="container body">
       <div class="main_container">
         <div class="col-md-3 left_col menu_fixed" id="side-panel">
@@ -94,7 +96,7 @@
                 <h3>General</h3>
                 <ul class="nav side-menu">
                   <li>
-                    <a href="{{url('/admin')}}"><i class="fa fa-home"></i> Admin Dashboard </a>
+                    <a href="{{url('/admin')}}"><i class="fa fa-dashboard"></i> Admin Dashboard </a>
                   </li>
                   <li><a><i class="fa fa-users"></i> Users <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
@@ -107,35 +109,28 @@
                   <li>
                     <a href="{{route('admin.business.index')}}"><i class="fa fa-briefcase"></i> Business </a>
                   </li>
-                  <li><a><i class="fa fa-database"></i> Database <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="{{route('admin.database.backup')}}">Backup</a></li>
-                      <li><a href="{{route('admin.database.backup')}}">Restore</a></li>
-                    </ul>
+                  <li>
+                    <a href="{{route('admin.backup.index')}}"><i class="fa fa-database"></i> Backup </a>
                   </li>
-                </ul>
-              </div>
-              <div class="menu_section">
-                <h3>CRUD</h3>
-                <ul class="nav side-menu">
-                  <li><a><i class="fa fa-user-circle"></i> Roles</a></li>
                 </ul>
               </div>
               <div class="menu_section">
                 <h3>Others</h3>
                 <ul class="nav side-menu">
+                  @if($position != '')
+                    <li>
+                      <a href="#" id="officer-links" data-toggle="modal" data-target="#officerModal"><i class="fa fa-external-link-square"></i> Officer Links</a>
+                    </li>
+                  @endif
                   <li>
-                    <a href="#" id="officer-links" data-toggle="modal" data-target="#officerModal"><i class="fa fa-info-circle"></i> Officer Links</a>
-                  </li>
-                  <li>
-                    <a href="#" id="member-links" data-toggle="modal" data-target="#memberModal"><i class="fa fa-info-circle"></i> Member Links</a>
+                    <a href="#" id="member-links" data-toggle="modal" data-target="#memberModal"><i class="fa fa-external-link-square"></i> Member Links</a>
                   </li>
                 </ul>
               </div>
               <div class="menu_section">
                 <h3>SETTINGS</h3>
                 <ul class="nav side-menu">
-                  <li><a href="{{url('admin/coop')}}"><i class="fa fa-info-circle"></i> Setup</a>
+                  <li><a href="{{url('admin/coop')}}"><i class="fa fa-gear"></i> Setup</a>
                   </li>
                 </ul>
               </div>
@@ -144,7 +139,7 @@
                 <h3>General</h3>
                 <ul class="nav side-menu">
                   <li>
-                    <a href="{{route('officer.index')}}"><i class="fa fa-home"></i> Officer Dashboard </a>
+                    <a href="{{route('officer.index')}}"><i class="fa fa-dashboard"></i> Officer Dashboard </a>
                   </li>
                   @if($position == 'Treasurer')
                     <li><a><i class="fa fa-money"></i> Contributions </a>
@@ -159,16 +154,22 @@
                   </li>
                   @elseif($position == 'President')
                   <li>
-                    <a href="{{url('/officer/loan?s=Pending')}}"><i class="fa fa-home"></i> List of Loan </a>
+                    <a href="{{url('/officer/loan')}}"><i class="fa fa-home"></i> List of Loan </a>
                   </li>
                   @endif
+                  <li>
+                    <a href="{{route('officer.member.index')}}"><i class="fa fa-users"></i> Members </a>
+                  </li>
+                  <li>
+                    <a href="{{route('officer.business.index')}}"><i class="fa fa-briefcase"></i> Business </a>
+                  </li>
                 </ul>
               </div>
               <div class="menu_section">
                 <h3>Others</h3>
                 <ul class="nav side-menu">
                   <li>
-                    <a href="#" id="member-links" data-toggle="modal" data-target="#memberModal"><i class="fa fa-info-circle"></i> Member Links</a>
+                    <a href="#" id="member-links" data-toggle="modal" data-target="#memberModal"><i class="fa fa-external-link-square"></i> Member Links</a>
                   </li>
                 </ul>
               </div>
@@ -177,7 +178,7 @@
                 <h3>General</h3>
                 <ul class="nav side-menu">
                   <li>
-                    <a href="{{route('member.index')}}"><i class="fa fa-home"></i> Dashboard </a>
+                    <a href="{{route('member.index')}}"><i class="fa fa-dashboard"></i> Dashboard </a>
                   </li>
                   <li><a><i class="fa fa-money"></i> Contributions </a>
                     <ul class="nav child_menu">
@@ -189,7 +190,7 @@
                     <a href="{{route('member.loan.index')}}"><i class="fa fa-credit-card"></i> Loans </a>
                   </li>
                   <li>
-                    <a href="{{route('member.report')}}"><i class="fa fa-bar-chart"></i> Reports </a>
+                    <a href="{{route('member.report')}}"><i class="fa fa-pie-chart"></i> Reports </a>
                   </li>
                 </ul>
               </div>
@@ -231,7 +232,7 @@
                 <li class="profile">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                     <!-- <img src="images/img.jpg" alt=""> -->
-                    <span style="text-transform: capitalize;">{{ Auth::user()->f_name }}</span>
+                    <span style="text-transform: capitalize;">{{ Auth::user()->f_name }} {{ Auth::user()->l_name }}  </span>
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-animated">
@@ -261,77 +262,12 @@
                     </li>
                   </ul>
                 </li>
-
-                <li role="presentation" class="dropdown">
-                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-envelope-o"></i>
-                    <span class="badge bg-green">6</span>
-                  </a>
-                  <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                    <li>
-                      <a>
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a>
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a>
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a>
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <div class="text-center">
-                        <a>
-                          <strong>See All Alerts</strong>
-                          <i class="fa fa-angle-right"></i>
-                        </a>
-                      </div>
-                    </li>
-                  </ul>
-                </li>
               </ul>
             </nav>
           </div>
         </div>
         <!-- /top navigation -->
-
+        <div class="preloader"><span class="preloader-gif"></span></div>
         <!-- page content -->
         <div class="right_col" role="main">
           @yield('content')
@@ -364,6 +300,7 @@
               <a href="{{route('officer.index')}}" class="btn btn-app">
                 <i class="fa fa-dashboard"></i> Dashboard
               </a>
+              @if($position == 'President' || $position == 'Treasurer')
               <br/>
               <div style="background-color: cornflowerblue;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Contributions</h5></div>
               <a href="{{route('officer.contribution.monthly')}}" class="btn btn-app">
@@ -375,12 +312,17 @@
               <a href="{{route('officer.contribution.sharecapital')}}" class="btn btn-app">
                 <i class="fa fa-line-chart"></i> Share Capital
               </a>
-              @if($position == 'President' || $position == 'Treasurer')
-                <br/>
-                <div style="background-color: cornflowerblue;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Others</h5></div>
-                <a href="{{url('/officer/loan?s=Pending')}}" class="btn btn-app">
-                  <i class="fa fa-credit-card"></i> List of Loan
-                </a>
+              <br/>
+              <div style="background-color: cornflowerblue;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Others</h5></div>
+              <a href="{{url('/officer/loan')}}" class="btn btn-app">
+                <i class="fa fa-credit-card"></i> List of Loan
+              </a>
+              <a href="{{route('officer.member.index')}}" class="btn btn-app">
+                <i class="fa fa-users"></i> Members
+              </a>
+              <a href="{{route('officer.business.index')}}" class="btn btn-app">
+                <i class="fa fa-briefcase"></i> Business
+              </a>
               @endif
             @endif
           </div>
@@ -416,7 +358,7 @@
               <br/>
               <div style="background-color: cornflowerblue;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Others</h5></div>
               <a href="{{route('member.loan.index')}}" class="btn btn-app">
-                <i class="fa fa-money"></i> Loans
+                <i class="fa fa-credit-card"></i> Loans
               </a>
               <a href="{{route('member.report')}}" class="btn btn-app">
                 <i class="fa fa-pie-chart"></i> Reports
@@ -467,11 +409,13 @@
     <script src="{{ asset('js/tables/dataTables.scroller.min.js') }}"></script> -->
     <script src="{{ asset('js/tables/dataTables.fixedHeader.min.js') }}"></script>
    
+    <script src="{{ asset('js/Chart.js') }}" charset="utf-8"></script>
     <script src="{{ asset('js/snackbar.js') }}"></script>
     <!-- Custom Js -->
     <script src="{{ asset('js/custom.min.js') }}"></script>
-
+    <script src="{{ asset('js/loader.js') }}"></script>
     <script type="text/javascript">
+
       var role = {{ Auth::user()->role_id }};
 
       // console.log(role);

@@ -30,7 +30,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Filesystem Disks
++    | Filesystem Disks
     |--------------------------------------------------------------------------
     |
     | Here you may configure as many filesystem "disks" as you wish, and you
@@ -42,6 +42,10 @@ return [
     */
 
     'disks' => [
+        'custom' => [
+            'driver' => 'local',
+            'root' => storage_path('laravel-backups'),
+        ],
 
         'local' => [
             'driver' => 'local',

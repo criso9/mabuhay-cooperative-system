@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\User;
 use App\Cooperative;
 use App\Loan;
+use Carbon\Carbon;
 use Auth;
 use Tzsk\Sms\Facade\Sms;
 
@@ -19,6 +20,7 @@ class EmailController extends BaseController
 
 		$user = User::where('id', '=', $request->_userid)->first();
 	  	$emailContent = "";
+	  	$remarks = $request->remarks;
 
 
 	  	if($request->_status == 'approve'){
@@ -27,9 +29,9 @@ class EmailController extends BaseController
 	  		$emailContent = "email.reject_member";
 	  	}
 
-        Mail::send($emailContent, ['user' => $user, 'coop' => $this->coop], function ($message) use ($user)
+        Mail::send($emailContent, ['user' => $user, 'coop' => $this->coop, 'remarks' => $remarks], function ($message) use ($user)
         {
-            $message->from('admin@mabuhay.com', 'Administrator');
+            $message->from('administrator@mabuhaybnhs.com', 'Administrator');
             $message->to($user->email);
             $message->subject('Account Registration');
         });
@@ -42,7 +44,7 @@ class EmailController extends BaseController
 	  	if($request->_status == 'approve'){
 	  		$user->status = "waiting";
 	  	} else if ($request->_status == 'reject'){
-	  		$user->remarks = $request->remarks;
+	  		$user->remarks_reviewed = $request->remarks;
 	  		$user->status = "rejected";
 	  	}
 		
@@ -55,6 +57,8 @@ class EmailController extends BaseController
 	public function loanApproval(Request $request){
 		$loan = Loan::where('id', '=', $request->_id)->first();
 		$user = User::where('id', '=', $loan->user_id)->first();
+
+		$remarks = $request->remarks;
 		
 	  	$emailContent = "";
 
@@ -64,9 +68,9 @@ class EmailController extends BaseController
 	  		$emailContent = "email.reject_loan";
 	  	}
 
-        Mail::send($emailContent, ['user' => $user, 'loan' => $loan, 'coop' => $this->coop], function ($message) use ($user)
+        Mail::send($emailContent, ['user' => $user, 'loan' => $loan, 'coop' => $this->coop, 'remarks' => $remarks], function ($message) use ($user)
         {
-            $message->from('admin@mabuhay.com', 'Administrator');
+            $message->from('administrator@mabuhaybnhs.com', 'Administrator');
             $message->to($user->email);
             $message->subject('Loan Application');
         });
@@ -79,8 +83,10 @@ class EmailController extends BaseController
     	$msg = "";
 
 		if($request->_status == "approve"){
-			$loanUpdate->status = "Approve";
+			$loanUpdate->status = "Active";
 			$loanUpdate->remaining_balance = $request->_remBal;
+			$loanUpdate->due_date = Carbon::now()->addMonths(6)->format('Y-m-d H:i:s'); //6months
+
 		} else if($request->_status == "reject"){
 			$loanUpdate->status = "Rejected";
 			$loanUpdate->remarks = $request->remarks;

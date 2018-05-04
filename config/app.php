@@ -162,11 +162,6 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        'Collective\Html\HtmlServiceProvider',
-        Spatie\Backup\BackupServiceProvider::class,
-        'DaveJamesMiller\Breadcrumbs\ServiceProvider',
-        Tzsk\Sms\Provider\SmsServiceProvider::class,
-
         /*
          * Package Service Providers...
          */
@@ -180,6 +175,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        'Collective\Html\HtmlServiceProvider',
+        Spatie\Backup\BackupServiceProvider::class,
+        'DaveJamesMiller\Breadcrumbs\ServiceProvider',
+        Tzsk\Sms\Provider\SmsServiceProvider::class,
 
     ],
 
