@@ -14,6 +14,7 @@ class FilesTypeTableSeeder extends Seeder
         DB::table('files_type')->insert([
             ['type' => 'policies'],
             ['type' => 'minutes'],
+            ['type' => 'attendance'],
             ['type' => 'others'],
         ]);
     }

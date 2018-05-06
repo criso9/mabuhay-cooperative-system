@@ -44,6 +44,8 @@ Route::get('confirmation', array('as' => 'confirmation', 'uses' => 'Admin\UserCo
 
 Route::post('send/loanapproval', array('as' => 'officer.email.loan.approval', 'uses' => 'EmailController@loanApproval'));
 
+Route::get('send/loanreminder/{loan}', array('as' => 'officer.email.loan.reminder', 'uses' => 'EmailController@loanReminder'));
+
 
 // Admin panel
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
@@ -105,7 +107,9 @@ Route::group(['prefix' => 'officer', 'middleware' => 'officer'], function () {
 
 	Route::get('/contribution/month', array('as' => 'officer.contribution.monthly','uses' => 'Officer\OfficerController@monthlyContribution'));
 	Route::post('/contribution/month', array('as' => 'officer.contribution.monthly.year','uses' => 'Officer\OfficerController@monthlyContributionYearSelected'));
-	Route::post('/contribution/month/info', array('as' => 'officer.contribution.monthly.info','uses' => 'Officer\OfficerController@monthlyContributionInfo'));
+
+  Route::get('contribution/month/{member}', array('as' => 'officer.contribution.monthly.member','uses' => 'Officer\OfficerController@monthlyMemberContribution'));
+  Route::post('contribution/month/{member}', array('as' => 'officer.contribution.monthly.member.year','uses' => 'Officer\OfficerController@memberYearSelected'));
 
 	Route::get('/contribution/damayan', array('as' => 'officer.contribution.damayan','uses' => 'Officer\OfficerController@damayanContribution'));
 	Route::get('/contribution/sharecapital', array('as' => 'officer.contribution.sharecapital','uses' => 'Officer\OfficerController@sharecapitalContribution'));
@@ -127,6 +131,13 @@ Route::group(['prefix' => 'officer', 'middleware' => 'officer'], function () {
    Route::post('/member', array('as' => 'officer.member.index.filter','uses' => 'Officer\OfficerController@memberFilter'));
 
    Route::get('/member/show/{member}', array('as' => 'officer.member.show','uses' => 'Officer\OfficerController@showMember'));
+
+   Route::get('/documents', array('as' => 'officer.documents.index','uses' => 'Officer\OfficerController@documentsList'));
+   Route::post('documents/add', array('as' => 'officer.documents.store','uses' => 'Officer\OfficerController@documentsAdd'));
+
+   Route::get('documents/delete/{file_id}', array('as' => 'officer.documents.delete','uses' => 'Officer\OfficerController@documentsDelete'));
+
+   Route::get('documents/download/{file_id}', array('as' => 'officer.documents.download','uses' => 'Officer\OfficerController@documentsDownload'));
 	
 });
 
@@ -137,7 +148,9 @@ Route::group(['prefix' => 'member', 'middleware' => 'member'], function () {
 	Route::get('/contribution/month', array('as' => 'member.contribution.monthly','uses' => 'Member\MemberController@monthlyContribution'));
 	Route::post('/contribution/month', array('as' => 'member.contribution.monthly.year','uses' => 'Member\MemberController@monthlyContributionYearSelected'));
 
-	Route::get('/contribution/other', array('as' => 'member.contribution.other','uses' => 'Member\MemberController@otherContribution'));
+  Route::get('/contribution/damayan', array('as' => 'member.contribution.damayan','uses' => 'Member\MemberController@damayanContribution'));
+
+  Route::get('/contribution/sharecapital', array('as' => 'member.contribution.sharecapital','uses' => 'Member\MemberController@sharecapitalContribution'));
 
 	Route::get('/loan', array('as' => 'member.loan.index','uses' => 'Member\MemberController@loan'));
 	Route::post('/loan', array('as' => 'member.loan.index.filter','uses' => 'Member\MemberController@loanFilter'));

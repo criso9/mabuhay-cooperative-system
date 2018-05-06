@@ -74,7 +74,7 @@
                         </span>
                       </a>
                     @else
-                        <a href="{{route('login')}}"><span class="glyphicon glyphicon-log-in" style="margin-right: 5px;"></span> Login</a>
+                        <a href="{{route('login')}}"><span style="margin-right: 5px;"></span><i class="fa fa-sign-in"></i> Login</a>
                     @endif
                 </li>
               </ul>

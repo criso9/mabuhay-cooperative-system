@@ -57,6 +57,11 @@ Breadcrumbs::register('officer.contribution.monthly', function ($breadcrumbs) {
     $breadcrumbs->push('Monthly Contribution', route('officer.contribution.monthly'));
 });
 
+Breadcrumbs::register('officer.contribution.monthly.member', function ($breadcrumbs) {
+    $breadcrumbs->parent('officer.contribution.monthly');
+    $breadcrumbs->push('Member', url('contribution/month/{member}'));
+});
+
 Breadcrumbs::register('officer.contribution.damayan', function ($breadcrumbs) {
 	$breadcrumbs->parent('officer.index');
     $breadcrumbs->push('Damayan', route('officer.contribution.damayan'));
@@ -64,7 +69,7 @@ Breadcrumbs::register('officer.contribution.damayan', function ($breadcrumbs) {
 
 Breadcrumbs::register('officer.contribution.sharecapital', function ($breadcrumbs) {
 	$breadcrumbs->parent('officer.index');
-    $breadcrumbs->push('Damayan', route('officer.contribution.sharecapital'));
+    $breadcrumbs->push('Share Capital', route('officer.contribution.sharecapital'));
 });
 
 Breadcrumbs::register('officer.loan.index', function ($breadcrumbs) {
@@ -87,6 +92,11 @@ Breadcrumbs::register('officer.member.show', function ($breadcrumbs) {
     $breadcrumbs->push('Profile', url('/officer/member/show/{member}'));
 });
 
+Breadcrumbs::register('officer.documents.index', function ($breadcrumbs) {
+    $breadcrumbs->parent('officer.index');
+    $breadcrumbs->push('Documents', route('officer.documents.index'));
+});
+
 // Member
 
 Breadcrumbs::register('member.index', function ($breadcrumbs) {
@@ -98,9 +108,14 @@ Breadcrumbs::register('member.contribution.monthly', function ($breadcrumbs) {
     $breadcrumbs->push('Monthly Contribution', route('member.contribution.monthly'));
 });
 
-Breadcrumbs::register('member.contribution.other', function ($breadcrumbs) {
+Breadcrumbs::register('member.contribution.damayan', function ($breadcrumbs) {
 	$breadcrumbs->parent('member.index');
-    $breadcrumbs->push('Other Contributions', route('member.contribution.other'));
+    $breadcrumbs->push('Damayan', route('member.contribution.damayan'));
+});
+
+Breadcrumbs::register('member.contribution.sharecapital', function ($breadcrumbs) {
+    $breadcrumbs->parent('member.index');
+    $breadcrumbs->push('Share Capital', route('member.contribution.sharecapital'));
 });
 
 Breadcrumbs::register('member.loan.index', function ($breadcrumbs) {

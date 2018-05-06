@@ -35,13 +35,13 @@ class CoopController extends BaseController
          	DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE files_uploaded.added_by = users.id) AS added_by"),
          	DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE files_uploaded.removed_by = users.id) AS removed_by")
      		)
-         ->where('files_type.type', '!=', 'minutes')
+         ->whereIn('files_type.type', ['policies', 'others'])
          ->where('files_uploaded.status', 'active')
          ->get();
 
 		$fileType = DB::table('files_type')
 		->select('type', 'id')
-		->where('type', '!=', 'minutes')
+		->whereIn('files_type.type', ['policies', 'others'])
 		->orderBy('type')
 		->pluck('type', 'id');
 		
@@ -208,7 +208,7 @@ class CoopController extends BaseController
 	    		$validator->errors()->add('docs', 'File is required.');
 	    	}else{
 	    		for($i=0; $i<count($_FILES['docs']['name']); $i++) {
-	    			if($_FILES['docs']['type'][$i] != 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && $_FILES['docs']['type'][$i] != 'application/pdf'){
+	    			if($_FILES['docs']['type'][$i] != 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && $_FILES['docs']['type'][$i] != 'application/pdf' && $_FILES['docs']['type'][$i] != 'application/msword'){
 	    				$validator->errors()->add('docs', 'Document must be a file of type: docx, pdf');
 	    			}
 	    		}

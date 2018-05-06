@@ -163,6 +163,9 @@
                   <li>
                     <a href="{{route('officer.business.index')}}"><i class="fa fa-briefcase"></i> Business </a>
                   </li>
+                  <li>
+                    <a href="{{route('officer.documents.index')}}"><i class="fa fa-file-text"></i> Documents </a>
+                  </li>
                 </ul>
               </div>
               <div class="menu_section">
@@ -183,7 +186,8 @@
                   <li><a><i class="fa fa-money"></i> Contributions </a>
                     <ul class="nav child_menu">
                       <li><a href="{{route('member.contribution.monthly')}}">Monthly</a></li>
-                      <li><a href="{{route('member.contribution.other')}}">Others</a></li>
+                      <li><a href="{{route('member.contribution.damayan')}}">Damayan</a></li>
+                      <li><a href="{{route('member.contribution.sharecapital')}}">Share Capital</a></li>
                     </ul>
                   </li>
                   <li>
@@ -302,7 +306,7 @@
               </a>
               @if($position == 'President' || $position == 'Treasurer')
               <br/>
-              <div style="background-color: cornflowerblue;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Contributions</h5></div>
+              <div style="background: rgb(51, 102, 51) none repeat scroll 0% 0%;;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Contributions</h5></div>
               <a href="{{route('officer.contribution.monthly')}}" class="btn btn-app">
                 <i class="fa fa-calendar"></i> Monthly
               </a>
@@ -313,7 +317,7 @@
                 <i class="fa fa-line-chart"></i> Share Capital
               </a>
               <br/>
-              <div style="background-color: cornflowerblue;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Others</h5></div>
+              <div style="background: rgb(51, 102, 51) none repeat scroll 0% 0%;;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Others</h5></div>
               <a href="{{url('/officer/loan')}}" class="btn btn-app">
                 <i class="fa fa-credit-card"></i> List of Loan
               </a>
@@ -322,6 +326,9 @@
               </a>
               <a href="{{route('officer.business.index')}}" class="btn btn-app">
                 <i class="fa fa-briefcase"></i> Business
+              </a>
+              <a href="{{route('officer.documents.index')}}" class="btn btn-app">
+                <i class="fa fa-file-text"></i> Documents 
               </a>
               @endif
             @endif
@@ -345,18 +352,18 @@
                 <i class="fa fa-dashboard"></i> Dashboard
               </a>
               <br/>
-              <div style="background-color: cornflowerblue;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Contributions</h5></div>
+              <div style="background: rgb(0, 107, 179) none repeat scroll 0% 0%;;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Contributions</h5></div>
               <a href="{{route('member.contribution.monthly')}}" class="btn btn-app">
                 <i class="fa fa-calendar"></i> Monthly
               </a>
-              <a href="{{route('member.contribution.other')}}" class="btn btn-app">
+              <a href="{{route('member.contribution.damayan')}}" class="btn btn-app">
                 <i class="fa fa-medkit"></i> Damayan
               </a>
-              <a href="{{route('member.contribution.other')}}" class="btn btn-app">
+              <a href="{{route('member.contribution.sharecapital')}}" class="btn btn-app">
                 <i class="fa fa-line-chart"></i> Share Capital
               </a>
               <br/>
-              <div style="background-color: cornflowerblue;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Others</h5></div>
+              <div style="background: rgb(0, 107, 179) none repeat scroll 0% 0%;;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Others</h5></div>
               <a href="{{route('member.loan.index')}}" class="btn btn-app">
                 <i class="fa fa-credit-card"></i> Loans
               </a>

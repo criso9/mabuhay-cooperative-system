@@ -1,7 +1,7 @@
 @extends('layout.panel')
 
 @section('title')
-Monthly Contributions
+Damayan
 @stop
 
 @section('content')
@@ -13,18 +13,12 @@ Monthly Contributions
   <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
       <div class="x_title">
-        <h2>Monthly Contributions <small></small></h2>
+        <h2>Damayan <small></small></h2>
         <div class="clearfix"></div>
       </div>
       <div class="x_content">
       <br/>
-
-      <!-- <div>
-      	{{$contributions}}
-      </div> -->
-	
-        <!-- <form class="form-horizontal form-label-left year-contribution" style="width: 15%;float: right;""> -->
-        {{ Form::model($contributions, array('route' => array('member.contribution.monthly.year'), 'method' => 'post', 'class' => 'form-horizontal form-label-left year-contribution', 'style' => 'width: 15%;float: right;')) }}
+        {{ Form::open(array('route' => 'member.contribution.monthly.year', 'method' => 'post', 'class' => 'form-horizontal form-label-left year-contribution', 'style' => 'width: 15%;float: right;right: 0px;')) }}
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <input type="hidden" name="_payment" value="{{ $payment->id }}">
           <div class="form-group">
@@ -41,28 +35,12 @@ Monthly Contributions
               </select>
             </div>
           </div>
-          <div class="form-group month-contribution">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-weight: normal;">Month:</label>
-            <div class="col-md-9 col-sm-9 col-xs-12">
-              <select id="month-contribution" name="month" class="form-control" style="height: 30.5px;font-size: 12px;" onchange="this.form.submit()">
-              <option>All</option>
-              @if (count($months) > 1)
-                @foreach($months as $m)
-                  <option value="{{$m}}" {{ $m == $selected_month ? "selected" : "" }}>{{$m}}</option>
-                @endforeach
-              @elseif (count($months) > 0)
-                <option value="{{$years[0]}}">{{$months[0]}}</option>
-              @endif
-              </select>
-            </div>
-          </div>
-        </form>
+        {{ Form::close() }}
 
         <div class="monthly-contribution">
-          <table id="member-m-cont" class="table table-striped table-bordered">
+          <table id="member-d-cont" class="table table-striped table-bordered">
           <thead>
             <tr>
-              <th>Month</th>
               <th>Amount</th>
               <th>Date Paid</th>
               <th>Payment Method</th>
@@ -74,7 +52,6 @@ Monthly Contributions
            @if ($contributions->count() > 1)
               @foreach($contributions as $cont)
                 <tr>
-                  <td>{{$cont->month}}</td>
                   <td>{{$cont->amount}}</td>
                   <td>{{$cont->date_paid}}</td>
                   <td>{{$cont->payment_type}}</td>
@@ -83,11 +60,10 @@ Monthly Contributions
               @endforeach
             @elseif ($contributions->count() > 0)
               <tr>
-				<td>{{$contributions[0]->month}}</td>
-				<td>{{$contributions[0]->amount}}</td>
-				<td>{{$contributions[0]->date_paid}}</td>
-				<td>{{$contributions[0]->payment_type}}</td>
-				<td>{{$contributions[0]->receipt_no}}</td>
+        				<td>{{$contributions[0]->amount}}</td>
+        				<td>{{$contributions[0]->date_paid}}</td>
+        				<td>{{$contributions[0]->payment_type}}</td>
+        				<td>{{$contributions[0]->receipt_no}}</td>
               </tr>
             @endif
           </tbody>
@@ -112,20 +88,14 @@ Monthly Contributions
     @endif
 
     var year = document.getElementById("year-contribution");
-    var month = document.getElementById("month-contribution");
     
     var yearVal = year.options[year.selectedIndex].value;
-    var monthVal = month.options[month.selectedIndex].value;
     var fName = "";
 
-    //prepend Month and Year on the fileName
-    if(monthVal == 'All'){
-      fName = yearVal + ' Monthly Contributions - ' + '{{Auth::user()->f_name}}' + ' ' + '{{Auth::user()->l_name}}';
-    } else {
-      fName = yearVal +  ' ' + monthVal + ' Contributions - ' + '{{Auth::user()->f_name}}' + ' ' + '{{Auth::user()->l_name}}';
-    }
+    //prepend Year on the fileName
+    fName = yearVal + ' Damayan Contributions - ' + '{{Auth::user()->f_name}}' + ' ' + '{{Auth::user()->l_name}}';
 
-    $('#member-m-cont').DataTable({
+    $('#member-d-cont').DataTable({
       dom: 'B<"clear">lfrtip',
       // buttons: [
       //   'copy', 'csv', 'excel', 'pdf', 'print'
@@ -255,13 +225,7 @@ Monthly Contributions
                         .addClass( 'print-table' );
 
                 //prepend Month and Year on the Title
-                if(monthVal == 'All'){
-                  $(win.document.body).find('h1').prepend(yearVal + ' ');
-                } else {
-                  $(win.document.body).find('h1').text(monthVal + ' ' + yearVal + ' Contributions');
-                }
-
-                $(win.document.body).find('h1').append(' - ' + '{{Auth::user()->f_name}} {{Auth::user()->l_name}}');
+                $(win.document.body).find('h1').text(fName);
                 
             }
         },

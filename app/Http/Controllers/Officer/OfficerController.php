@@ -13,6 +13,9 @@ use DateTime;
 use DateInterval;
 use DatePeriod;
 use DB;
+use Storage;
+use File;
+use App\FilesUploaded;
 use App\Cooperative;
 use App\User;
 use App\MonthlyContribution;
@@ -106,9 +109,9 @@ class OfficerController extends BaseController
 			$start_year = $date_founded;
 			$end_year = new DateTime(date('Y-m-d'));
 
-			if ($curr_date->format('Y') != $date_founded->format('Y')){
-				$end_year->add(new DateInterval("P1Y"));
-			}
+			// if ($curr_date->format('Y') != $date_founded->format('Y')){
+			// 	$end_year->add(new DateInterval("P1Y"));
+			// }
 
 			$interval_year = DateInterval::createFromDateString('1 year');
 			$period_year   = new DatePeriod($start_year, $interval_year, $end_year);
@@ -128,23 +131,128 @@ class OfficerController extends BaseController
 
 	}
 
+	public function monthlyMemberContribution($id)
+	{
+		if($this->position != 'Treasurer' && $this->position != 'President'){
+			return Redirect::route('forbidden');
+		}else{
+			$curr_year = new DateTime(date('Y-m-d'));
+			$paramYear = Input::get('y');
+			$paramMonth = Input::get('m');
+			$selected_year = "";
+			$selected_month = "";
+			$contributions = "";
+
+			if ($paramYear != '') {
+	        	$selected_year = $paramYear;
+	        } else {
+	        	$selected_year = $curr_year->format('Y');
+	        }
+
+	         if ($paramMonth != '' && $paramMonth != 'All') {
+	        	$selected_month = $paramMonth;
+
+	        	$contributions = DB::table('users')
+	            ->join('contributions', 'users.id', '=', 'contributions.user_id')
+	            ->join('payments', 'contributions.payment_id', '=', 'payments.id')
+	            ->select('users.id', 'users.f_name', 'users.l_name', 'contributions.date_paid', 'contributions.amount', 'contributions.payment_type', 'contributions.receipt_no', 'contributions.id',
+	            	DB::raw('monthname(contributions.date) AS month'),
+	            	DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE contributions.updated_by = users.id) AS updated_by")
+	            )
+	           	->whereYear('contributions.date', '=', $selected_year)
+	           	->where(DB::raw('monthname(contributions.date)'), '=', $selected_month)
+	           	->where('contributions.user_id', '=', $id)
+	           	->where('payments.payment', '=', 'Monthly Contribution')
+	            ->get();
+	        } else {
+	        	$selected_month = 'All';
+
+	        	$contributions = DB::table('users')
+	            ->join('contributions', 'users.id', '=', 'contributions.user_id')
+	            ->join('payments', 'contributions.payment_id', '=', 'payments.id')
+	            ->select('users.id', 'users.f_name', 'users.l_name', 'contributions.date_paid', 'contributions.amount', 'contributions.payment_type', 'contributions.receipt_no', 'contributions.id',
+	            	DB::raw('monthname(contributions.date) AS month'),
+	            	DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE contributions.updated_by = users.id) AS updated_by")
+	            )
+	           	->whereYear('contributions.date', '=', $selected_year)
+	           	->where('contributions.user_id', '=', $id)
+	           	->where('payments.payment', '=', 'Monthly Contribution')
+	            ->get();
+	        }
+
+	        //get list of months
+	        $curr_date = new DateTime(date('Y-m-d'));
+	       	$date_founded = new DateTime(date($this->coop->date_founded));
+
+	       	$months = array();
+
+	       	if ($curr_date->format('Y') == $date_founded->format('Y') || $selected_year == $date_founded->format('Y')) {
+	       		//get list of months for the year founded
+	       		$end_month = new DateTime($date_founded->format('Y').'-12-31');
+	       		$interval_month = DateInterval::createFromDateString('1 month');
+				$period_month   = new DatePeriod($date_founded, $interval_month, $end_month);
+
+				foreach ($period_month as $m) {
+				    array_push($months,  $m->format("F"));
+				}
+	       	} else {
+	       		for ($m=1; $m<=12; $m++) {
+					$month = date('F', mktime(0,0,0,$m, 1, date('Y')));
+					array_push($months,  $month);
+			    }
+	       	}
+
+			//get list of years since COOP founded date
+			$start_year = $date_founded;
+			$end_year = new DateTime(date('Y-m-d'));
+
+			// if ($curr_date->format('Y') != $date_founded->format('Y')){
+			// 	$end_year->add(new DateInterval("P1Y"));
+			// }
+			
+			$interval_year = DateInterval::createFromDateString('1 year');
+			$period_year   = new DatePeriod($start_year, $interval_year, $end_year);
+
+			$years = array();
+
+			foreach ($period_year as $year) {
+			    array_push($years,  $year->format("Y"));
+			}
+
+			rsort($years);
+
+			$member = DB::table('users')
+	            ->select('f_name', 'l_name')
+	           	->where('id', '=', $id)
+	            ->first();
+
+			return view('officer.contribution.member.member_monthly', compact('contributions', 'months', 'years', 'selected_year', 'selected_month', 'id', 'member'));
+		}
+
+	}
+
+	public function memberYearSelected(Request $request)
+	{
+		if($this->position != 'Treasurer' && $this->position != 'President'){
+			return Redirect::route('forbidden');
+		}else{
+			return Redirect::route('officer.contribution.monthly.member', [$request->_id, 'y' => $request->year, 'm'=>$request->month]);
+		}
+	}
+
 	public function monthlyContributionYearSelected(Request $request)
 	{
 		if($this->position != 'Treasurer' && $this->position != 'President'){
 			return Redirect::route('forbidden');
 		}else{
-			return Redirect::route('officer.contribution.monthly', ['y'=>$request->year, 'm'=>$request->month]);
+			if($request->_payment == '1'){
+	        	return Redirect::route('officer.contribution.monthly', ['y' => $request->year, 'm' => $request->month]);
+	        } else if ($request->_payment == '2') {
+	        	return Redirect::route('officer.contribution.damayan', ['y' => $request->year]);
+	        } else if ($request->_payment == '3') {
+	        	return Redirect::route('officer.contribution.sharecapital', ['y' => $request->year]);
+	        }
 		}
-	}
-
-	public function monthlyContributionInfo(Request $request)
-	{
-		if($this->position != 'Treasurer' && $this->position != 'President'){
-			return Redirect::route('forbidden');
-		}else{
-			$data= $request->id;
-	     	return response()->json($data);
-	    }
 	}
 
 	public function storeContribution(Request $request)
@@ -166,11 +274,14 @@ class OfficerController extends BaseController
 	        if ($request->payment_id == '1') {
 	        	$dtmy = DateTime::createFromFormat('M Y', $request->date);
 	        	$cont->date = $dtmy->format('Y-m-d H:i:s');
+	        	$cont->date_paid = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->date_paid)));
 	        } else  if ($request->payment_id == '2') {
 	        	$dt = DateTime::createFromFormat('Y', $request->date);
 	        	$cont->date = $dt->format('Y-m-d H:i:s');
+	        	$cont->date_paid = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->date_paid)));
 	        } else {
 	        	$cont->date = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->date)));
+	        	$cont->date_paid = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->date)));
 	        }
 
 	        // dd($request->date_paid);
@@ -178,7 +289,6 @@ class OfficerController extends BaseController
 	        $cont->amount = $request->amount;
 	        $cont->payment_type = $request->payment_type;
 	        $cont->receipt_no = $request->receipt_no;
-	        $cont->date_paid = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->date_paid)));
 	        $cont->updated_by = Auth::user()->id;
 
 	        $cont->save();
@@ -186,9 +296,9 @@ class OfficerController extends BaseController
 	        if($request->payment_id == '1'){
 	        	return Redirect::route('officer.contribution.monthly', ['y' => $request->_year, 'm' => $request->_month])->withFlashMessage('Contribution was added');
 	        } else if ($request->payment_id == '2') {
-	        	return Redirect::route('officer.contribution.damayan', ['y' => $request->_year, 'm' => $request->_month])->withFlashMessage('Contribution was added');
+	        	return Redirect::route('officer.contribution.damayan', ['y' => $request->_year])->withFlashMessage('Contribution was added');
 	        } else if ($request->payment_id == '3') {
-
+	        	return Redirect::route('officer.contribution.sharecapital', ['y' => $request->_year])->withFlashMessage('Contribution was added');
 	        }
 	    }	
 	} 
@@ -198,7 +308,16 @@ class OfficerController extends BaseController
 		if($this->position != 'Treasurer' && $this->position != 'President'){
 			return Redirect::route('forbidden');
 		}else{
-			
+			$curr_year = new DateTime(date('Y-m-d'));
+			$paramYear = Input::get('y');
+			$selected_year = "";
+
+			if ($paramYear != '') {
+	        	$selected_year = $paramYear;
+	        } else {
+	        	$selected_year = $curr_year->format('Y');
+	        }
+
 			$users = User::select(DB::raw("CONCAT(l_name, ', ', f_name) AS fullName"),'id')->where('status', 'active')->whereNotIn('id', [Auth::user()->id])->orderBy('l_name')->pluck('fullName', 'id');
 
 			$payment = DB::table('payments')
@@ -209,11 +328,36 @@ class OfficerController extends BaseController
 			$damayan = DB::table('users')
 	        ->join('contributions', 'users.id', '=', 'contributions.user_id')
 	        ->join('payments', 'contributions.payment_id', '=', 'payments.id')
-	        ->select('users.id', 'users.f_name', 'users.l_name', 'contributions.payment_type', 'contributions.receipt_no', 'contributions.date')
+	        ->select('users.id', 'users.f_name', 'users.l_name', 'contributions.payment_type', 'contributions.receipt_no', 'contributions.date', 'contributions.amount', 'contributions.date_paid',
+	        	DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE contributions.updated_by = users.id) AS updated_by")
+	    	)
 	       	->where('payments.payment', '=', 'Damayan')
+	       	->whereYear('contributions.date', '=', $selected_year)
 	        ->get();
 
-			return view('officer.contribution.damayan', compact('damayan', 'payment', 'users'));
+	        //get list of years since COOP founded date
+	        $curr_date = new DateTime(date('Y-m-d'));
+	       	$date_founded = new DateTime(date($this->coop->date_founded));
+
+			$start_year = $date_founded;
+			$end_year = new DateTime(date('Y-m-d'));
+
+			// if ($curr_date->format('Y') != $date_founded->format('Y')){
+			// 	$end_year->add(new DateInterval("P1Y"));
+			// }
+
+			$interval_year = DateInterval::createFromDateString('1 year');
+			$period_year   = new DatePeriod($start_year, $interval_year, $end_year);
+
+	        $years = array();
+
+			foreach ($period_year as $year) {
+			    array_push($years,  $year->format("Y"));
+			}
+
+			rsort($years);
+
+			return view('officer.contribution.damayan', compact('damayan', 'payment', 'users', 'years', 'selected_year'));
 		}
 	}
 
@@ -222,24 +366,17 @@ class OfficerController extends BaseController
 		if($this->position != 'Treasurer' && $this->position != 'President'){
 			return Redirect::route('forbidden');
 		}else{
-			// $coop = Cooperative::whereNotNull('id')->first();
+			$curr_year = new DateTime(date('Y-m-d'));
+			$paramYear = Input::get('y');
+			$selected_year = "";
 
-			// $users = User::select(DB::raw("CONCAT(l_name, ', ', f_name) AS fullName"),'id')->where('status', 'active')->whereNotIn('id', [Auth::user()->id])->orderBy('l_name')->pluck('fullName', 'id');
+			if ($paramYear != '') {
+	        	$selected_year = $paramYear;
+	        } else {
+	        	$selected_year = $curr_year->format('Y');
+	        }
 
-			$users = DB::table('users')
-			->select(
-				DB::raw("CONCAT(l_name, ', ', f_name) AS fullName"),
-				'id')
-			->where('status', '=', 'active')
-			->whereNotIn('id', [Auth::user()->id])
-			->whereNotIn('id', function($query){
-			    $query->select('user_id')
-			    ->from('contributions')
-			    ->join('payments', 'contributions.payment_id', '=', 'payments.id')
-			    ->where('payments.payment', '=', 'Share Capital');
-			})
-			->orderBy('l_name')
-			->pluck('fullName', 'id');
+			$users = User::select(DB::raw("CONCAT(l_name, ', ', f_name) AS fullName"),'id')->where('status', 'active')->whereNotIn('id', [Auth::user()->id])->orderBy('l_name')->pluck('fullName', 'id');
 
 			$payment = DB::table('payments')
 			->select('id')
@@ -249,11 +386,36 @@ class OfficerController extends BaseController
 			$sharecapital = DB::table('users')
 	        ->join('contributions', 'users.id', '=', 'contributions.user_id')
 	        ->join('payments', 'contributions.payment_id', '=', 'payments.id')
-	        ->select('users.id', 'users.f_name', 'users.l_name', 'contributions.payment_type', 'contributions.receipt_no', 'contributions.date')
+	        ->select('users.id', 'users.f_name', 'users.l_name', 'contributions.payment_type', 'contributions.receipt_no', 'contributions.date', 'contributions.amount', 'contributions.date_paid',
+	        	DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE contributions.updated_by = users.id) AS updated_by")
+	    	)
 	       	->where('payments.payment', '=', 'Share Capital')
+	       	->whereYear('contributions.date', '=', $selected_year)
 	        ->get();
 
-			return view('officer.contribution.sharecapital', compact('users', 'payment', 'sharecapital'));
+	        //get list of years since COOP founded date
+	        $curr_date = new DateTime(date('Y-m-d'));
+	       	$date_founded = new DateTime(date($this->coop->date_founded));
+
+			$start_year = $date_founded;
+			$end_year = new DateTime(date('Y-m-d'));
+
+			// if ($curr_date->format('Y') != $date_founded->format('Y')){
+			// 	$end_year->add(new DateInterval("P1Y"));
+			// }
+
+			$interval_year = DateInterval::createFromDateString('1 year');
+			$period_year   = new DatePeriod($start_year, $interval_year, $end_year);
+
+	        $years = array();
+
+			foreach ($period_year as $year) {
+			    array_push($years,  $year->format("Y"));
+			}
+
+			rsort($years);
+
+			return view('officer.contribution.sharecapital', compact('sharecapital', 'payment', 'users', 'years', 'selected_year'));
 		}
 	}
 
@@ -301,7 +463,7 @@ class OfficerController extends BaseController
 
 	        $loans = DB::table('loans')
 	        ->join('users', 'loans.user_id', '=', 'users.id')
-	        ->select('loans.user_id', 'users.f_name', 'users.l_name', 'loans.transaction_no', 'loans.date_applied', 'loans.status', 'loans.amount_loan', 'loans.amount_paid', 'loans.remaining_balance', 'loans.due_date', 'loans.id', 'loans.interest_amount', 'loans.reviewed_at', 'loans.remarks',
+	        ->select('loans.user_id', 'users.f_name', 'users.l_name', 'loans.transaction_no', 'loans.date_applied', 'loans.status', 'loans.amount_loan', 'loans.amount_paid', 'loans.remaining_balance', 'loans.due_date', 'loans.id', 'loans.interest_amount', 'loans.reviewed_at', 'loans.remarks', 'loans.id',
 	        	DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE loans.reviewed_by = users.id) AS reviewed_by")
 	    	)
 	        ->where('loans.user_id', '!=', Auth::user()->id)
@@ -527,4 +689,114 @@ class OfficerController extends BaseController
 	{
 		return Redirect::route('officer.member.index', ['f'=>$request->filter, 's'=>$request->statusFilter]);
 	}
+
+	public function documentsList()
+	{
+
+        $docs = DB::table('files_uploaded')
+        ->join('files_type', 'files_uploaded.type_id', '=', 'files_type.id')
+         ->select('files_uploaded.id', 'files_type.type', 'orig_file_name', 'file_name', 'path',
+            DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE files_uploaded.added_by = users.id) AS added_by"),
+            'added_at'
+        )
+        ->where('status', 'active')
+        ->whereIn('type', ['minutes', 'attendance'])
+        ->get();
+
+        $fileType = DB::table('files_type')
+		->select('type', 'id')
+		->whereIn('type', ['minutes', 'attendance'])
+		->orderBy('type')
+		->pluck('type', 'id');
+
+        return view('officer.document.index', compact('docs', 'fileType'));
+	}
+
+	public function documentsAdd(Request $request)
+    {
+    	$fileReq = $request['docs'];
+
+		$validator = Validator::make($request = Input::all(), FilesUploaded::$docs_rules);
+
+		$validator->after(function ($validator) use ($fileReq) {
+	    	if($fileReq == ''){
+	    		$validator->errors()->add('docs', 'File is required.');
+	    	}else{
+	    		for($i=0; $i<count($_FILES['docs']['name']); $i++) {
+	    			if($_FILES['docs']['type'][$i] != 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && $_FILES['docs']['type'][$i] != 'application/pdf' && $_FILES['docs']['type'][$i] != 'application/msword'){
+	    				$validator->errors()->add('docs', 'Document must be a file of type: docx, pdf');
+	    			}
+	    		}
+	    	}
+     
+        });
+
+        if($validator->fails())
+        {
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
+
+		if(count($_FILES['docs']['name']) > 0){
+
+			for($i=0; $i<count($_FILES['docs']['name']); $i++) {
+				$tmpFilePath = $_FILES['docs']['tmp_name'][$i];
+				$fileName = $request['file_type']."-".date('Ymd-His').'-'.$_FILES['docs']['name'][$i];
+			    $filePath = "uploads/documents/".$fileName;
+
+			    $origFileName = $_FILES['docs']['name'][$i];
+
+			   	move_uploaded_file($tmpFilePath, $filePath);
+
+			   	$fileUpload = new FilesUploaded;
+			    
+			    $fileUpload->type_id = $request['file_type'];
+			    $fileUpload->status = 'active';
+			    $fileUpload->orig_file_name = $origFileName;
+			    $fileUpload->file_name = $fileName;
+			    $fileUpload->path = $filePath;
+			    $fileUpload->added_by = Auth::user()->id;
+			    $fileUpload->added_at = date('Y-m-d H:i:s');
+
+			    $fileUpload->save();
+			}
+		}
+
+        return Redirect::route('officer.documents.index')->withFlashMessage('Changes save successfully');
+    }
+
+    public function documentsDelete($file_id)
+    {
+    	$docs = DB::table('files_uploaded')
+        ->select('path', 'file_name')
+        ->where('status', 'active')
+        ->where('id', $file_id)
+        ->first();
+
+    	if (file_exists($docs->path))
+    	{
+    		File::delete($docs->path);
+    		DB::table('files_uploaded')->where('id', $file_id)->delete();
+
+    		return Redirect::route('officer.documents.index')->withFlashMessage('File deleted successfully');
+    	}else {
+    		return Redirect::back()->withErrors('File Does not Exist');
+    	} 
+    }
+
+    public function documentsDownload($file_id)
+    {
+    	$docs = DB::table('files_uploaded')
+        ->select('path', 'file_name')
+        ->where('status', 'active')
+        ->where('id', $file_id)
+        ->first();
+
+    	if (file_exists($docs->path))
+    	{
+			return response()->download($docs->path);
+    	}else {
+    		return Redirect::back()->withErrors('File Does not Exist');
+    	} 
+    }
+
 }

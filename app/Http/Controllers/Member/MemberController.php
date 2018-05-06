@@ -22,13 +22,17 @@ class MemberController extends BaseController
 {
     public function index()
 	{
+		$curr_date = new DateTime(date('Y-m-d'));
+		$curr_date->format('Y');
 
 		$contributions = DB::table('users')
 			->join('contributions', 'users.id', '=', 'contributions.user_id')
-            ->select('contributions.amount',
+			->join('payments', 'contributions.payment_id', '=', 'payments.id')
+            ->select(DB::raw('contributions.amount AS amount'),
             	DB::raw('monthname(contributions.date) AS month'))
-           	->whereYear('contributions.date', '=', '2018')
+           	->whereYear('contributions.date', '=', $curr_date)
            	->where('contributions.user_id', '=', Auth::user()->id)
+           	->where('payments.payment', '=', 'Monthly Contribution')
            	->orderBy(DB::raw('month(contributions.date)'), 'asc')
             ->get();
 
@@ -57,57 +61,128 @@ class MemberController extends BaseController
 
         	$contributions = DB::table('users')
             ->join('contributions', 'users.id', '=', 'contributions.user_id')
+            ->join('payments', 'contributions.payment_id', '=', 'payments.id')
             ->select('users.id', 'users.f_name', 'users.l_name', 'contributions.date_paid', 'contributions.amount', 'contributions.payment_type', 'contributions.receipt_no', 'contributions.id',
             	DB::raw('monthname(contributions.date) AS month'))
            	->whereYear('contributions.date', '=', $selected_year)
            	->where(DB::raw('monthname(contributions.date)'), '=', $selected_month)
            	->where('contributions.user_id', '=', Auth::user()->id)
+           	->where('payments.payment', '=', 'Monthly Contribution')
             ->get();
         } else {
         	$selected_month = 'All';
 
         	$contributions = DB::table('users')
             ->join('contributions', 'users.id', '=', 'contributions.user_id')
+            ->join('payments', 'contributions.payment_id', '=', 'payments.id')
             ->select('users.id', 'users.f_name', 'users.l_name', 'contributions.date_paid', 'contributions.amount', 'contributions.payment_type', 'contributions.receipt_no', 'contributions.id',
             	DB::raw('monthname(contributions.date) AS month'))
            	->whereYear('contributions.date', '=', $selected_year)
            	->where('contributions.user_id', '=', Auth::user()->id)
+           	->where('payments.payment', '=', 'Monthly Contribution')
             ->get();
         }
 
-        // dd($contributions);
-
+        $payment = DB::table('payments')
+		->select('id')
+		->where('payment', '=', 'Monthly Contribution')
+		->first();
 		
+        //get list of months
+        $curr_date = new DateTime(date('Y-m-d'));
+	    $date_founded = new DateTime(date($this->coop->date_founded));
+
+       	$months = array();
+
+       	if ($curr_date->format('Y') == $date_founded->format('Y') || $selected_year == $date_founded->format('Y')) {
+	       		//get list of months for the year founded
+	       		$end_month = new DateTime($date_founded->format('Y').'-12-31');
+	       		$interval_month = DateInterval::createFromDateString('1 month');
+				$period_month   = new DatePeriod($date_founded, $interval_month, $end_month);
+
+				foreach ($period_month as $m) {
+				    array_push($months,  $m->format("F"));
+				}
+	       	} else {
+	       		for ($m=1; $m<=12; $m++) {
+					$month = date('F', mktime(0,0,0,$m, 1, date('Y')));
+					array_push($months,  $month);
+			    }
+	       	}
+
+			//get list of years since COOP founded date
+			$start_year = $date_founded;
+			$end_year = new DateTime(date('Y-m-d'));
+
+			// if ($curr_date->format('Y') != $date_founded->format('Y')){
+			// 	$end_year->add(new DateInterval("P1Y"));
+			// }
+
+			$interval_year = DateInterval::createFromDateString('1 year');
+			$period_year   = new DatePeriod($start_year, $interval_year, $end_year);
+
+			$years = array();
+
+			foreach ($period_year as $year) {
+			    array_push($years,  $year->format("Y"));
+			}
+
+			rsort($years);
+
+
+		return view('member.contribution.monthly', compact('contributions', 'months', 'years', 'selected_year', 'selected_month', 'payment'));
+	}
+
+	public function monthlyContributionYearSelected(Request $request)
+	{
+		if($request->_payment == '1'){
+        	return Redirect::route('member.contribution.monthly', ['y' => $request->year, 'm' => $request->month]);
+        } else if ($request->_payment == '2') {
+        	return Redirect::route('member.contribution.damayan', ['y' => $request->year]);
+        } else if ($request->_payment == '3') {
+        	return Redirect::route('member.contribution.sharecapital', ['y' => $request->year]);
+        }
+
+	}
+
+	public function damayanContribution()
+	{
+		$curr_year = new DateTime(date('Y-m-d'));
+		$paramYear = Input::get('y');
+		$selected_year = "";
+		$contributions = "";
+
+		if ($paramYear != '') {
+        	$selected_year = $paramYear;
+        } else {
+        	$selected_year = $curr_year->format('Y');
+        }
+
+        $contributions = DB::table('users')
+        ->join('contributions', 'users.id', '=', 'contributions.user_id')
+        ->join('payments', 'contributions.payment_id', '=', 'payments.id')
+        ->select('users.id', 'users.f_name', 'users.l_name', 'contributions.date_paid', 'contributions.amount', 'contributions.payment_type', 'contributions.receipt_no', 'contributions.id')
+       	->whereYear('contributions.date', '=', $selected_year)
+       	->where('contributions.user_id', '=', Auth::user()->id)
+       	->where('payments.payment', '=', 'Damayan')
+        ->get();
+
+        $payment = DB::table('payments')
+		->select('id')
+		->where('payment', '=', 'Damayan')
+		->first();
 
         //get list of months
         $curr_date = new DateTime(date('Y-m-d'));
        	$date_founded = new DateTime(date($this->coop->date_founded));
 
-       	$months = array();
-
-       	if ($curr_date->format('Y') == $date_founded->format('Y') || $selected_year == $date_founded->format('Y')) {
-       		//get list of months for the year founded
-       		$end_month = new DateTime($date_founded->format('Y').'-12-31');
-       		$interval_month = DateInterval::createFromDateString('1 month');
-			$period_month   = new DatePeriod($date_founded, $interval_month, $end_month);
-
-			foreach ($period_month as $m) {
-			    array_push($months,  $m->format("F"));
-			}
-       	} else {
-       		for ($m=1; $m<=12; $m++) {
-				$month = date('F', mktime(0,0,0,$m, 1, date('Y')));
-				array_push($months,  $month);
-		    }
-       	}
-
 		//get list of years since COOP founded date
 		$start_year = $date_founded;
 		$end_year = new DateTime(date('Y-m-d'));
 
-		if ($curr_date->format('Y') != $date_founded->format('Y')){
-			$end_year->add(new DateInterval("P1Y"));
-		}
+		// if ($curr_date->format('Y') != $date_founded->format('Y')){
+		// 	$end_year->add(new DateInterval("P1Y"));
+		// }
 		
 		$interval_year = DateInterval::createFromDateString('1 year');
 		$period_year   = new DatePeriod($start_year, $interval_year, $end_year);
@@ -121,17 +196,60 @@ class MemberController extends BaseController
 		rsort($years);
 
 
-		return view('member.contribution.monthly', compact('contributions', 'months', 'years', 'selected_year', 'selected_month'));
+		return view('member.contribution.damayan', compact('contributions', 'years', 'selected_year', 'payment'));
 	}
 
-	public function monthlyContributionYearSelected(Request $request)
+	public function sharecapitalContribution()
 	{
-		return Redirect::route('member.contribution.monthly', ['y' => $request->year, 'm'=>$request->month]);
-	}
+		$curr_year = new DateTime(date('Y-m-d'));
+		$paramYear = Input::get('y');
+		$selected_year = "";
+		$contributions = "";
 
-	public function otherContribution()
-	{
-		return view('member.contribution.other');
+		if ($paramYear != '') {
+        	$selected_year = $paramYear;
+        } else {
+        	$selected_year = $curr_year->format('Y');
+        }
+
+        $contributions = DB::table('users')
+        ->join('contributions', 'users.id', '=', 'contributions.user_id')
+        ->join('payments', 'contributions.payment_id', '=', 'payments.id')
+        ->select('users.id', 'users.f_name', 'users.l_name', 'contributions.date_paid', 'contributions.amount', 'contributions.payment_type', 'contributions.receipt_no', 'contributions.id')
+       	->whereYear('contributions.date', '=', $selected_year)
+       	->where('contributions.user_id', '=', Auth::user()->id)
+       	->where('payments.payment', '=', 'Share Capital')
+        ->get();
+
+        $payment = DB::table('payments')
+		->select('id')
+		->where('payment', '=', 'Share Capital')
+		->first();
+
+        //get list of months
+        $curr_date = new DateTime(date('Y-m-d'));
+       	$date_founded = new DateTime(date($this->coop->date_founded));
+
+		//get list of years since COOP founded date
+		$start_year = $date_founded;
+		$end_year = new DateTime(date('Y-m-d'));
+
+		// if ($curr_date->format('Y') != $date_founded->format('Y')){
+		// 	$end_year->add(new DateInterval("P1Y"));
+		// }
+		
+		$interval_year = DateInterval::createFromDateString('1 year');
+		$period_year   = new DatePeriod($start_year, $interval_year, $end_year);
+
+		$years = array();
+
+		foreach ($period_year as $year) {
+		    array_push($years,  $year->format("Y"));
+		}
+
+		rsort($years);
+
+		return view('member.contribution.sharecapital', compact('contributions', 'years', 'selected_year', 'payment'));
 	}
 
 	public function loan()

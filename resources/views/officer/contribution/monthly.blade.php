@@ -27,6 +27,7 @@ Monthly Contributions
         {{ Form::model($contributions, array('route' => array('officer.contribution.monthly.year'), 'method' => 'post', 'class' => 'form-horizontal form-label-left year-contribution', 'style' => 'width: 15%;float: right;')) }}
         
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
+          <input type="hidden" name="_payment" value="{{ $payment->id }}">
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-weight: normal;margin-right: -10px;">Year:</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
@@ -63,6 +64,7 @@ Monthly Contributions
           <table id="officer-m-cont" class="table table-striped table-bordered">
           <thead>
             <tr>
+              <th>Action</th>
               <th>Name</th>
               @if ($selected_month != "All" && $selected_month != "")
                 <th>{{$selected_month}}</th>
@@ -82,6 +84,17 @@ Monthly Contributions
             @if ($contributions->count() > 1)
               @foreach($contributions as $cont)
                 <tr>
+                  <td align="center">
+                    @if($selected_year && $selected_month)
+                      <a href="{{url('/officer/contribution/month/'.$cont->id.'?y='.$selected_year.'&m='.$selected_month)}}" class="btn btn-xs btn-success">
+                        <i class="fa fa-info-circle"></i> View
+                      </a>
+                    @else
+                      <a href="{{url('/officer/contribution/month/'.$cont->id)}}" class="btn btn-xs btn-success">
+                        <i class="fa fa-info-circle"></i> View
+                      </a>
+                    @endif
+                  </td>
                   <td style="text-transform: capitalize;">{{$cont->l_name}}, {{$cont->f_name}}</td>
                   @if ($selected_month != "All" && $selected_month != "")
                     <td>
@@ -121,48 +134,22 @@ Monthly Contributions
                           elseif($months[0] == 'December'){echo '<td>'.$cont->December.'</td>';}
                         ?>
                     @endif
-
-                    <!-- <td>
-                      {{$cont->January}}
-                    </td>
-                    <td>
-                      {{$cont->February}}
-                    </td>
-                    <td>
-                      {{$cont->March}}
-                    </td>
-                    <td>
-                      {{$cont->April}}
-                    </td>
-                    <td>
-                      {{$cont->May}}
-                    </td>
-                    <td>
-                      {{$cont->June}}
-                    </td>
-                    <td>
-                      {{$cont->July}}
-                    </td>
-                    <td>
-                      {{$cont->August}}
-                    </td>
-                    <td>
-                      {{$cont->September}}
-                    </td>
-                    <td>
-                      {{$cont->October}}
-                    </td>
-                    <td>
-                      {{$cont->November}}
-                    </td>
-                    <td>
-                      {{$cont->December}}
-                    </td> -->
                   @endif
                 </tr>
               @endforeach
             @elseif ($contributions->count() > 0)
               <tr>
+                <td align="center">
+                  @if($selected_year && $selected_month)
+                    <a href="{{url('/officer/contribution/month/'.$contributions[0]->id.'?y='.$selected_year.'&m='.$selected_month)}}" class="btn btn-xs btn-success">
+                      <i class="fa fa-info-circle"></i> View
+                    </a>
+                  @else
+                    <a href="{{url('/officer/contribution/month/'.$contributions[0]->id)}}" class="btn btn-xs btn-success">
+                      <i class="fa fa-info-circle"></i> View
+                    </a>
+                  @endif
+                </td>
                 <td style="text-transform: capitalize;">{{$contributions[0]->l_name}}, {{$contributions[0]->f_name}}</td>
                 @if ($selected_month != "All" && $selected_month != "")
                     <td>
@@ -470,7 +457,11 @@ Monthly Contributions
       fixedHeader: {
         header: true,
         footer: false
-      }
+      },
+      "order": [[ 1, "asc" ]],
+      "columnDefs": [
+        { "orderable": false, "targets": 0 }
+      ]
     });
   });
 

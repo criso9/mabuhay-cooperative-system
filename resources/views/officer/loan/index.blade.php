@@ -45,6 +45,10 @@
                 <td class="no-sort">Reject</td>
           	  @endif
 
+              @if($status_filter == 'Active')
+                <td class="no-sort">Action</td>
+              @endif
+
               <td>Transaction No.</td>
               <td>Date Applied</td>
               <td>Name</td>
@@ -89,6 +93,11 @@
                           @endif
                        @endif
 						          @endif
+                      @if($status_filter == 'Active')
+                      <td align="center" style="vertical-align: middle;">
+                        <a class="btn btn-xs btn-success" href="{{ url('/send/loanreminder/'.$l->id) }}"><i class="fa fa-send"></i> Remind</a>
+                      </td>
+                      @endif
 	                    <td>{{$l->transaction_no}}</td>
 	                    <td>{{$l->date_applied}}</td>
 	                    <td>{{$l->f_name}}, {{$l->l_name}}</td>
@@ -131,6 +140,11 @@
                             @endif
                          @endif
 						        @endif
+                    @if($status_filter == 'Active')
+                      <td align="center" style="vertical-align: middle;">
+                        <a class="btn btn-xs btn-success" href="{{ url('/send/loanreminder/'.$loans->id) }}"><i class="fa fa-send"></i> Remind</a>
+                      </td>
+                      @endif
         						<td>{{$loans[0]->transaction_no}}</td>
         						<td>{{$loans[0]->date_applied}}</td>
                     <td>{{$loans[0]->f_name}}, {{$loans[0]->l_name}}</td>

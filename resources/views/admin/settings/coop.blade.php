@@ -125,7 +125,7 @@
 				<div id="step2">
 					<h2 class="StepTitle">Home Page - Slideshow of Pictures</h2>
 					<div style="margin-bottom: 10px;float: right;">
-						<a href="" class="btn btn-round btn-info" data-toggle="modal" data-target="#add-carousel-modal" onclick="addCarousel()">Add Carousel Image</a>
+						<a href="" class="btn btn-round btn-info" data-toggle="modal" data-target="#add-carousel-modal">Add Carousel Image</a>
 					</div>
 					<div>
 			          <table id="carousel-list" class="table table-striped table-bordered" style="font-size: 13px;width: 100%;">
@@ -173,7 +173,7 @@
 				<div id="step3">
 					<h2 class="StepTitle">Upload the following documents</h2>
 					 <div style="margin-bottom: 10px;float: right;">
-						<a href="" class="btn btn-round btn-info" data-toggle="modal" data-target="#add-file-modal" onclick="addCarousel()">Add Files</a>
+						<a href="" class="btn btn-round btn-info" data-toggle="modal" data-target="#add-file-modal">Add Files</a>
 					</div>
 					<div>
 						<table id="docs-list" class="table table-striped table-bordered" style="font-size: 13px;width: 100%;">
@@ -193,7 +193,7 @@
 		                      	<td align="middle" style="vertical-align: middle;">
 		                        	<a href="" id="removeBtn" data-toggle="modal" data-target = "#removeFileModal" onclick="removeFile('{{$d->id}}')"><img id="{{$d->id}}-remove" src="/images/reject.png" style="width:25px; height: 25px;" onmouseover="deacHover('{{$d->id}}-remove');" onmouseout="deacOffHover('{{$d->id}}-remove');"/></a>
 	                      		</td>
-			                    <td>
+			                    <td class="link-row">
 			                    	<a href="{{url($d->path)}}">{{$d->orig_file_name}}</a>
 			                    </td>
 			                    <td style="vertical-align: middle;">{{$d->type}}</td>
@@ -206,7 +206,7 @@
 			                    <td align="middle" style="vertical-align: middle;">
 		                        	<a href="" id="removeBtn" data-toggle="modal" data-target = "#removeFileModal" onclick="removeFile('{{$document[0]->id}}')"><img id="{{$document[0]->id}}-remove" src="/images/reject.png" style="width:25px; height: 25px;" onmouseover="deacHover('{{$document[0]->id}}-remove');" onmouseout="deacOffHover('{{$document[0]->id}}-remove');"/></a>
 	                      		</td>
-			                  <td>
+			                  <td class="link-row">
 			                  	<a href="{{url($document[0]->path)}}">{{$document[0]->orig_file_name}}</a>
 			                  </td>
 			                  <td style="vertical-align: middle;">{{$document[0]->type}}</td>

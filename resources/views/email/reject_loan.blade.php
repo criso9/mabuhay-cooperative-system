@@ -16,6 +16,7 @@
 <br/>
 <p>Best Regards,</p>
 <p>Administrator</p>
+<p>Mabuhay BNHS</p>
 <br/>
 <p><b>Note: </b>Do not reply on this email.</p>
 </body>

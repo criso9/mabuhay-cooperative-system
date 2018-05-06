@@ -5,7 +5,7 @@
     bottom: 0;
     right: 0;
     background: #eee;
-    opacity: 0.9;
+    /*opacity: 0.9;*/
     z-index: 99999;
 }
 
@@ -286,7 +286,7 @@ table thead th, table thead td {
 }
 
 /*Contributions*/
-.year-contribution, .month-contribution, .pending-type {
+.year-contribution, .year-contribution-mem, .month-contribution, .pending-type {
     top: 18px;
     position: absolute;
     font-weight: normal;
@@ -294,6 +294,11 @@ table thead th, table thead td {
 }
 
 .year-contribution {
+    right: 160px;
+}
+
+.year-contribution-mem {
+    top: 55px;
     right: 160px;
 }
 
@@ -327,9 +332,13 @@ table thead th, table thead td {
     font-size: 12px;
     height: 30px;
 }
-#officer-m-cont_filter, #member-m-cont_filter {
+#officer-m-cont_filter, #member-m-cont_filter, #officer-d-cont_filter, #member-d-cont_filter {
     margin-left: 240px;
     position: absolute;
+}
+
+#officer-d-cont_filter, #member-d-cont_filter {
+    margin-left: 430px;
 }
 
 #pending-users_filter, #loans-list_filter, #business-list_filter {
@@ -523,4 +532,14 @@ form span.req{
 
 .sub-services, .our-team{
     padding: 20px 0 0 0;
+}
+
+.link-row a {
+    color: #0275d8;
+    text-decoration: none;
+}
+
+.link-row a:hover {
+    color: #777;
+    text-decoration: underline;
 }

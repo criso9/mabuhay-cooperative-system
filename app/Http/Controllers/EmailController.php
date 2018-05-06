@@ -11,8 +11,9 @@ use App\User;
 use App\Cooperative;
 use App\Loan;
 use Carbon\Carbon;
+use DateTime;
 use Auth;
-use Tzsk\Sms\Facade\Sms;
+use SMS;
 
 class EmailController extends BaseController
 {
@@ -75,10 +76,6 @@ class EmailController extends BaseController
             $message->subject('Loan Application');
         });
 
-        Sms::send("Text to send.", function($sms) {
-		    $sms->to(['+639151178289']); # The numbers to send to.
-		});
-
         $loanUpdate = Loan::findOrFail($request->_id);
     	$msg = "";
 
@@ -106,5 +103,34 @@ class EmailController extends BaseController
 		}
 
 		return Redirect::route('officer.loan.index')->withFlashMessage($msg);
+	}
+
+	public function loanReminder($id){
+		$loan = Loan::select('id', 'transaction_no', 'due_date', 'user_id')
+		->where('id', '=', $id)->first();
+
+		$ddate = Carbon::parse($loan->due_date);
+		$due_date = $ddate->format('F d, Y');
+
+		$user = User::where('id', '=', $loan->user_id)->first();
+
+	  	$emailContent = "email.remind_loan";
+
+        Mail::send($emailContent, ['user' => $user, 'loan' => $loan, 'coop' => $this->coop, 'due_date' => $due_date], function ($message) use ($user)
+        {
+            $message->from('administrator@mabuhaybnhs.com', 'Administrator');
+            $message->to($user->email);
+            $message->subject('Loan Reminder');
+        });
+
+        SMS::send('Sample Message', [], function($sms) {
+		    $sms->to('+639151178289');
+		});
+
+  //       Sms::send("Text to send.", function($sms) {
+		//     $sms->to(['+639151178289']); # The numbers to send to.
+		// });
+
+		return Redirect::route('officer.loan.index')->withFlashMessage('Loan Reminder sent successfully');
 	}
 }

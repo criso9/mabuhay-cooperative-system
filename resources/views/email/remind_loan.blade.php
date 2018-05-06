@@ -7,9 +7,7 @@
 <h4>Hello {{$user->f_name}},</h4>
 
 <p>Good day!</p>
-<p>Thank you for the interest in joining the {{$coop->coop_name}}</p>
-<p>We regret to inform you that your membership request was rejected.</p>
-<p>Reason of rejection = {{$remarks}}</p>
+<p>This is a reminder that your loan application which has a transaction no. of {{$loan->transaction_no}} for {{$coop->coop_name}} will be due on {{$due_date}}.</p>
 <br/>
 <p>Thank you and God Bless!</p>
 <br/>
