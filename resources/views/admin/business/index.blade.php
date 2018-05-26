@@ -42,13 +42,15 @@ Business List
             <thead>
             <tr>
               @if($status_filter == 'Active')
-                <td class="no-sort">Deactivate</td>
+                <td class="no-sort">Action</td>
               @endif
 
               <td>Name</td>
               <td>Description</td>
               <td>Status</td>
               <td>Capital</td>
+              <td>Income</td>
+              <td>Profit</td>
               <td>Date Started</td>
               <td>Added By</td>
 
@@ -65,13 +67,16 @@ Business List
                   <tr>
                     @if($status_filter == 'Active')
                       <td align="middle">
-                        <a href="" id="deactivateBtn" data-toggle="modal" data-target = "#deactivateModal" onclick="deactivate('{{$b->id}}')"><img id="{{$b->id}}-deac" src="/images/reject.png" style="width:25px; height: 25px;" onmouseover="deacHover('{{$b->id}}-deac');" onmouseout="deacOffHover('{{$b->id}}-deac');"/></a>
+                        <a href="{{url('/admin/business/'.$business->id)}}" class="btn btn-xs btn-success"><i class="fa fa-info-circle"></i> View</a>
+                        <a href="" id="deactivateBtn" data-toggle="modal" data-target = "#deactivateModal" onclick="deactivate('{{$b->id}}')" class="btn btn-xs btn-danger"><i class="fa fa-remove"></i> Deactivate</a>
                       </td>
                     @endif
                     <td>{{$b->name}}</td>
                     <td>{{$b->description}}</td>
                     <td>{{$b->status}}</td>
                     <td>{{$b->capital}}</td>
+                    <td>{{$b->income}}</td>
+                    <td>{{$b->profit}}</td>
                     <td>{{$b->date_started}}</td>
                     <td>{{$b->added_by}}</td>
 
@@ -86,13 +91,16 @@ Business List
                 <tr>
                   @if($status_filter == 'Active')
                     <td align="middle">
-                      <a href="" id="deactivateBtn" data-toggle="modal" data-target = "#deactivateModal" onclick="deactivate('{{$business[0]->id}}')"><img id="{{$business[0]->id}}-deac" src="/images/reject.png" style="width:25px; height: 25px;" onmouseover="deacHover('{{$business[0]->id}}-deac');" onmouseout="deacOffHover('{{$business[0]->id}}-deac');"/></a>
+                      <a href="{{url('/admin/business/'.$business[0]->id)}}" class="btn btn-xs btn-success"><i class="fa fa-info-circle"></i> View</a>
+                      <a href="" id="deactivateBtn" data-toggle="modal" data-target = "#deactivateModal" onclick="deactivate('{{$business[0]->id}}')" class="btn btn-xs btn-danger"><i class="fa fa-remove"></i> Deactivate</a>
                     </td>
                   @endif
                   <td>{{$business[0]->name}}</td>
                   <td>{{$business[0]->description}}</td>
                   <td>{{$business[0]->status}}</td>
                   <td>{{$business[0]->capital}}</td>
+                  <td>{{$business[0]->income}}</td>
+                  <td>{{$business[0]->profit}}</td>
                   <td>{{$business[0]->date_started}}</td>
                   <td>{{$business[0]->added_by}}</td>
 

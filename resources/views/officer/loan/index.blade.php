@@ -312,7 +312,7 @@ $(document).ready(function() {
       });
     @endif
 
-    @if ($status_filter == 'Pending')
+    @if ($status_filter == 'Pending' || $status_filter == 'Active')
       $('#loans-list').DataTable({
         fixedHeader: {
           header: true,

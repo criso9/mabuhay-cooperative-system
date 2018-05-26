@@ -35,7 +35,7 @@
           </tr>
           <tr>
             <td>Contact No. <span class="req">*</span></td>
-            <td colspan="2"><input type="text" name="phone" required value="{{ old('phone') }}" class="form-control"/></td> 
+            <td colspan="2"><input type="text" name="phone" id="phone" required value="{{ old('phone') }}" class="form-control"/></td> 
             <td>Birth date <span class="req">*</span></td>
             <td colspan="2"><input type="date" name="b_date" required value="{{ old('b_date') }}" class="form-control" /></td> 
           </tr>
@@ -135,6 +135,14 @@
 
   <script src="js/jquery-3.2.1.min.js"></script>
   <script type="text/javascript">
+  $(document).ready(function() {
+     var phone = [{ "mask": "0\\9#########"}, { "mask": "09#########"}];
+    
+      $('#phone').inputmask({ 
+          mask: phone, 
+          greedy: false, 
+          definitions: { '#': { validator: "[0-9]", cardinality: 1}} });
+  });
 
   var btn = document.getElementById("agreeButton");
   

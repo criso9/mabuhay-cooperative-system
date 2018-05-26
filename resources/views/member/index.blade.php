@@ -16,7 +16,7 @@
         <div>
          <div class="panel-body" style="padding:5px;">
            <canvas id="bar-chart" height="200" width="600"></canvas>
-        </div>
+          </div>
         </div>
       </div>
     </div>
@@ -52,10 +52,16 @@
   var Amount = new Array();
 
 	$(document).ready(function() {
-		@if (Session::has('flash_message'))
-	      $('#msgModal').modal('show');
-	    @endif
+    @if (Session::has('status_message'))
+      Snackbar.show({
+        pos: 'top-right', 
+        text: '{{ Session::get('status_message') }}',
+      });
+    @endif
 
+		@if (Session::has('flash_message'))
+      $('#msgModal').modal('show');
+    @endif
 
     @foreach($contributions as $cont)
         Month.push('{{ $cont->month }}');

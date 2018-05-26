@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\Redirect;
 use App\User;
 use App\Cooperative;
 use App\Loan;
+use App\Announcement;
 use Carbon\Carbon;
 use DateTime;
 use Auth;
-use SMS;
 
 class EmailController extends BaseController
 {
@@ -30,9 +30,11 @@ class EmailController extends BaseController
 	  		$emailContent = "email.reject_member";
 	  	}
 
-        Mail::send($emailContent, ['user' => $user, 'coop' => $this->coop, 'remarks' => $remarks], function ($message) use ($user)
+	  	$coopname = $this->coop->coop_name;
+
+        Mail::send($emailContent, ['user' => $user, 'coop' => $this->coop, 'remarks' => $remarks], function ($message) use ($user, $coopname)
         {
-            $message->from('administrator@mabuhaybnhs.com', 'Administrator');
+            $message->from('administrator@mabuhaybnhs.com', $coopname);
             $message->to($user->email);
             $message->subject('Account Registration');
         });
@@ -62,6 +64,7 @@ class EmailController extends BaseController
 		$remarks = $request->remarks;
 		
 	  	$emailContent = "";
+	  	$coopname = $this->coop->coop_name;
 
 	  	if($request->_status == 'approve'){
 	  		$emailContent = "email.approve_loan";
@@ -69,9 +72,9 @@ class EmailController extends BaseController
 	  		$emailContent = "email.reject_loan";
 	  	}
 
-        Mail::send($emailContent, ['user' => $user, 'loan' => $loan, 'coop' => $this->coop, 'remarks' => $remarks], function ($message) use ($user)
+        Mail::send($emailContent, ['user' => $user, 'loan' => $loan, 'coop' => $this->coop, 'remarks' => $remarks], function ($message) use ($user, $coopname)
         {
-            $message->from('administrator@mabuhaybnhs.com', 'Administrator');
+            $message->from('administrator@mabuhaybnhs.com', $coopname);
             $message->to($user->email);
             $message->subject('Loan Application');
         });
@@ -111,26 +114,117 @@ class EmailController extends BaseController
 
 		$ddate = Carbon::parse($loan->due_date);
 		$due_date = $ddate->format('F d, Y');
+		$due_date_sms = $ddate->format('m/d/Y');
 
 		$user = User::where('id', '=', $loan->user_id)->first();
 
 	  	$emailContent = "email.remind_loan";
+	  	$coopname = $this->coop->coop_name;
 
-        Mail::send($emailContent, ['user' => $user, 'loan' => $loan, 'coop' => $this->coop, 'due_date' => $due_date], function ($message) use ($user)
+        Mail::send($emailContent, ['user' => $user, 'loan' => $loan, 'coop' => $this->coop, 'due_date' => $due_date], function ($message) use ($user, $coopname)
         {
-            $message->from('administrator@mabuhaybnhs.com', 'Administrator');
+            $message->from('administrator@mabuhaybnhs.com', $coopname);
             $message->to($user->email);
             $message->subject('Loan Reminder');
         });
 
-        SMS::send('Sample Message', [], function($sms) {
-		    $sms->to('+639151178289');
-		});
+        $smsmsg = $user->f_name.", your loan ".$loan->transaction_no." for ".$this->coop->coop_name." will be due on ".$due_date_sms.".";
 
-  //       Sms::send("Text to send.", function($sms) {
-		//     $sms->to(['+639151178289']); # The numbers to send to.
-		// });
+        $result = $this->itexmo($user->phone,$smsmsg,"TR-CARIS178289_J2DJP");
+		if ($result == ""){
+			echo "iTexMo: No response from server!!!
+		Please check the METHOD used (CURL or CURL-LESS). If you are using CURL then try CURL-LESS and vice versa.	
+		Please CONTACT US for help. ";	
+		} else if ($result == 0){
+			echo "Message Sent!";
+		}
+		else{	
+			echo "Error Num ". $result . " was encountered!";
+		}
 
+        
 		return Redirect::route('officer.loan.index')->withFlashMessage('Loan Reminder sent successfully');
+	}
+
+	public function announcementReminder($id){
+		$announcement = Announcement::select('id', 'event_date', 'details')
+		->where('id', '=', $id)->first();
+
+		$edate = Carbon::parse($announcement->event_date);
+		$event_date = $edate->format('F d, Y');
+		$event_date_sms = $edate->format('m/d/Y');
+
+		$user = User::where('status', '=', 'active')
+		// ->where('id', '4')
+		->get();
+
+	  	$emailContent = "email.remind_announcement";
+	  	$coopname = $this->coop->coop_name;
+
+	  	if ($user->count() > 1)
+	  	{
+	  		foreach($user as $u) {
+	  			Mail::send($emailContent, ['f_name' => $u->f_name, 'announcement' => $announcement, 'coop' => $this->coop, 'event_date' => $event_date], function ($message) use ($u, $coopname)
+		        {
+		            $message->from('administrator@mabuhaybnhs.com', $coopname);
+		            $message->to($u->email);
+		            $message->subject('Announcement');
+		        });
+
+		        //send SMS
+		  //       $smsmsg = $this->coop->coop_name.": ".$announcement->details." on ".$event_date_sms.".";
+
+		  //       $result = $this->itexmo($u->phone,$smsmsg,"TR-CARIS178289_J2DJP");
+				// if ($result == ""){
+				// 	echo "iTexMo: No response from server!!!
+				// Please check the METHOD used (CURL or CURL-LESS). If you are using CURL then try CURL-LESS and vice versa.	
+				// Please CONTACT US for help. ";	
+				// } else if ($result == 0){
+				// 	echo "Message Sent!";
+				// }
+				// else{	
+				// 	echo "Error Num ". $result . " was encountered!";
+				// }
+            }
+	  	} elseif ($user->count() > 0)
+	  	{
+	  		Mail::send($emailContent, ['f_name' => $user[0]->f_name, 'announcement' => $announcement, 'coop' => $this->coop, 'event_date' => $event_date], function ($message) use ($user, $coopname)
+	        {
+	            $message->from('administrator@mabuhaybnhs.com', $coopname);
+	            $message->to($user[0]->email);
+	            $message->subject('Announcement');
+	        });
+
+	        //send SMS
+	        $smsmsg = $this->coop->coop_name.": ".$announcement->details." on ".$event_date_sms.".";
+
+	        $result = $this->itexmo($user[0]->phone,$smsmsg,"TR-CARIS178289_J2DJP");
+			if ($result == ""){
+				echo "iTexMo: No response from server!!!
+			Please check the METHOD used (CURL or CURL-LESS). If you are using CURL then try CURL-LESS and vice versa.	
+			Please CONTACT US for help. ";	
+			} else if ($result == 0){
+				echo "Message Sent!";
+			}
+			else{	
+				echo "Error Num ". $result . " was encountered!";
+			}
+	  	}
+        
+		return Redirect::route('officer.announcements.index')->withFlashMessage('Announcement Reminder sent successfully');
+	}
+
+	public function itexmo($number,$message,$apicode){
+		$url = 'https://www.itexmo.com/php_api/api.php';
+		$itexmo = array('1' => $number, '2' => $message, '3' => $apicode);
+		$param = array(
+		    'http' => array(
+		        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+		        'method'  => 'POST',
+		        'content' => http_build_query($itexmo),
+		    ),
+		);
+		$context  = stream_context_create($param);
+		return file_get_contents($url, false, $context);
 	}
 }

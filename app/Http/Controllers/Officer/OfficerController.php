@@ -22,13 +22,20 @@ use App\MonthlyContribution;
 use App\Loan;
 use App\Http\Controllers\BaseController;
 use App\LoanPayment;
+use Inani\Larapoll\Poll;
+use App\Announcement;
 
 class OfficerController extends BaseController
 {
     
     public function index()
 	{
-		return view('officer.index');
+		$poll = DB::table('polls')
+        	->select('id', 'question', 'isClosed')
+        	->where('isClosed', '=', '0')
+        	->get();
+
+		return view('officer.index', compact('poll'));
 	}
 
 	public function monthlyContribution()
@@ -597,7 +604,7 @@ class OfficerController extends BaseController
         }
 
         $business = DB::table('businesses')
-         ->select('id', 'name', 'description', 'businesses.status', 'capital', 'interest', 'date_started', 
+         ->select('id', 'name', 'description', 'businesses.status', 'capital', 'date_started', 
             DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE businesses.added_by = users.id) AS added_by"),
             'date_ended',
             DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE businesses.removed_by = users.id) AS removed_by"),
@@ -797,6 +804,69 @@ class OfficerController extends BaseController
     	}else {
     		return Redirect::back()->withErrors('File Does not Exist');
     	} 
+    }
+
+    public function announcementList()
+	{
+
+        $announcement = DB::table('announcements')
+         ->select('id', 'details', 'created_at', 'updated_at',
+            DB::raw("CONCAT(monthname(event_date), ' ', day(event_date), ', ', year(event_date)) AS event_date"),
+            DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE created_by = users.id) AS created_by"),
+            DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE updated_by = users.id) AS updated_by")
+        )
+        ->get();
+
+        return view('officer.announcement.index', compact('announcement'));
+	}
+
+	public function announcementAdd(Request $request)
+    {
+        $announcement = new Announcement;
+
+        $eventDate = DateTime::createFromFormat('M d, Y', $request->event_date);
+
+        $announcement->event_date = $eventDate->format('Y-m-d');
+        $announcement->details = $request->details;
+        $announcement->created_by = Auth::user()->id;
+
+        $announcement->save();
+
+        return Redirect::route('officer.announcements.index')->withFlashMessage('Announcement was added');
+    }
+
+    public function announcementEdit($id)
+    {
+    	$announcement = DB::table('announcements')
+        ->select('id', 'details',
+        	DB::raw("CONCAT(monthname(event_date), ' ', day(event_date), ', ', year(event_date)) AS event_date")
+    	)
+        ->where('id', $id)
+        ->first();
+
+        return view('officer.announcement.edit', compact('announcement'));
+    }
+
+    public function announcementUpdate(Request $request)
+    {
+    	$announcement = Announcement::findOrFail($request->_id);
+
+    	$eventDate = DateTime::createFromFormat('M d, Y', $request->event_date);
+
+        $announcement->event_date = $eventDate->format('Y-m-d');
+        $announcement->details = $request->details;
+        $announcement->updated_by = Auth::user()->id;   
+
+        $announcement->update();
+
+        return Redirect::route('officer.announcements.index')->withFlashMessage('Announcement was updated');
+    }
+
+    public function announcementDelete(Request $request)
+    {
+    	DB::table('announcements')->where('id', $request->_id)->delete();
+
+    	return Redirect::route('officer.announcements.index')->withFlashMessage('Announcement deleted successfully');
     }
 
 }

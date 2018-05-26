@@ -178,7 +178,7 @@ return [
         'Collective\Html\HtmlServiceProvider',
         Spatie\Backup\BackupServiceProvider::class,
         'DaveJamesMiller\Breadcrumbs\ServiceProvider',
-        SimpleSoftwareIO\SMS\SMSServiceProvider::class
+        Inani\Larapoll\LarapollServiceProvider::class,
 
     ],
 
@@ -231,7 +231,8 @@ return [
         'Form' => 'Collective\Html\FormFacade',
         'HTML' => 'Collective\Html\HtmlFacade',
         'Breadcrumbs' => 'DaveJamesMiller\Breadcrumbs\Facade',
-        'SMS' => SimpleSoftwareIO\SMS\Facades\SMS::class
+        'Larapoll' => Inani\Larapoll\LarapollServiceProvider::class,
+        'PollWriter'=>Inani\Larapoll\PollWriterFacade::class
 
     ],
 

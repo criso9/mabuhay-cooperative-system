@@ -60,7 +60,7 @@ class RegisterController extends BaseController
                 $validator->errors()->add('f_name', 'Name is already registered (Last, First and Middle Name).');
             }
             if($referral != '' || $referral != null){
-                if($refRel == 'Select Relationship' || $refRel != null){
+                if($refRel == 'Select Relationship'){
                     $validator->errors()->add('ref_relation', 'The Referral Relationship field is required.');
                 }
             }

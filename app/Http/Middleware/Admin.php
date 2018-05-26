@@ -16,7 +16,7 @@ class Admin
      */
     public function handle($request, Closure $next)
     {
-       if ( Auth::check() )
+       if (Auth::check())
         {
             $role = Auth::user()->checkRoles();
             if ($role == 'admin')
@@ -26,7 +26,9 @@ class Admin
                 return redirect('/page_403');
             }
         }
+        
+        return $next($request);
 
-        return redirect('/login');
+        // return redirect('/login');
     }
 }

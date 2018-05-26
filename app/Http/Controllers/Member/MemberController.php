@@ -17,6 +17,7 @@ use App\Cooperative;
 use App\User;
 use App\MonthlyContribution;
 use App\Loan;
+use Inani\Larapoll\Poll;
 
 class MemberController extends BaseController
 {
@@ -35,8 +36,6 @@ class MemberController extends BaseController
            	->where('payments.payment', '=', 'Monthly Contribution')
            	->orderBy(DB::raw('month(contributions.date)'), 'asc')
             ->get();
-
-            // dd($contributions);
 
 		return view('member.index', compact('contributions'));
 	}
@@ -383,4 +382,19 @@ class MemberController extends BaseController
 	{
 		return view('member.report');
 	}
+
+	public function votePoll(Poll $poll, Request $request)
+    {
+    	dd("test");
+        try{
+            $vote = $request->user()
+                ->poll($poll)
+                ->vote($request->get('options'));
+            if($vote){
+                return Redirect::route('member.index')->withFlashMessage('Done on Voting');
+            }
+        }catch (\Exception $e){
+            return back()->with('errors', $e->getMessage());
+        }
+    }
 }

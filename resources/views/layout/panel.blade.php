@@ -110,6 +110,9 @@
                     <a href="{{route('admin.business.index')}}"><i class="fa fa-briefcase"></i> Business </a>
                   </li>
                   <li>
+                    <a href="{{route('admin.poll.index')}}"><i class="fa fa-question-circle"></i> Poll </a>
+                  </li>
+                  <li>
                     <a href="{{route('admin.backup.index')}}"><i class="fa fa-database"></i> Backup </a>
                   </li>
                 </ul>
@@ -165,6 +168,9 @@
                   </li>
                   <li>
                     <a href="{{route('officer.documents.index')}}"><i class="fa fa-file-text"></i> Documents </a>
+                  </li>
+                  <li>
+                    <a href="{{route('officer.announcements.index')}}"><i class="fa fa-bullhorn"></i> Announcements </a>
                   </li>
                 </ul>
               </div>
@@ -330,6 +336,10 @@
               <a href="{{route('officer.documents.index')}}" class="btn btn-app">
                 <i class="fa fa-file-text"></i> Documents 
               </a>
+              <a href="{{route('officer.announcements.index')}}" class="btn btn-app">
+                <i class="fa fa-bullhorn"></i> Announcements 
+              </a>
+
               @endif
             @endif
           </div>

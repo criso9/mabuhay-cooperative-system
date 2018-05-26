@@ -19,7 +19,8 @@ class CreateBusinessTable extends Migration
             $table->String('description');
             $table->String('status');
             $table->float('capital');
-            $table->float('interest')->nullable();
+            $table->float('income')->nullable();
+            $table->float('profit')->nullable();
             $table->date('date_started');
             $table->bigInteger('added_by')->unsigned();
             $table->date('date_ended')->nullable();

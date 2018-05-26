@@ -35,9 +35,7 @@
 		              <span class="count_top"><i class="fa fa-user"></i> Rejected Application</span>
 		              <div class="count">{{$rejected}}</div>
 		            </div>
-		           
 		         </div>
-
 			</div>
 		</div>
 	</div>

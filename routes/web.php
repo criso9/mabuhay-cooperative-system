@@ -15,6 +15,8 @@
 //     return view('home.index');
 // });
 
+$prefix = config('larapoll_config.prefix');
+
 Route::get('/', array('as' => 'home.index', 'uses' => 'Home\HomeController@index'));
 Route::get('/about', array('as' => 'home.about', 'uses' => 'Home\HomeController@about'));
 Route::get('/services', array('as' => 'home.services', 'uses' => 'Home\HomeController@services'));
@@ -46,6 +48,7 @@ Route::post('send/loanapproval', array('as' => 'officer.email.loan.approval', 'u
 
 Route::get('send/loanreminder/{loan}', array('as' => 'officer.email.loan.reminder', 'uses' => 'EmailController@loanReminder'));
 
+Route::get('send/announcementreminder/{id}', array('as' => 'officer.email.announcement.reminder', 'uses' => 'EmailController@announcementReminder'));
 
 // Admin panel
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
@@ -99,6 +102,33 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
    Route::put('business', array('as' => 'admin.business.update','uses' => 'Admin\AdminController@businessUpdate'));
 
    Route::post('business/add', array('as' => 'admin.business.store','uses' => 'Admin\AdminController@businessAdd'));
+
+   Route::get('business/{name}', array('as' => 'admin.business.show','uses' => 'Admin\AdminController@viewBusiness'));
+    Route::post('business/{name}', array('as' => 'admin.business.show.store','uses' => 'Admin\AdminController@addBusinessIncome'));
+
+    Route::get('polls', ['uses' => 'Admin\AdminController@indexPoll', 'as' => 'admin.poll.index']);
+    Route::get('polls/create', ['uses' => 'Admin\AdminController@createPoll', 'as' => 'admin.poll.create']);
+
+    Route::get('polls/{poll}', ['uses' => 'Admin\AdminController@editPoll', 'as' => 'admin.poll.edit']);
+
+    Route::post('polls/{poll}', ['uses' => 'Admin\AdminController@updatePoll', 'as' => 'admin.poll.update']);
+
+    Route::delete('polls/{poll}', ['uses' => 'Admin\AdminController@removePoll', 'as' => 'admin.poll.remove']);
+
+    Route::patch('polls/{poll}/lock', ['uses' => 'Admin\AdminController@lockPoll', 'as' => 'admin.poll.lock']);
+
+    Route::patch('polls/{poll}/unlock', ['uses' => 'Admin\AdminController@unlockPoll', 'as' => 'admin.poll.unlock']);
+
+    Route::post('polls', ['uses' => 'Admin\AdminController@storePoll', 'as' => 'admin.poll.store']);
+
+    Route::get('polls/{poll}/options/add', ['uses' => 'Admin\AdminController@pushPoll', 'as' => 'admin.poll.options.push']);
+
+    Route::post('polls/{poll}/options/add', ['uses' => 'Admin\AdminController@addPollOptions', 'as' => 'admin.poll.options.add']);
+
+    Route::get('polls/{poll}/options/remove', ['uses' => 'Admin\AdminController@deletePollOptions', 'as' => 'admin.poll.options.remove']);
+
+    Route::delete('polls/{poll}/options/remove', ['uses' => 'Admin\AdminController@removePollOptions', 'as' => 'admin.poll.options.remove']);
+
 });
 
 // Officer panel
@@ -138,6 +168,18 @@ Route::group(['prefix' => 'officer', 'middleware' => 'officer'], function () {
    Route::get('documents/delete/{file_id}', array('as' => 'officer.documents.delete','uses' => 'Officer\OfficerController@documentsDelete'));
 
    Route::get('documents/download/{file_id}', array('as' => 'officer.documents.download','uses' => 'Officer\OfficerController@documentsDownload'));
+
+   Route::post('/polls/vote/{poll}', array('as' => 'officer.poll.vote','uses' => 'Admin\AdminController@votePoll'));
+
+   Route::get('/announcements', array('as' => 'officer.announcements.index','uses' => 'Officer\OfficerController@announcementList'));
+
+   Route::post('announcements/add', array('as' => 'officer.announcements.store','uses' => 'Officer\OfficerController@announcementAdd'));
+
+   Route::post('announcements/delete', array('as' => 'officer.announcements.delete','uses' => 'Officer\OfficerController@announcementDelete'));
+
+   Route::get('announcements/edit/{id}', array('as' => 'officer.announcements.edit','uses' => 'Officer\OfficerController@announcementEdit'));
+
+   Route::post('announcements/edit/{id}', array('as' => 'officer.announcements.update','uses' => 'Officer\OfficerController@announcementUpdate'));
 	
 });
 
@@ -160,4 +202,6 @@ Route::group(['prefix' => 'member', 'middleware' => 'member'], function () {
 	Route::post('/loan/apply', array('as' => 'member.loan.store','uses' => 'Member\MemberController@storeLoan'));
 
 	Route::get('/report', array('as' => 'member.report','uses' => 'Member\MemberController@report'));
+
+
 });

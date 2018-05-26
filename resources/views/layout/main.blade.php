@@ -111,6 +111,7 @@
   <script src="js/wow.min.js"></script>
   <!-- <script src="js/functions.js"></script> -->
   <script src="{{ asset('js/loader.js') }}"></script>
+  <script src="{{ asset('js/jquery.inputmask.bundle.js') }}"></script>
   <script type="text/javascript">
  
     $(document).ready(function () {

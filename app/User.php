@@ -4,10 +4,12 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Inani\Larapoll\Traits\Voter;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use Voter;
 
     protected $table = 'users';
 

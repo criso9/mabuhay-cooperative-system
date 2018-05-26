@@ -7,10 +7,10 @@
     "require": {
         "php": ">=5.6.4",
         "davejamesmiller/laravel-breadcrumbs": "^3.0",
+        "inani/larapoll": "2.0",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "5.4.*",
-        "mrabbani/laravel_infobip": "^0.15.0",
         "spatie/laravel-backup": "^3.11"
     },
     "require-dev": {

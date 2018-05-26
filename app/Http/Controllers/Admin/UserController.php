@@ -410,5 +410,4 @@ class UserController extends BaseController
         return Redirect::route('admin.admin.index')->withFlashMessage('Admin was deactivated');
 	}
 
-
 }

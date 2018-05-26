@@ -46,6 +46,36 @@ Breadcrumbs::register('admin.business.index', function ($breadcrumbs) {
     $breadcrumbs->push('Business', route('admin.business.index'));
 });
 
+Breadcrumbs::register('admin.business.show', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin.business.index');
+    $breadcrumbs->push('Business Information', url('business/{name}'));
+});
+
+Breadcrumbs::register('admin.poll.index', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin.index');
+    $breadcrumbs->push('Poll', route('admin.poll.index'));
+});
+
+Breadcrumbs::register('admin.poll.create', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin.poll.index');
+    $breadcrumbs->push('Create Poll', route('admin.poll.create'));
+});
+
+Breadcrumbs::register('admin.poll.edit', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin.poll.index');
+    $breadcrumbs->push('Edit Poll', url('polls/{poll}'));
+});
+
+Breadcrumbs::register('admin.poll.options.push', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin.poll.index');
+    $breadcrumbs->push('Edit Poll Options', url('polls/{poll}/options/add'));
+});
+
+Breadcrumbs::register('admin.poll.options.remove', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin.poll.index');
+    $breadcrumbs->push('Remove Poll Options', url('polls/{poll}/options/remove'));
+});
+
 // OFFICER
 
 Breadcrumbs::register('officer.index', function ($breadcrumbs) {
@@ -95,6 +125,16 @@ Breadcrumbs::register('officer.member.show', function ($breadcrumbs) {
 Breadcrumbs::register('officer.documents.index', function ($breadcrumbs) {
     $breadcrumbs->parent('officer.index');
     $breadcrumbs->push('Documents', route('officer.documents.index'));
+});
+
+Breadcrumbs::register('officer.announcements.index', function ($breadcrumbs) {
+    $breadcrumbs->parent('officer.index');
+    $breadcrumbs->push('Announcements', route('officer.announcements.index'));
+});
+
+Breadcrumbs::register('officer.announcements.edit', function ($breadcrumbs) {
+    $breadcrumbs->parent('officer.announcements.index');
+    $breadcrumbs->push('Edit', url('/officer/announcements/edit/{id}'));
 });
 
 // Member

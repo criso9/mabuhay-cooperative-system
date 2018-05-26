@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Input;
 use App\User;
 use App\Cooperative;
 use App\Business;
+use App\BusinessIncome;
 use Carbon\Carbon;
 use Artisan;
 use Log;
@@ -17,12 +18,16 @@ use Storage;
 use DB;
 use DateTime;
 use Auth;
-
+use Inani\Larapoll\Poll;
+use App\Http\Requests\PollCreationRequest;
+use App\Http\Requests\AddOptionsRequest;
+use Inani\Larapoll\Helpers\PollHandler;
 
 class AdminController extends BaseController
 {
     public function index()
 	{
+
         $users = DB::table('users')
         ->select('id')
         ->count();
@@ -190,7 +195,7 @@ class AdminController extends BaseController
         }
 
         $business = DB::table('businesses')
-         ->select('id', 'name', 'description', 'businesses.status', 'capital', 'interest', 'date_started', 
+         ->select('id', 'name', 'description', 'businesses.status', 'capital', 'income', 'profit', 'date_started', 
             DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE businesses.added_by = users.id) AS added_by"),
             'date_ended',
             DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE businesses.removed_by = users.id) AS removed_by"),
@@ -241,5 +246,160 @@ class AdminController extends BaseController
         return Redirect::route('admin.business.index')->withFlashMessage('Business was deactivated');
     }
 
+    public function viewBusiness($id)
+    {
+        $business = DB::table('business_incomes')
+        ->join('businesses', 'business_incomes.business_id', '=', 'businesses.id')
+        ->select('business_incomes.id', 'business_id', 'businesses.name', 'businesses.description', 'business_incomes.amount', 'business_incomes.date_paid',
+            DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE business_incomes.updated_by = users.id) AS updated_by")
+        )
+        ->where('business_incomes.business_id', '=', $id)
+        ->where('businesses.status', '=', 'Active')
+        ->get();
+
+        $businessName = DB::table('businesses')
+        ->select('id','name', 'description')
+        ->where('id', '=', $id)
+        ->where('status', '=', 'Active')
+        ->first();
+
+        return view('admin.business.show', compact('business', 'businessName'));
+    }
+
+    public function addBusinessIncome(Request $request, $id)
+    {
+
+        $businessIncome = new BusinessIncome;
+
+        $businessIncome->business_id = $id; 
+        $businessIncome->amount = $request->amount;
+
+        $datePaid = DateTime::createFromFormat('M d, Y', $request->date_paid);
+        $businessIncome->date_paid = $datePaid->format('Y-m-d');
+
+        $businessIncome->updated_by = Auth::user()->id;
+
+        $businessIncome->save();
+
+
+        $business = Business::findOrFail($id);
+
+        $busIncome = $business->income + $request->amount;
+
+        $business->income = $business->income + $request->amount;
+
+        if($busIncome > $business->capital){
+            $busProfit = $busIncome - $business->capital;
+            $business->profit = $busProfit;
+        }
+
+        $business->update();
+
+        return Redirect('/admin/business/'.$id)->withFlashMessage('Business Income was added');
+    }
+
+    public function indexPoll()
+    {
+
+        $polls = Poll::withCount('options', 'votes')->latest()->paginate(
+            config('larapoll_config.pagination')
+        );
+
+        return view('admin.poll.index', compact('polls'));
+    }
+
+    public function removePoll(Poll $poll)
+    {
+        $poll->remove();
+
+        return redirect(route('admin.poll.index'))
+            ->with('success', 'Your poll has been deleted successfully');
+    }
+
+    public function createPoll()
+    {
+        return view('admin.poll.create');
+    }
+
+    public function lockPoll(Poll $poll)
+    {
+        $poll->lock();
+        return redirect(route('admin.poll.index'))
+            ->with('success', 'Your poll has been locked successfully');
+    }
+
+    public function unlockPoll(Poll $poll)
+    {
+        $poll->unLock();
+        return redirect(route('admin.poll.index'))
+            ->with('success', 'Your poll has been unlocked successfully');
+    }
+
+    public function editPoll(Poll $poll)
+    {
+        return view('admin.poll.edit', compact('poll'));
+    }
+
+    public function updatePoll(Poll $poll, Request $request)
+    {
+        PollHandler::modify($poll, $request->all());
+
+        return redirect(route('admin.poll.index'))
+            ->with('success', 'Your poll has been updated successfully');
+    }
+
+    public function storePoll(PollCreationRequest $request)
+    {
+        $poll = PollHandler::createFromRequest($request->all());
+        return redirect(route('admin.poll.index'))
+            ->with('success', 'Your poll has been addedd successfully');
+    }
+
+    public function pushPoll(Poll $poll)
+    {
+        return view('admin.poll.options.push', compact('poll'));
+    }
+
+    public function addPollOptions(Poll $poll, AddOptionsRequest $request)
+    {
+        $poll->attach($request->get('options'));
+
+        return redirect(route('admin.poll.index'))
+            ->with('success', 'New poll options have been added successfully');
+    }
+
+     public function deletePollOptions(Poll $poll)
+    {
+        return view('admin.poll.options.remove', compact('poll'));
+    }
+
+    public function removePollOptions(Poll $poll, Request $request)
+    {
+        try{
+            $poll->detach($request->get('options'));
+            return redirect(route('admin.poll.index'))
+                ->with('success', 'Poll options have been removed successfully');
+        }catch (\Exception $e){
+            $message = PollHandler::getMessage($e);
+
+            return back()
+                ->withErrors($message);
+        }
+    }
+
+    public function votePoll(Poll $poll, Request $request)
+    {
+        try{
+            $vote = $request->user()
+                ->poll($poll)
+                ->vote($request->get('options'));
+            if($vote){
+                return Redirect::route('officer.index')->withStatusMessage('Done on voting');
+            }
+        }catch (\Exception $e){
+            return back()->with('errors', $e->getMessage());
+        }
+    }
     
+
 }
