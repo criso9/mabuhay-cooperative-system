@@ -158,6 +158,10 @@ class EmailController extends BaseController
 		// ->where('id', '4')
 		->get();
 
+		$user_tmp = User::where('status', '=', 'active')
+		->whereIn('id', ['5', '1'])
+		->get();
+
 	  	$emailContent = "email.remind_announcement";
 	  	$coopname = $this->coop->coop_name;
 
@@ -171,21 +175,43 @@ class EmailController extends BaseController
 		            $message->subject('Announcement');
 		        });
 
-		        //send SMS
-		  //       $smsmsg = $this->coop->coop_name.": ".$announcement->details." on ".$event_date_sms.".";
+		        //send SMS - activate if implemented (with unlimited SMS)
+		        $smsmsg = $this->coop->coop_name.": ".$announcement->details." on ".$event_date_sms.".";
 
-		  //       $result = $this->itexmo($u->phone,$smsmsg,"TR-CARIS178289_J2DJP");
-				// if ($result == ""){
-				// 	echo "iTexMo: No response from server!!!
-				// Please check the METHOD used (CURL or CURL-LESS). If you are using CURL then try CURL-LESS and vice versa.	
-				// Please CONTACT US for help. ";	
-				// } else if ($result == 0){
-				// 	echo "Message Sent!";
-				// }
-				// else{	
-				// 	echo "Error Num ". $result . " was encountered!";
-				// }
+		        $result = $this->itexmo($u->phone,$smsmsg,"TR-CARIS178289_J2DJP");
+				if ($result == ""){
+					echo "iTexMo: No response from server!!!
+				Please check the METHOD used (CURL or CURL-LESS). If you are using CURL then try CURL-LESS and vice versa.	
+				Please CONTACT US for help. ";	
+				} else if ($result == 0){
+					echo "Message Sent!";
+				}
+				else{	
+					echo "Error Num ". $result . " was encountered!";
+				}
             }
+
+            //temporary only - send SMS announcement to selected people
+     //        if ($user_tmp->count() > 1)
+		  	// {
+		  	// 	foreach($user_tmp as $ut) {
+			  //       //send SMS
+			  //       $smsmsg = $this->coop->coop_name.": ".$announcement->details." on ".$event_date_sms.".";
+
+			  //       $result = $this->itexmo($ut->phone,$smsmsg,"TR-CARIS178289_J2DJP");
+					// if ($result == ""){
+					// 	echo "iTexMo: No response from server!!!
+					// Please check the METHOD used (CURL or CURL-LESS). If you are using CURL then try CURL-LESS and vice versa.	
+					// Please CONTACT US for help. ";	
+					// } else if ($result == 0){
+					// 	echo "Message Sent!";
+					// }
+					// else{	
+					// 	echo "Error Num ". $result . " was encountered!";
+					// }
+	    //         }
+		  	// }
+
 	  	} elseif ($user->count() > 0)
 	  	{
 	  		Mail::send($emailContent, ['f_name' => $user[0]->f_name, 'announcement' => $announcement, 'coop' => $this->coop, 'event_date' => $event_date], function ($message) use ($user, $coopname)

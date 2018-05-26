@@ -96,6 +96,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
 
    Route::get('backup/download/{file_name}', array('as' => 'admin.backup.download','uses' => 'Admin\AdminController@downloadBackup'));
    Route::get('backup/delete/{file_name}', array('as' => 'admin.backup.delete','uses' => 'Admin\AdminController@deleteBackup'));
+   Route::get('backup/restore/{file_name}', array('as' => 'admin.backup.restore','uses' => 'Admin\AdminController@restoreBackup'));
 
    Route::get('business', array('as' => 'admin.business.index','uses' => 'Admin\AdminController@businessList'));
    Route::post('business', array('as' => 'admin.business.index.filter','uses' => 'Admin\AdminController@businessFilter'));

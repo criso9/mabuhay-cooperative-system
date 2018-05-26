@@ -18,6 +18,7 @@ use Storage;
 use DB;
 use DateTime;
 use Auth;
+use ZipArchive;
 use Inani\Larapoll\Poll;
 use App\Http\Requests\PollCreationRequest;
 use App\Http\Requests\AddOptionsRequest;
@@ -84,12 +85,23 @@ class AdminController extends BaseController
                 //     $fileSize = number_format($size/(1<<10),2)." KB";
                 // else
                 //     $fileSize = number_format($size)." bytes";
+
+                $mb = number_format($disk->size($f)/(1<<20),2);
+                $type = "";
+
+                if($mb > 1){
+                    $type = "System";
+                } else {
+                    $type = "Database";
+                }
+                
   
                 $backups[] = [
                     'file_path' => $f,
                     'file_name' => str_replace(config('laravel-backup.backup.name') . '/', '', $f),
                     'file_size' => $this->human_filesize($disk->size($f)),
                     'last_modified' => $this->get_date($disk->lastModified($f)),
+                    'file_type' => $type,
                 ];
             }
         }
@@ -123,11 +135,10 @@ class AdminController extends BaseController
                 '--only-db' => 'true'
             ]);
             $output = Artisan::output();
-            Log::info("Backpack\BackupManager -- new backup started from admin interface \r\n" . $output);
+            // Log::info("Backpack\BackupManager -- new backup started from admin interface \r\n" . $output);
             return Redirect::route('admin.backup.index')->withFlashMessage('Database backup success');
         } catch (Exception $e) {
-            Flash::error($e->getMessage());
-            return redirect()->back();
+            return redirect()->back()->withErrors($e->getMessage());
         }
     }
 
@@ -139,11 +150,10 @@ class AdminController extends BaseController
                 '--only-files' => 'true'
             ]);
             $output = Artisan::output();
-            Log::info("Backpack\BackupManager -- new backup started from admin interface \r\n" . $output);
-            return Redirect::route('admin.backup.index')->withFlashMessage('Database backup success');
+            // Log::info("Backpack\BackupManager -- new backup started from admin interface \r\n" . $output);
+            return Redirect::route('admin.backup.index')->withFlashMessage('System backup success');
         } catch (Exception $e) {
-            Flash::error($e->getMessage());
-            return redirect()->back();
+            return redirect()->back()->withErrors($e->getMessage());
         }
     }
 
@@ -162,7 +172,7 @@ class AdminController extends BaseController
                 "Content-disposition" => "attachment; filename=\"" . basename($file) . "\"",
             ]);
         } else {
-            abort(404, "The backup file doesn't exist.");
+            return redirect()->back()->withErrors("The backup file doesn't exist.");
         }
     }
 
@@ -173,7 +183,51 @@ class AdminController extends BaseController
             $disk->delete(config('laravel-backup.backup.name') . '/' . $file_name);
             return Redirect::route('admin.backup.index')->withFlashMessage('Backup was deleted');
         } else {
-            abort(404, "The backup file doesn't exist.");
+            return redirect()->back()->withErrors("The backup file doesn't exist.");
+        }
+    }
+
+    public function restoreBackup($file_name)
+    {
+        $disk = Storage::disk(config('laravel-backup.backup.destination.disks')[0]);
+        if ($disk->exists(config('laravel-backup.backup.name') . '/' . $file_name)) {
+
+            $fs = Storage::disk(config('laravel-backup.backup.destination.disks')[0])->getDriver()->getAdapter()->getPathPrefix();
+            $sqlfile = "";
+
+            //extract sql file
+            $zip = new ZipArchive;
+            if ($zip->open($fs.$file_name) === TRUE) {
+                $zip->extractTo($fs);
+                $zip->close();
+
+                //get file name of the sql file
+                $filesInFolder = \File::files($fs);
+               
+                foreach($filesInFolder as $path)
+                {
+                    if(pathinfo($path)['extension'] == "sql"){
+                        $sqlfile = pathinfo($path)['basename'];
+                    }
+                    
+                }
+
+                //restore .sql file
+                $command = "mysql --user=" . env('DB_USERNAME') ." --password=" . env('DB_PASSWORD') . " --host=" . env('DB_HOST') . " " . env('DB_DATABASE') . " < " . $fs . $sqlfile . "";
+
+                $returnVar = NULL;
+                $output = NULL;
+                exec($command, $output, $returnVar);
+
+                $disk->delete(config('laravel-backup.backup.name') . '/' . $sqlfile);
+
+                return Redirect::route('admin.backup.index')->withFlashMessage('Backup was restored');
+            }
+
+            return redirect()->back()->withErrors("Cannot open zip file.");
+            
+        } else {
+            return redirect()->back()->withErrors("The backup file doesn't exist.");
         }
     }
 

@@ -174,9 +174,9 @@ Announcements List
         header: true,
         footer: false
       },
-      "order": [[ 0, "desc" ]],
+      "order": [[ 5, "desc" ]],
       "columnDefs": [
-        { "orderable": false, "targets": 7 }
+        { "orderable": false, "targets": 6 }
       ]
     });
 
