@@ -19,7 +19,15 @@ class HomeController extends BaseController
          ->where('images_uploaded.status', 'active')
          ->get();
 
-		return view('home.index', compact('carousel'));
+        $announcement = DB::table('announcements')
+        ->select('id', 'details',
+            DB::raw("CONCAT(monthname(event_date), ' ', day(event_date), ', ', year(event_date)) AS event_date")
+        )
+        ->where('event_date', '>=', DB::raw("CURDATE()"))
+        ->orderBy('event_date', 'asc')
+        ->get();
+
+		return view('home.index', compact('carousel', 'announcement'));
 	}
 
 	public function about()

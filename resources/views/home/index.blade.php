@@ -113,14 +113,23 @@
           </tr>
         </thead>
         <tbody style="color:black;">
-          <tr>
-            <td> April 3, 2018 </td>
-            <td> Ongoing development </td>
-          </tr>
-          <td> April 4, 2018 </td>
-          <td> Continuation of development</td>
-        </tr>
-         </a>
+          @if ($announcement->count() > 1)
+            @foreach($announcement as $a)
+              <tr> 
+                <td>{{$a->event_date}}</td>
+                <td>{{$a->details}}</td>
+              </tr>
+            @endforeach
+          @elseif ($announcement->count() > 0)
+            <tr> 
+              <td>{{$announcement[0]->event_date}}</td>
+              <td>{{$announcement[0]->details}}</td>
+            </tr>
+          @else
+            <tr>
+              <td colspan="2">No announcements</td>
+            </tr>
+          @endif
         </tbody>
       </table>
     </div>
