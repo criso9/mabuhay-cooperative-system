@@ -36,10 +36,11 @@
 
 @media only screen and (max-width: 767px) {
     .navbar-brand {margin-left: 0px;}
-    #breadcrumb {margin-top: 51px;z-index: 1020;}
+    #breadcrumb {z-index: 1020;}
     /*.aboutus {margin-top: 100px;}*/
     #myCarousel, .aboutus, .services {margin-top: 0px !important;}
     /*.container-login100 {top: -50px;}*/
      #myCarousel, .carousel-inner, .carousel-inner img {height: 280px !important;}
+     .wrap-login100 {margin-top: 0px !important}
 }
 

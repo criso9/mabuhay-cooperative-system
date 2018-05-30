@@ -17,6 +17,7 @@ class CreateBusinessIncomeTable extends Migration
             $table->increments('id');
             $table->bigInteger('business_id')->unsigned();
             $table->float('amount');
+            $table->float('profit')->default(0);
             $table->dateTime('date_paid');
             $table->string('updated_by', 100);
             $table->timestamps();

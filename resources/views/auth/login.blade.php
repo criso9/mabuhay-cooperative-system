@@ -1,5 +1,10 @@
 @extends('layout.main')
 
+@section('breadcrumb')
+  <li><a href="{{url('/')}}">Home</a></li>
+  <li>Login</li>
+@stop
+
 @section('content')
 	<div class="limiter">
 		<div>
@@ -16,7 +21,7 @@
 	  	</div>
 
 		<div class="container-login100" style="background-image:url({{url('/images/bg-01.jpg')}});">
-			<div class="wrap-login100">
+			<div class="wrap-login100" style="margin-top: 10px;">
 				<form class="login100-form validate-form" action="{{ route('login.post') }}" method="POST">
 					 {{ csrf_field() }}
 					<div class="login100-form-logo">

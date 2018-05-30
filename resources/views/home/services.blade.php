@@ -1,15 +1,11 @@
 @extends('layout.main')
 
-@section('content')
+@section('breadcrumb')
+  <li><a href="{{url('/')}}">Home</a></li>
+  <li>Services</li>
+@stop
 
-<div id="breadcrumb">
-    <div class="container">
-      <div class="breadcrumb" style="padding: 0px;font-size: 14px;">
-        <li><a href="{{url('/')}}">Home</a></li>
-        <li>Services</li>
-      </div>
-    </div>
-  </div>
+@section('content')
 
   <div class="services" style="margin-top: 130px;">
     <div class="container">

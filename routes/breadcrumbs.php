@@ -107,6 +107,11 @@ Breadcrumbs::register('officer.loan.index', function ($breadcrumbs) {
     $breadcrumbs->push('Loan Approval', route('officer.loan.index'));
 });
 
+Breadcrumbs::register('officer.loan.payment', function ($breadcrumbs) {
+    $breadcrumbs->parent('officer.loan.index');
+    $breadcrumbs->push('Payment', url('/loan/payment/{trans}'));
+});
+
 Breadcrumbs::register('officer.business.index', function ($breadcrumbs) {
     $breadcrumbs->parent('officer.index');
     $breadcrumbs->push('Business', route('officer.business.index'));
@@ -161,6 +166,16 @@ Breadcrumbs::register('member.contribution.sharecapital', function ($breadcrumbs
 Breadcrumbs::register('member.loan.index', function ($breadcrumbs) {
 	$breadcrumbs->parent('member.index');
     $breadcrumbs->push('Loan', route('member.loan.index'));
+});
+
+Breadcrumbs::register('member.loan.cash', function ($breadcrumbs) {
+    $breadcrumbs->parent('member.loan.index');
+    $breadcrumbs->push('Cash Loan', route('member.loan.cash'));
+});
+
+Breadcrumbs::register('member.loan.motor', function ($breadcrumbs) {
+    $breadcrumbs->parent('member.loan.index');
+    $breadcrumbs->push('Motor Loan', route('member.loan.motor'));
 });
 
 Breadcrumbs::register('member.report', function ($breadcrumbs) {

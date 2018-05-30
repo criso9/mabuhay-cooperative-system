@@ -11,6 +11,7 @@ use App\User;
 use App\Cooperative;
 use App\Loan;
 use App\Announcement;
+use App\MonthlyContribution;
 use Carbon\Carbon;
 use DateTime;
 use Auth;
@@ -84,8 +85,28 @@ class EmailController extends BaseController
 
 		if($request->_status == "approve"){
 			$loanUpdate->status = "Active";
-			$loanUpdate->remaining_balance = $request->_remBal;
-			$loanUpdate->due_date = Carbon::now()->addMonths(6)->format('Y-m-d H:i:s'); //6months
+			// $loanUpdate->remaining_balance = $request->_remBal;
+
+			if($loan->loan_type == "Cash"){
+				$loanUpdate->due_date = Carbon::now()->addMonths(6)->format('Y-m-d H:i:s'); //6months
+			} else if ($loan->loan_type == "Motor"){
+				$loanUpdate->due_date = Carbon::now()->addMonths(36)->format('Y-m-d H:i:s'); //36months
+			}
+			
+			if($loan->type == "d"){
+	        	$sharecap = new MonthlyContribution;
+
+	        	$sharecap->user_id = $loan->user_id;
+	        	$sharecap->payment_id = "3";
+	        	$sharecap->date = date('Y-m-d H:i:s');
+	        	$sharecap->amount = $loan->scapital_amount;
+	        	$sharecap->payment_type = "Cash";
+	        	$sharecap->receipt_no = date('mdY-Hmss');
+	        	$sharecap->date_paid = date('Y-m-d H:i:s');
+	        	$sharecap->updated_by = Auth::user()->id;
+
+	        	$sharecap->save();
+	        }
 
 		} else if($request->_status == "reject"){
 			$loanUpdate->status = "Rejected";

@@ -179,6 +179,7 @@ return [
         Spatie\Backup\BackupServiceProvider::class,
         'DaveJamesMiller\Breadcrumbs\ServiceProvider',
         Inani\Larapoll\LarapollServiceProvider::class,
+        'Witty\LaravelDbBackup\DBBackupServiceProvider'
 
     ],
 

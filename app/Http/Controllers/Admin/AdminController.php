@@ -212,12 +212,21 @@ class AdminController extends BaseController
                     
                 }
 
-                //restore .sql file
-                $command = "mysql --user=" . env('DB_USERNAME') ." --password=" . env('DB_PASSWORD') . " --host=" . env('DB_HOST') . " " . env('DB_DATABASE') . " < " . $fs . $sqlfile . "";
+                try {
+                    // start the backup process
+                    Artisan::call('db:restore', ['dump' => $sqlfile]);
+                    // $output = Artisan::output();
+                    // dd($output);
+                } catch (Exception $e) {
+                    return redirect()->back()->withErrors($e->getMessage());
+                }
 
-                $returnVar = NULL;
-                $output = NULL;
-                exec($command, $output, $returnVar);
+                //restore .sql file
+                // $command = "mysql --user=" . env('DB_USERNAME') ." --password=" . env('DB_PASSWORD') . " --host=" . env('DB_HOST') . " " . env('DB_DATABASE') . " < " . $fs . $sqlfile . "";
+
+                // $returnVar = NULL;
+                // $output = NULL;
+                // exec($command, $output, $returnVar);
 
                 $disk->delete(config('laravel-backup.backup.name') . '/' . $sqlfile);
 
@@ -322,11 +331,25 @@ class AdminController extends BaseController
 
     public function addBusinessIncome(Request $request, $id)
     {
+        $b = DB::table('businesses')
+        ->select('income', 'capital')
+        ->where('id', '=', $id)
+        ->first();
 
         $businessIncome = new BusinessIncome;
 
         $businessIncome->business_id = $id; 
         $businessIncome->amount = $request->amount;
+
+        $total = $b->income + $request->amount;
+
+        if($b->income > $b->capital){
+            $businessIncome->profit = $request->amount;
+        }else if($total > $b->capital){
+            $profit = $b->capital - $b->income;
+            $profit = $request->amount - $profit;
+            $businessIncome->profit = $profit;
+        }
 
         $datePaid = DateTime::createFromFormat('M d, Y', $request->date_paid);
         $businessIncome->date_paid = $datePaid->format('Y-m-d');
@@ -448,7 +471,7 @@ class AdminController extends BaseController
                 ->poll($poll)
                 ->vote($request->get('options'));
             if($vote){
-                return Redirect::route('officer.index')->withStatusMessage('Done on voting');
+                return Redirect::route('member.index')->withStatusMessage('Done on voting');
             }
         }catch (\Exception $e){
             return back()->with('errors', $e->getMessage());

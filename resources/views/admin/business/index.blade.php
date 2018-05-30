@@ -67,7 +67,7 @@ Business List
                   <tr>
                     @if($status_filter == 'Active')
                       <td align="middle">
-                        <a href="{{url('/admin/business/'.$business->id)}}" class="btn btn-xs btn-success"><i class="fa fa-info-circle"></i> View</a>
+                        <a href="{{url('/admin/business/'.$b->id)}}" class="btn btn-xs btn-success"><i class="fa fa-info-circle"></i> View</a>
                         <a href="" id="deactivateBtn" data-toggle="modal" data-target = "#deactivateModal" onclick="deactivate('{{$b->id}}')" class="btn btn-xs btn-danger"><i class="fa fa-remove"></i> Deactivate</a>
                       </td>
                     @endif

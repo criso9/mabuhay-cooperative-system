@@ -17,7 +17,8 @@ class CreateLoansPaymentTable extends Migration
             $table->increments('id');
             $table->String('transaction_no');
             $table->float('amount');
-            $table->float('interest_amount');
+            $table->float('interest_amount')->nullable();
+            $table->float('sharecap_amount')->nullable();
             $table->dateTime('date_paid');
             $table->string('payment_type', 100);
             $table->string('receipt_no', 500);

@@ -36,7 +36,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <div class="nav navbar-brand">
+            <div class="nav navbar-brand" style="max-width: 550px;height: auto;">
               <a href="{{url('/')}}"><h1>
                 @if($coop)
                   <img src="{{url('/uploads/'.$coop->logo)}}" alt="..." class="img-circle logo-img" id="coop-logo">
@@ -54,7 +54,7 @@
                 <li role="presentation"><a href="{{url('/')}}">Home</a></li>
                 <li role="presentation"><a href="{{url('/about')}}">About Us</a></li>
                 <li role="presentation"><a href="{{url('/services')}}">Services</a></li>
-                <li role="presentation"><a href="{{url('/contacts')}}">Contact Us</a></li>
+                <!-- <li role="presentation"><a href="{{url('/contacts')}}">Contact Us</a></li> -->
               </ul>
               <ul class="nav nav-tabs navbar-nav navbar-right login-menu">
                 <li>
@@ -80,7 +80,15 @@
               </ul>
             </div>
           </div>
+
         </div>
+        <div id="breadcrumb">
+            <div class="container">
+              <div class="breadcrumb" style="padding: 0px;font-size: 14px;">
+                @yield('breadcrumb')
+              </div>
+            </div>
+          </div>
       <!--</div>-->
     </nav>
   </header>

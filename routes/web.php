@@ -153,6 +153,8 @@ Route::group(['prefix' => 'officer', 'middleware' => 'officer'], function () {
 
      Route::post('/loan/approval', array('as' => 'officer.loan.approval', 'uses' => 'Officer\OfficerController@loanApproval'));
 
+     Route::get('/loan/payment/{trans}', array('as' => 'officer.loan.payment','uses' => 'Officer\OfficerController@loanPaymentView'));
+
      Route::post('/loan/payment', array('as' => 'officer.loan.store','uses' => 'Officer\OfficerController@loanPayment'));
 
      Route::get('/business', array('as' => 'officer.business.index','uses' => 'Officer\OfficerController@businessList'));
@@ -170,8 +172,7 @@ Route::group(['prefix' => 'officer', 'middleware' => 'officer'], function () {
 
    Route::get('documents/download/{file_id}', array('as' => 'officer.documents.download','uses' => 'Officer\OfficerController@documentsDownload'));
 
-   Route::post('/polls/vote/{poll}', array('as' => 'officer.poll.vote','uses' => 'Admin\AdminController@votePoll'));
-
+   
    Route::get('/announcements', array('as' => 'officer.announcements.index','uses' => 'Officer\OfficerController@announcementList'));
 
    Route::post('announcements/add', array('as' => 'officer.announcements.store','uses' => 'Officer\OfficerController@announcementAdd'));
@@ -198,11 +199,18 @@ Route::group(['prefix' => 'member', 'middleware' => 'member'], function () {
 	Route::get('/loan', array('as' => 'member.loan.index','uses' => 'Member\MemberController@loan'));
 	Route::post('/loan', array('as' => 'member.loan.index.filter','uses' => 'Member\MemberController@loanFilter'));
 
-	
+	Route::get('/loan/cash', array('as' => 'member.loan.cash','uses' => 'Member\MemberController@loanCash'));
+
+  Route::get('/loan/motor', array('as' => 'member.loan.motor','uses' => 'Member\MemberController@loanMotor'));
+  Route::post('/loan/motor', array('as' => 'member.loan.motor.store','uses' => 'Member\MemberController@storeLoanMotor'));
+
 	// Route::get('/loan/apply', array('as' => 'member.loan.apply','uses' => 'Member\MemberController@loanApply'));
 	Route::post('/loan/apply', array('as' => 'member.loan.store','uses' => 'Member\MemberController@storeLoan'));
 
 	Route::get('/report', array('as' => 'member.report','uses' => 'Member\MemberController@report'));
+
+  Route::post('/polls/vote/{poll}', array('as' => 'member.poll.vote','uses' => 'Admin\AdminController@votePoll'));
+
 
 
 });

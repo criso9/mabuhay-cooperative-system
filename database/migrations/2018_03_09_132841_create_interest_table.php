@@ -17,6 +17,7 @@ class CreateInterestTable extends Migration
             $table->increments('id');
             $table->string('type', 100);
             $table->string('rate', 100);
+            $table->string('actual_value', 100);
             $table->timestamps();
         });
     }

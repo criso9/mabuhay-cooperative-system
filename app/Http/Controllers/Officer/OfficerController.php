@@ -24,18 +24,88 @@ use App\Http\Controllers\BaseController;
 use App\LoanPayment;
 use Inani\Larapoll\Poll;
 use App\Announcement;
+use Carbon\Carbon;
 
 class OfficerController extends BaseController
 {
     
     public function index()
 	{
-		$poll = DB::table('polls')
-        	->select('id', 'question', 'isClosed')
-        	->where('isClosed', '=', '0')
-        	->get();
+		$loanMonthly = DB::table('loan_payments')
+		->join('loans', 'loan_payments.transaction_no', '=', 'loans.transaction_no')
+		->select(
+			DB::raw('\'Loan\' AS type'),
+			DB::raw('SUM(loan_payments.interest_amount) AS amount'),
+			DB::raw('CONCAT(monthname(date_paid), \' \',  year(date_paid)) as monthname')
+		)
+		->whereIn('status', ['Active', 'Paid'])
+		->groupBy(DB::raw('CONCAT(monthname(date_paid), \' \',  year(date_paid))'))
+		->get();
 
-		return view('officer.index', compact('poll'));
+		$businessMonthly = DB::table('business_incomes')
+		->select(
+			DB::raw('\'Business\' AS type'),
+			DB::raw('SUM(profit) AS amount'),
+			DB::raw('CONCAT(monthname(date_paid), \' \',  year(date_paid)) as monthname')
+		)
+		->groupBy(DB::raw('CONCAT(monthname(date_paid), \' \',  year(date_paid))'))
+		->get();
+
+		$loanM = DB::table('loan_payments')
+		->join('loans', 'loan_payments.transaction_no', '=', 'loans.transaction_no')
+		->select(
+			DB::raw('CONCAT(monthname(date_paid), \' \',  year(date_paid)) as monthname')
+		)
+		->whereIn('status', ['Active', 'Paid'])
+		->groupBy(DB::raw('CONCAT(monthname(date_paid), \' \',  year(date_paid))'));
+
+		$businessM = DB::table('business_incomes')
+		->select(
+			DB::raw('CONCAT(monthname(date_paid), \' \',  year(date_paid)) as monthname')
+		)
+		->groupBy(DB::raw('CONCAT(monthname(date_paid), \' \',  year(date_paid))'));
+
+		$monthly = $loanM->union($businessM)->get();
+
+		//YEARLY
+
+		$loanYearly = DB::table('loan_payments')
+		->join('loans', 'loan_payments.transaction_no', '=', 'loans.transaction_no')
+		->select(
+			DB::raw('\'Loan\' AS type'),
+			DB::raw('SUM(loan_payments.interest_amount) AS amount'),
+			DB::raw('year(date_paid) as yearname')
+		)
+		->whereIn('status', ['Active', 'Paid'])
+		->groupBy(DB::raw('year(date_paid)'))
+		->get();
+
+		$businessYearly = DB::table('business_incomes')
+		->select(
+			DB::raw('\'Business\' AS type'),
+			DB::raw('SUM(profit) AS amount'),
+			DB::raw('year(date_paid) as yearname')
+		)
+		->groupBy(DB::raw('year(date_paid)'))
+		->get();
+
+		$loanY = DB::table('loan_payments')
+		->join('loans', 'loan_payments.transaction_no', '=', 'loans.transaction_no')
+		->select(
+			DB::raw('year(date_paid) as yearname')
+		)
+		->whereIn('status', ['Active', 'Paid'])
+		->groupBy(DB::raw('year(date_paid)'));
+
+		$businessY = DB::table('business_incomes')
+		->select(
+			DB::raw('year(date_paid) as yearname')
+		)
+		->groupBy(DB::raw('year(date_paid)'));
+
+		$yearly = $loanY->union($businessY)->get();
+
+		return view('officer.index', compact('loanMonthly', 'businessMonthly', 'monthly', 'loanYearly', 'businessYearly', 'yearly'));
 	}
 
 	public function monthlyContribution()
@@ -470,7 +540,7 @@ class OfficerController extends BaseController
 
 	        $loans = DB::table('loans')
 	        ->join('users', 'loans.user_id', '=', 'users.id')
-	        ->select('loans.user_id', 'users.f_name', 'users.l_name', 'loans.transaction_no', 'loans.date_applied', 'loans.status', 'loans.amount_loan', 'loans.amount_paid', 'loans.remaining_balance', 'loans.due_date', 'loans.id', 'loans.interest_amount', 'loans.reviewed_at', 'loans.remarks', 'loans.id',
+	        ->select('loans.user_id', 'users.f_name', 'users.l_name', 'loans.transaction_no', 'loans.date_applied', 'loans.status', 'loans.amount_loan', 'loans.amount_paid', 'loans.remaining_balance', 'loans.amount_repayable', 'loans.interest_amount_paid', 'loans.scapital_amount', 'loans.scapital_amount_paid', 'loans.due_date', 'loans.id', 'loans.interest_amount', 'loans.reviewed_at', 'loans.remarks', 'loans.id', 'loans.loan_type',
 	        	DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE loans.reviewed_by = users.id) AS reviewed_by")
 	    	)
 	        ->where('loans.user_id', '!=', Auth::user()->id)
@@ -529,6 +599,53 @@ class OfficerController extends BaseController
   //       return Redirect::route('officer.loan.index')->withFlashMessage($msg);
     }
 
+    public function loanPaymentView($trans){
+    	if($this->position != 'Treasurer' && $this->position != 'President'){
+			return Redirect::route('forbidden');
+		}else{
+			$loans = DB::table('loans')
+	        ->join('users', 'loans.user_id', '=', 'users.id')
+	        ->select('loans.user_id', 'users.f_name', 'users.l_name', 'loans.transaction_no', 'loans.date_applied', 'loans.status', 'loans.type', 'loans.amount_loan', 'loans.amount_paid', 'loans.remaining_balance', 'loans.amount_repayable', 'loans.interest_amount_paid', 'loans.scapital_amount', 'loans.scapital_amount_paid', 'loans.due_date', 'loans.id', 'loans.interest_amount', 'loans.reviewed_at', 'loans.remarks', 'loans.id', 'loans.loan_type',
+	        	DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE loans.reviewed_by = users.id) AS reviewed_by")
+	    	)
+	        ->where('loans.user_id', '!=', Auth::user()->id)
+	        ->where('transaction_no', $trans)
+	        ->first();
+
+	        $to = Carbon::createFromFormat('Y-m-d H:s:i', $loans->due_date);
+			// $from = Carbon::createFromFormat('Y-m-d H:s:i', '2018-11-1 9:30:34');
+      
+			$months = $to->diffInMonths(date('Y-m-d H:i:s'));
+			if($months == 0){
+				$months = 1;
+			}
+
+	        $amount_due = $loans->remaining_balance / $months;
+	        $amount_due = number_format((float)$amount_due, 2, '.', '');
+
+	        $int = 0;
+	        $sh = 0;
+	        $minimum = 0;
+
+	        if($loans->loan_type == "Cash"){
+	        	if($loans->type == "a"){
+		        	$int = ($loans->interest_amount - $loans->interest_amount_paid) / $months;
+		        	$sh = ($loans->scapital_amount - $loans->scapital_amount_paid) / $months;
+		        	$minimum = $int + $sh;
+		        	$minimum = number_format((float)$minimum, 2, '.', '');
+		        } else if ($loans->type == "d") {
+		        	$minimum = 1;
+		        }
+	        } else if ($loans->loan_type == "Motor"){
+	        	$int = ($loans->interest_amount - $loans->interest_amount_paid) / $months;
+	        	$minimum = number_format((float)$int, 2, '.', '');
+	        }
+	        
+		}
+
+    	return view('officer.loan.payment', compact('loans', 'amount_due', 'minimum', 'int', 'sh'));
+    }
+
     public function loanPayment(Request $request){
     	if($this->position != 'Treasurer' && $this->position != 'President'){
 			return Redirect::route('forbidden');
@@ -539,13 +656,32 @@ class OfficerController extends BaseController
 				return Redirect::back()->withErrors($validator)->withInput();
 			}
 
+			$loanInfo = DB::table('loans')
+        	->select('amount_paid', 'interest_amount', 'id', 'remaining_balance', 'user_id', 'type', 'interest_amount_paid', 'scapital_amount_paid', 'amount_repayable', 'loan_type')
+        	->where('transaction_no', $request->transaction_no)
+        	->first();
+
 			$loanPay = new LoanPayment;
 
-			// dd($request->transaction_no);
+			$_amount = 0;
 
 	        $loanPay->transaction_no = $request->transaction_no;
-	        $loanPay->amount = $request->amount;
-	        $loanPay->interest_amount = $request->interest_amount;
+
+	        if($loanInfo->loan_type == "Cash"){
+	        	if($loanInfo->type == "a"){
+		        	$loanPay->interest_amount = $request->interest;
+		        	$loanPay->sharecap_amount = $request->sharecap;
+		        	$_amount = $request->amount - $request->minimum;
+		        } else if ($loanInfo->type == "d"){
+		        	$_amount = $request->amount;
+		        }
+	        } else if ($loanInfo->loan_type == "Motor"){
+	        	$loanPay->interest_amount = $request->interest;
+	        	$_amount = $request->amount - $request->minimum;
+	        }
+	        
+	        $loanPay->amount = $_amount;
+	        
 	        $loanPay->date_paid = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->date_paid)));
 	        $loanPay->payment_type = $request->payment_type;
 	        $loanPay->receipt_no = $request->receipt_no;
@@ -553,12 +689,47 @@ class OfficerController extends BaseController
 
 	        $loanPay->save();
 
-	       	$loanInfo = DB::table('loans')
-        	->select('amount_paid', 'interest_amount', 'id', 'remaining_balance')
-        	->where('transaction_no', $request->transaction_no)
-        	->first();
+	        //add sharecapital payment to sharecapital contributions
+	        if($loanInfo->type == "a"){
+	        	$sharecap = new MonthlyContribution;
+
+	        	$sharecap->user_id = $loanInfo->user_id;
+	        	$sharecap->payment_id = "3";
+	        	$sharecap->date = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->date_paid)));
+	        	$sharecap->amount = $request->sharecap;
+	        	$sharecap->payment_type = $request->payment_type;
+	        	$sharecap->receipt_no = $request->receipt_no;
+	        	$sharecap->date_paid = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $request->date_paid)));
+	        	$sharecap->updated_by = Auth::user()->id;
+
+	        	$sharecap->save();
+	        }
 
         	$loan = Loan::findOrFail($loanInfo->id);
+        	$amount_paid = 0;
+
+        	if($loanInfo->loan_type == "Cash"){
+        		if($loanInfo->type == "a"){
+		        	$amount_paid = $request->amount - $request->minimum;
+		        	$t_int = $loanInfo->interest_amount_paid + $request->interest;
+		        	$t_sh = $loanInfo->scapital_amount_paid + $request->sharecap;
+
+		        	$loan->interest_amount_paid = $t_int;
+		        	$loan->scapital_amount_paid = $t_sh;
+		        	$loan->remaining_balance = $loanInfo->amount_repayable - (($loanInfo->amount_paid + $amount_paid) + $t_sh + $t_int);
+		        } else if ($loanInfo->type == "d"){
+		        	$amount_paid = $request->amount;
+		        	$loan->remaining_balance = $loanInfo->amount_repayable - (($loanInfo->amount_paid + $amount_paid) + $loanInfo->interest_amount_paid + $loanInfo->scapital_amount_paid);
+		        }
+        	} else if ($loanInfo->loan_type == "Motor"){
+        		$amount_paid = $request->amount - $request->minimum;
+	        	$t_int = $loanInfo->interest_amount_paid + $request->interest;
+
+	        	$loan->interest_amount_paid = $t_int;
+	        	$loan->remaining_balance = $loanInfo->amount_repayable - (($loanInfo->amount_paid + $amount_paid) + $t_int);
+        	}
+
+	        $loan->amount_paid = $loanInfo->amount_paid + $amount_paid;
 
         	if($loanInfo->amount_paid > 0){
         		$amount_paid = $loanInfo->amount_paid + $request->amount;
@@ -566,22 +737,27 @@ class OfficerController extends BaseController
         		$amount_paid = $request->amount;
         	}
 
-        	$remaining_balance = $loanInfo->remaining_balance - $request->amount;
-
-        	if($request->interest_amount != '' || $request->interest_amount != null){
-        		if($loanInfo->interest_amount > 0){
-	        		$intAmount = $loanInfo->interest_amount + $request->interest_amount;
-	        	}else{
-	        		$intAmount = $request->interest_amount;
-	        	}
-
-	        	$loan->interest_amount = $intAmount;
-        	}
         	
-        	$loan->amount_paid = $amount_paid;
-        	$loan->remaining_balance = $remaining_balance;
 
+        	// if($request->interest_amount != '' || $request->interest_amount != null){
+        	// 	if($loanInfo->interest_amount > 0){
+	        // 		$intAmount = $loanInfo->interest_amount + $request->interest_amount;
+	        // 	}else{
+	        // 		$intAmount = $request->interest_amount;
+	        // 	}
+
+	        // 	$loan->interest_amount = $intAmount;
+        	// }
+        	
         	$loan->update();
+
+        	$loanUpdated = Loan::findOrFail($loanInfo->id);
+
+        	if($loanUpdated->remaining_balance == "0.0" || $loanUpdated->remaining_balance == "0" || $loanUpdated->remaining_balance == "0.00"){
+        		$loanUpdated->status = "Paid";
+
+        		$loanUpdated->update();
+        	}
 	        
 	        return Redirect::route('officer.loan.index')->withFlashMessage('Payment was added');
 	    }
@@ -604,7 +780,7 @@ class OfficerController extends BaseController
         }
 
         $business = DB::table('businesses')
-         ->select('id', 'name', 'description', 'businesses.status', 'capital', 'date_started', 
+         ->select('id', 'name', 'description', 'businesses.status', 'capital', 'date_started', 'income', 'profit',
             DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE businesses.added_by = users.id) AS added_by"),
             'date_ended',
             DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE businesses.removed_by = users.id) AS removed_by"),

@@ -37,7 +37,13 @@ class MemberController extends BaseController
            	->orderBy(DB::raw('month(contributions.date)'), 'asc')
             ->get();
 
-		return view('member.index', compact('contributions'));
+        $poll = DB::table('polls')
+    	->select('id', 'question', 'isClosed')
+    	->where('isClosed', '=', '0')
+    	->get();
+
+
+		return view('member.index', compact('contributions', 'poll'));
 	}
 
 	public function monthlyContribution()
@@ -256,6 +262,7 @@ class MemberController extends BaseController
 		$status_filter = Input::get('s');
 		$statFilter = array();
 		$cashLoan = "false";
+		$motorLoan = "false";
 		$loanable = "false";
 
 		$stat = DB::table('loans')
@@ -275,7 +282,7 @@ class MemberController extends BaseController
 		}
 
 		$loans = DB::table('loans')
-		->select('loans.user_id', 'loans.transaction_no', 'loans.date_applied', 'loans.status', 'loans.amount_loan', 'loans.amount_paid', 'loans.remaining_balance', 'loans.due_date', 'loans.id', 'loans.interest_amount', 'loans.reviewed_at', 'loans.remarks',
+		->select('loans.user_id', 'loans.transaction_no', 'loans.date_applied', 'loans.status', 'loans.amount_loan', 'loans.amount_paid', 'loans.amount_repayable', 'loans.interest_amount_paid', 'loans.scapital_amount', 'loans.scapital_amount_paid', 'loans.remaining_balance', 'loans.due_date', 'loans.id', 'loans.interest_amount', 'loans.reviewed_at', 'loans.remarks', 'loans.loan_type',
 			DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE loans.reviewed_by = users.id) AS reviewed_by")
 		)
 		->where('user_id', '=', Auth::user()->id)
@@ -300,7 +307,7 @@ class MemberController extends BaseController
 		$activeLoan = DB::table('loans')
 		->select(DB::raw('SUM(amount_loan) AS amount'), DB::raw('SUM(remaining_balance) AS balance'))
 		->where('user_id', '=', Auth::user()->id)
-		->where('status', '=', 'active')
+		->whereIn('status', ['Active', 'Pending'])
 		->first();
 
 		if($contribution->amount != null){
@@ -315,7 +322,21 @@ class MemberController extends BaseController
 			$loanable = 0;
 		}
 
-		return view('member.loan.index', compact('loans', 'stat', 'status_filter', 'user', 'contribution', 'interest', 'cashLoan', 'activeLoan', 'loanable'));
+		//motor loan check
+		$motorcount = DB::table('loans')
+		->select('id')
+		->where('user_id', '=', Auth::user()->id)
+		->where('loan_type', 'Motor')
+		->whereIn('status', ['Pending', 'Active'])
+		->count();
+
+		if($motorcount > 0){
+			$motorLoan = "false";
+		} else {
+			$motorLoan = "true";
+		}
+
+		return view('member.loan.index', compact('loans', 'stat', 'status_filter', 'user', 'contribution', 'interest', 'cashLoan', 'activeLoan', 'loanable', 'motorLoan'));
 	}
 
 	public function loanFilter(Request $request)
@@ -351,6 +372,7 @@ class MemberController extends BaseController
 		if($request->confirm == 'no'){
 			return Redirect::back();
 		}else if($request->confirm == 'yes'){
+		
 			$loan = new Loan;
 
 			$loan->user_id = Auth::user()->id;
@@ -358,8 +380,19 @@ class MemberController extends BaseController
 			$loan->status = "Pending";
 			$loan->date_applied = date('Y-m-d H:i:s');
 			$loan->amount_loan = $request->amount_loan;
+			$loan->amount_repayable = $request->i_tpay;
+			$loan->remaining_balance = $request->i_tpay;
+			$loan->interest_amount = $request->i_intpay;
+			$loan->scapital_amount = $request->i_shpay;
+			$loan->type = $request->_type;
+			$loan->loan_type = "Cash";
 
-	        $loan->save();
+			if($request->_type == "d"){
+				$loan->interest_amount_paid = $request->i_intpay;
+				$loan->scapital_amount_paid = $request->i_shpay;
+			}
+
+			$loan->save();
 
 	        return Redirect::route('member.loan.index')->withFlashMessage('Loan successfully applied');
 		}
@@ -376,6 +409,94 @@ class MemberController extends BaseController
 		// dd($request->transaction_no);
 
 		
+	}
+
+	public function loanCash()
+	{
+
+		$user = User::where('status', 'active')->where('id', [Auth::user()->id])->first();
+
+		$contribution = DB::table('contributions')
+		->join('payments', 'contributions.payment_id', '=', 'payments.id')
+		->select(DB::raw('FORMAT(SUM(contributions.amount), 2) AS amount'),
+			DB::raw('SUM(contributions.amount) * 2 AS loan_limit')
+		)
+		->where('payments.payment', '=', 'Monthly Contribution')
+		->where('contributions.user_id', '=', Auth::user()->id)
+		->first();
+
+		$interest = DB::table('interest')
+		->where('type', '=', 'Member')
+		->first();
+
+		$activeLoan = DB::table('loans')
+		->select(DB::raw('SUM(amount_loan) AS amount'), DB::raw('SUM(remaining_balance) AS balance'))
+		->where('user_id', '=', Auth::user()->id)
+		->whereIn('status', ['active', 'pending'])
+		->first();
+
+		if($contribution->amount != null){
+			if($activeLoan->balance >= $contribution->loan_limit){
+				$cashLoan = "false";
+			} else {
+				$cashLoan = "true";
+				$loanable = abs($contribution->loan_limit - $activeLoan->balance);
+			}
+		}else{
+			$cashLoan = "false";
+			$loanable = 0;
+		}
+
+		return view('member.loan.cash', compact('user', 'contribution', 'interest', 'activeLoan', 'loanable'));
+	}
+
+	public function loanMotor()
+	{
+
+		$user = User::where('status', 'active')->where('id', [Auth::user()->id])->first();
+
+		$contribution = DB::table('contributions')
+		->join('payments', 'contributions.payment_id', '=', 'payments.id')
+		->select(DB::raw('FORMAT(SUM(contributions.amount), 2) AS amount'),
+			DB::raw('SUM(contributions.amount) * 2 AS loan_limit')
+		)
+		->where('payments.payment', '=', 'Monthly Contribution')
+		->where('contributions.user_id', '=', Auth::user()->id)
+		->first();
+
+		$activeLoan = DB::table('loans')
+		->select(DB::raw('SUM(amount_loan) AS amount'), DB::raw('SUM(remaining_balance) AS balance'))
+		->where('user_id', '=', Auth::user()->id)
+		->whereIn('status', ['active', 'pending'])
+		->first();
+
+		return view('member.loan.motor', compact('user', 'contribution', 'interest', 'activeLoan'));
+	}
+
+	public function storeLoanMotor(Request $request)
+	{
+		if($request->confirm == 'no'){
+			return Redirect::back();
+		}else if($request->confirm == 'yes'){
+		
+			$loan = new Loan;
+
+			$loan->user_id = Auth::user()->id;
+			$loan->transaction_no = $request->transaction_no;
+			$loan->status = "Pending";
+			$loan->date_applied = date('Y-m-d H:i:s');
+			$loan->amount_loan = $request->amount_loan;
+			$loan->amount_repayable = $request->i_tpay;
+			$loan->remaining_balance = $request->i_tpay;
+			$loan->interest_amount = $request->i_intpay;
+			$loan->scapital_amount = 0;
+			$loan->type = "";
+			$loan->loan_type = "Motor";
+
+			$loan->save();
+
+	        return Redirect::route('member.loan.index')->withFlashMessage('Loan successfully applied');
+		}
 	}
 
 	public function report()

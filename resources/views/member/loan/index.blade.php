@@ -10,8 +10,14 @@
 		<div class="x_panel">
 			<div class="x_title">
 				<h2>List of Applied Loans <small></small></h2>
-				<div class="col-md-2 col-sm-2 col-xs-12 form-group pull-right" style="width: 143px;">
-		          <button type="button" id="cash-loan" class="btn btn-round btn-info" data-toggle="modal" data-target="#cashLoanModal" onclick="applyCashLoan()"> Apply Cash Loan</button>
+				<div class="col-md-2 col-sm-2 col-xs-12 form-group pull-right" style="width: 230px;">
+		          <!-- <a href="{{route('member.loan.cash')}}" class="btn btn-round btn-info">Apply Cash Loan</a> -->
+              {{ Form::open(array('route' => 'member.loan.motor', 'method' => 'get', 'style' => 'display: inline-table;')) }}
+                <button type="submit" id="motor-loan" class="btn btn-round btn-info">Motor Loan</button>
+              {{ Form::close() }}
+
+              <!-- <a href="{{route('member.loan.motor')}}" id="motor-loan" class="btn btn-round btn-info">Motor Loan</a> -->
+              <button type="button" id="cash-loan" class="btn btn-round btn-info" data-toggle="modal" data-target="#cashLoanModal">Cash Loan</button>
 		        </div>
 				<div class="clearfix"></div>
 			</div>
@@ -39,11 +45,16 @@
               <td>Transaction No.</td>
               <td>Date Applied</td>
               <td>Status</td>
+              <td>Type</td>
               <td>Date Reviewed</td>
               <td>Reviewed By</td>
               <td>Amount Loan</td>
+              <td>Amount Repayable</td>
               <td>Amount Paid</td>
+              <td>Interest</td>
               <td>Interest Paid</td>
+              <td>Share Capital</td>
+              <td>Share Capital Paid</td>
               <td>Remaining Balance</td>
               <td>Due Date</td>
               <td>Remarks</td>
@@ -56,11 +67,16 @@
 	                    <td>{{$l->transaction_no}}</td>
 	                    <td>{{$l->date_applied}}</td>
 	                    <td>{{$l->status}}</td>
+                      <td>{{$l->loan_type}}</td>
 	                    <td>{{$l->reviewed_at}}</td>
 	                    <td>{{$l->reviewed_by}}</td>
 	                    <td>{{$l->amount_loan}}</td>
+                      <td>{{$l->amount_repayable}}</td>
 	                    <td>{{$l->amount_paid}}</td>
-	                    <td>{{$l->interest_amount}}</td>
+                      <td>{{$l->interest_amount}}</td>
+	                    <td>{{$l->interest_amount_paid}}</td>
+                      <td>{{$l->scapital_amount}}</td>
+                      <td>{{$l->scapital_amount_paid}}</td>
 	                    <td>{{$l->remaining_balance}}</td>
 	                    <td>{{$l->due_date}}</td>
 	                    <td>{{$l->remarks}}</td>
@@ -68,17 +84,22 @@
 	                @endforeach
 	              @elseif ($loans->count() > 0)
 	                <tr>
-						<td>{{$loans[0]->transaction_no}}</td>
-						<td>{{$loans[0]->date_applied}}</td>
-						<td>{{$loans[0]->status}}</td>
-						<td>{{$loans[0]->reviewed_at}}</td>
-						<td>{{$loans[0]->reviewed_by}}</td>
-						<td>{{$loans[0]->amount_loan}}</td>
-						<td>{{$loans[0]->amount_paid}}</td>
-						<td>{{$loans[0]->interest_amount}}</td>
-						<td>{{$loans[0]->remaining_balance}}</td>
-						<td>{{$loans[0]->due_date}}</td>
-						<td>{{$loans[0]->remarks}}</td>
+        						<td>{{$loans[0]->transaction_no}}</td>
+        						<td>{{$loans[0]->date_applied}}</td>
+        						<td>{{$loans[0]->status}}</td>
+                    <td>{{$loans[0]->loan_type}}</td>
+        						<td>{{$loans[0]->reviewed_at}}</td>
+        						<td>{{$loans[0]->reviewed_by}}</td>
+        						<td>{{$loans[0]->amount_loan}}</td>
+                    <td>{{$loans[0]->amount_repayable}}</td>
+                    <td>{{$loans[0]->amount_paid}}</td>
+                    <td>{{$loans[0]->interest_amount}}</td>
+                    <td>{{$loans[0]->interest_amount_paid}}</td>
+                    <td>{{$loans[0]->scapital_amount}}</td>
+                    <td>{{$loans[0]->scapital_amount_paid}}</td>
+        						<td>{{$loans[0]->remaining_balance}}</td>
+        						<td>{{$loans[0]->due_date}}</td>
+        						<td>{{$loans[0]->remarks}}</td>
 	                </tr>
 	              @endif
             </tbody>
@@ -99,107 +120,42 @@
         <h4 class="modal-title" id="statusModalLabel">Cash Loan</h4>
       </div>
       <div class="modal-body">
-        {{ Form::open(array('route' => array('member.loan.store'), 'method' => 'post', 'class' => 'form-horizontal form-label-left', 'onsubmit' => 'return validate();')) }}
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            
-            <div>
-		      	<table width="100%">
-		      		<tr>
-		      			<td colspan="6"><b>Date:</b> {{ date('F d, Y') }}</td>
-		      		</tr>
-		      		<tr>
-		      			<td colspan="6">
-		      				<b>Transaction No:</b> 
-		      				<span id="transNo"></span>
-		      				<input type="hidden" id="_transNo" name="transaction_no"/>
-		      			</td>
-		      		</tr>
-
-		      		<!-- <tr>
-		      			<td align="right">{{ Form::radio('type', 'new') }}</td>
-		      			<td>&nbsp;New</td>
-		      			<td align="right">{{ Form::radio('type', 'renewal') }}</td>
-		      			<td>&nbsp;Renewal</td>
-		      			<td colspan="2"></td>
-		      		</tr> -->
-		      		<tr>
-		      			<td colspan="6" style="padding-top: 10px;"><b>Applicant's Information</b></td>
-		      		</tr>
-		      		<tr>
-		      			<td>Last Name:</td>
-		      			<td>{{$user->l_name}}</td>
-		      			<td>First Name:</td>
-		      			<td>{{$user->f_name}}</td>
-		      			<td>Middle Name:</td>
-		      			<td>{{$user->m_name}}</td>
-		      		</tr>
-		      		<tr>
-		      			<td>Address:</td>
-		      			<td>{{$user->address}}</td>
-		      			<td>Contact No:</td>
-		      			<td>{{$user->phone}}</td>
-		      			<td>Email:</td>
-		      			<td>{{$user->email}}</td>
-		      		</tr>
-		      		<!-- <tr>
-		      			<td colspan="6" style="padding-top: 10px;"><b>Employment Information</b></td>
-		      		</tr>
-		      		<tr>
-		      			<td colspan="2">Current Employer:</td>
-		      			<td>{{ Form::text('employer') }}</td>
-		      			<td colspan="2">Employer Address:</td>
-		      			<td>{{ Form::text('emp_address') }}</td>
-		      		</tr>
-		      		<tr>
-		      			<td colspan="2"><i>If none, other source of income:</i></td>
-		      			<td colspan="4">{{ Form::text('other_source') }}</td>
-		      		</tr>
-		      		<tr>
-		      			<td colspan="2">Monthly Income:</td>
-		      			<td colspan="4">{{ Form::text('income') }}</td>
-		      		</tr> -->
-		      		<tr>
-		      			<td colspan="6" style="padding-top: 10px;"><b>Loan Information</b></td>
-		      		</tr>
-		      		<tr>
-		      			<td colspan="2">Total Contributions:</td>
-		      			<td colspan="4">&#8369;{{$contribution->amount}}</td>
-		      		</tr>
-		      		<tr>
-		      			<td colspan="2">Remaining Balance on Active Loans:</td>
-		      			<td colspan="4">&#8369;{{number_format($activeLoan->balance, 2)}}</td>
-		      		</tr>
-		      		<tr>
-		      			<td colspan="2">Loan Limit:</td>
-		      			<td colspan="4">&#8369;{{number_format($loanable, 2)}}</td>
-		      		</tr>
-		      		<tr>
-		      			<td colspan="2">Loan Amount:</td>	
-		      			<td colspan="4">
-		      				<input type="number" id="amount_loan" name="amount_loan" min="1" max="{{$loanable}}" required />
-		      			</td>
-		      		</tr>
-		      		<tr>
-		      			<td colspan="6" style="padding-top: 20px;"></td>
-		      		</tr>
-		      		<!-- <tr>
-		      			<td colspan="6" style="padding-top: 10px;"><b>Applicant's Declaration</b></td>
-		      		</tr>
-		      		<tr>
-		      			<td align="right">{{ Form::checkbox('consent') }}</td>
-		      			<td colspan="5">&nbsp;I certify that information listed on this application are true and correct to the best of my knowledge and ability. I accept and agree to be bound by the terms and conditions as contained in the Cooperative’s Loans Policy.</td>
-		      		</tr> -->
-		      		<tr>
-		      			<td colspan="6" align="right">
-		      				<button type="submit" class="btn btn-primary">Submit</button>
-		      				<input type="hidden" id="confirm" name="confirm"/>
-		      				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-		      			</td>
-		      		</tr>
-		      	</table>
-		      </div>
-		     
-         {{Form::close()}}
+      	<p><b>Loan Term (months): </b> 6</p>
+      	<p><b>Interest Rate (monthly): </b> 2%</p>
+      	<p><b>Share Capital (monthly): </b> 3%</p>
+      	<p>Please choose the payment type for the Interest and Share Capital</p>
+      	<br/>
+        <p><b>Sample Computation:</b></p>
+      	<table style="width: 30%;" class="cash-computation">
+      		<tr>
+      			<td>Loan:</td>
+      			<td align="right">Php 1,000.00</td>
+      		</tr>
+      		<tr>
+            <td>Interest:</td>
+            <td align="right">Php 120.00</td>
+      		</tr>
+      		<tr>
+            <td>Share Capital:</td>
+            <td align="right">Php 180.00</td>
+      		</tr>
+          <tr>
+            <td colspan="2"><b>Total Amount Repayable</b></td>
+          </tr>
+      		<tr>
+      			<td>Deduction:</td>
+      			<td align="right">Php 700.00</td>
+      		</tr>
+      		<tr>
+      			<td>Additional:</td>
+      			<td align="right">Php 1,300.00</td>
+      		</tr>
+      	</table>
+      	<br/>
+        <div style="text-align: center;">
+          <a href="{{url('/member/loan/cash?t=d')}}" class="btn btn-primary">Deduction</a>
+          <a href="{{url('/member/loan/cash?t=a')}}" class="btn btn-success">Additional</a>
+        </div>
       </div>
     </div>
 </div>
@@ -218,10 +174,6 @@ $(document).ready(function() {
     @endif
 
     $('#loans-list').DataTable({
-      // dom: 'B<"clear">lfrtip',
-      // buttons: [
-      //   'copy', 'csv', 'excel', 'pdf', 'print'
-      // ],
       fixedHeader: {
         header: true,
         footer: false
@@ -234,26 +186,31 @@ $(document).ready(function() {
     	document.getElementById("cash-loan").setAttribute("title", "Unable to make a loan");
     }
 
+    if(!{{$motorLoan}}){
+      document.getElementById("motor-loan").disabled = true;
+      document.getElementById("motor-loan").setAttribute("title", "Unable to make a loan");
+    }
+
 });
 
   // When the user clicks on the button, open the modal 
-  function applyCashLoan() {
-      var currentdate = moment().format('YYYYDDMM-HHmmssSS-{{Auth::user()->id}}');
-      $('#transNo').text(currentdate);
-      $('#_transNo').val(currentdate);
-  }
+  // function applyCashLoan() {
+  //     var currentdate = moment().format('YYYYDDMM-HHmmssSS-{{Auth::user()->id}}');
+  //     $('#transNo').text(currentdate);
+  //     $('#_transNo').val(currentdate);
+  // }
 
-  function validate(form) {
-  	 if(confirm("Do you want to proceed?")){
-    	// document.forms[1].submit();
-    	$('#confirm').val('yes');
-    	return true;
-	 }else{
-	 	$('#confirm').val('no');
-	 	return false;
-	 }
+  // function validate(form) {
+  // 	 if(confirm("Do you want to proceed?")){
+  //   	// document.forms[1].submit();
+  //   	$('#confirm').val('yes');
+  //   	return true;
+	 // }else{
+	 // 	$('#confirm').val('no');
+	 // 	return false;
+	 // }
 
-  }
+  // }
 
 </script>
 

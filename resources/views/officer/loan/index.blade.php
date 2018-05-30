@@ -10,9 +10,9 @@
 		<div class="x_panel">
 			<div class="x_title">
 				<h2>List of Applied Loans <small></small></h2>
-        <div class="col-md-2 col-sm-2 col-xs-12 form-group pull-right" style="width: 117px;">
+        <!-- <div class="col-md-2 col-sm-2 col-xs-12 form-group pull-right" style="width: 117px;">
           <button type="button" id="add-payment" class="btn btn-round btn-info" data-toggle="modal" data-target="#addPaymentModal" onclick="addPayment()"> Add Payment</button>
-        </div>
+        </div> -->
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
@@ -53,9 +53,14 @@
               <td>Date Applied</td>
               <td>Name</td>
               <td>Status</td>
+              <td>Type</td>
               <td>Amount Loan</td>
+              <td>Amount Repayable</td>
               <td>Amount Paid</td>
+              <td>Interest</td>
               <td>Interest Paid</td>
+              <td>Share Capital</td>
+              <td>Share Capital Paid</td>
               <td>Remaining Balance</td>
               <td>Due Date</td>
               <td>Reviewed By</td>
@@ -70,7 +75,7 @@
 	                  	@if ($status_filter == 'Pending')
 							         @if ($position == 'President')
                           <td align="middle">
-                            <a href="" id="approveBtn" data-toggle="modal" data-target = "#approveModal" onclick="approveStatus('{{$l->id}}', '{{$l->amount_loan}}')"><img id="{{$l->id}}-approve" src="/images/approve.png" style="width:25px; height: 25px;" onmouseover="onHover('{{$l->id}}-approve');" onmouseout="offHover('{{$l->id}}-approve');"/></a>
+                            <a href="" id="approveBtn" data-toggle="modal" data-target = "#approveModal" onclick="approveStatus('{{$l->id}}', '{{$l->amount_repayable}}')"><img id="{{$l->id}}-approve" src="/images/approve.png" style="width:25px; height: 25px;" onmouseover="onHover('{{$l->id}}-approve');" onmouseout="offHover('{{$l->id}}-approve');"/></a>
                           </td>
                           <td align="middle">
                             <a href="" id="rejectBtn" data-toggle="modal" data-target = "#rejectModal" onclick="rejectStatus('{{$l->id}}')"><img id="{{$l->id}}-reject" src="/images/reject.png" style="width:25px; height: 25px;" onmouseover="rejHover('{{$l->id}}-reject');" onmouseout="rejOffHover('{{$l->id}}-reject');"/></a>
@@ -78,7 +83,7 @@
                         @elseif ($position == 'Treasurer')
                           @if ($l->user_id == $allowedId)
                           <td align="middle">
-                            <a href="" id="approveBtn" data-toggle="modal" data-target = "#approveModal" onclick="approveStatus('{{$l->id}}', '{{$l->amount_loan}}')"><img id="{{$l->id}}-approve" src="/images/approve.png" style="width:25px; height: 25px;" onmouseover="onHover('{{$l->id}}-approve');" onmouseout="offHover('{{$l->id}}-approve');"/></a>
+                            <a href="" id="approveBtn" data-toggle="modal" data-target = "#approveModal" onclick="approveStatus('{{$l->id}}', '{{$l->amount_repayable}}')"><img id="{{$l->id}}-approve" src="/images/approve.png" style="width:25px; height: 25px;" onmouseover="onHover('{{$l->id}}-approve');" onmouseout="offHover('{{$l->id}}-approve');"/></a>
                           </td>
                           <td align="middle">
                             <a href="" id="rejectBtn" data-toggle="modal" data-target = "#rejectModal" onclick="rejectStatus('{{$l->id}}')"><img id="{{$l->id}}-reject" src="/images/reject.png" style="width:25px; height: 25px;" onmouseover="rejHover('{{$l->id}}-reject');" onmouseout="rejOffHover('{{$l->id}}-reject');"/></a>
@@ -96,15 +101,21 @@
                       @if($status_filter == 'Active')
                       <td align="center" style="vertical-align: middle;">
                         <a class="btn btn-xs btn-success" href="{{ url('/send/loanreminder/'.$l->id) }}"><i class="fa fa-send"></i> Remind</a>
+                        <a class="btn btn-xs btn-info" href="{{url('/officer/loan/payment/'.$l->transaction_no)}}"><i class="fa fa-money"></i> Payment</a>
                       </td>
                       @endif
 	                    <td>{{$l->transaction_no}}</td>
 	                    <td>{{$l->date_applied}}</td>
 	                    <td>{{$l->f_name}}, {{$l->l_name}}</td>
 	                    <td>{{$l->status}}</td>
+                      <td>{{$l->loan_type}}</td>
 	                    <td>{{$l->amount_loan}}</td>
-	                    <td>{{$l->amount_paid}}</td>
+	                    <td>{{$l->amount_repayable}}</td>
+                      <td>{{$l->amount_paid}}</td>
                       <td>{{$l->interest_amount}}</td>
+                      <td>{{$l->interest_amount_paid}}</td>
+                      <td>{{$l->scapital_amount}}</td>
+                      <td>{{$l->scapital_amount_paid}}</td>
 	                    <td>{{$l->remaining_balance}}</td>
 	                    <td>{{$l->due_date}}</td>
                       <td>{{$l->reviewed_by}}</td>
@@ -117,7 +128,7 @@
 	                	@if($status_filter == 'Pending')
                       @if ($position == 'President')
                             <td align="middle">
-                              <a href="" id="approveBtn" data-toggle="modal" data-target = "#approveModal" onclick="approveStatus('{{$loans[0]->id}}', '{{$loans[0]->amount_loan}}')"><img id="{{$loans[0]->id}}-approve" src="/images/approve.png" style="width:25px; height: 25px;" onmouseover="onHover('{{$loans[0]->id}}-approve');" onmouseout="offHover('{{$loans[0]->id}}-approve');"/></a>
+                              <a href="" id="approveBtn" data-toggle="modal" data-target = "#approveModal" onclick="approveStatus('{{$loans[0]->id}}', '{{$loans[0]->amount_repayable}}')"><img id="{{$loans[0]->id}}-approve" src="/images/approve.png" style="width:25px; height: 25px;" onmouseover="onHover('{{$loans[0]->id}}-approve');" onmouseout="offHover('{{$loans[0]->id}}-approve');"/></a>
                             </td>
                             <td align="middle">
                               <a href="" id="rejectBtn" data-toggle="modal" data-target = "#rejectModal" onclick="rejectStatus('{{$loans[0]->id}}')"><img id="{{$loans[0]->id}}-reject" src="/images/reject.png" style="width:25px; height: 25px;" onmouseover="rejHover('{{$loans[0]->id}}-reject');" onmouseout="rejOffHover('{{$loans[0]->id}}-reject');"/></a>
@@ -125,7 +136,7 @@
                           @elseif ($position == 'Treasurer')
                             @if ($loans[0]->user_id == $allowedId)
                             <td align="middle">
-                              <a href="" id="approveBtn" data-toggle="modal" data-target = "#approveModal" onclick="approveStatus('{{$loans[0]->id}}', '{{$loans[0]->amount_loan}}')"><img id="{{$loans[0]->id}}-approve" src="/images/approve.png" style="width:25px; height: 25px;" onmouseover="onHover('{{$loans[0]->id}}-approve');" onmouseout="offHover('{{$loans[0]->id}}-approve');"/></a>
+                              <a href="" id="approveBtn" data-toggle="modal" data-target = "#approveModal" onclick="approveStatus('{{$loans[0]->id}}', '{{$loans[0]->amount_repayable}}')"><img id="{{$loans[0]->id}}-approve" src="/images/approve.png" style="width:25px; height: 25px;" onmouseover="onHover('{{$loans[0]->id}}-approve');" onmouseout="offHover('{{$loans[0]->id}}-approve');"/></a>
                             </td>
                             <td align="middle">
                               <a href="" id="rejectBtn" data-toggle="modal" data-target = "#rejectModal" onclick="rejectStatus('{{$loans[0]->id}}')"><img id="{{$loans[0]->id}}-reject" src="/images/reject.png" style="width:25px; height: 25px;" onmouseover="rejHover('{{$loans[0]->id}}-reject');" onmouseout="rejOffHover('{{$loans[0]->id}}-reject');"/></a>
@@ -142,16 +153,22 @@
 						        @endif
                     @if($status_filter == 'Active')
                       <td align="center" style="vertical-align: middle;">
-                        <a class="btn btn-xs btn-success" href="{{ url('/send/loanreminder/'.$loans->id) }}"><i class="fa fa-send"></i> Remind</a>
+                        <a class="btn btn-xs btn-success" href="{{ url('/send/loanreminder/'.$loans[0]->id) }}"><i class="fa fa-send"></i> Remind</a>
+                        <a class="btn btn-xs btn-info" href="{{url('/officer/loan/payment/'.$loans[0]->transaction_no)}}"><i class="fa fa-money"></i> Payment</a>
                       </td>
                       @endif
         						<td>{{$loans[0]->transaction_no}}</td>
         						<td>{{$loans[0]->date_applied}}</td>
                     <td>{{$loans[0]->f_name}}, {{$loans[0]->l_name}}</td>
         						<td>{{$loans[0]->status}}</td>
-        						<td>{{$loans[0]->amount_loan}}</td>
-        						<td>{{$loans[0]->amount_paid}}</td>
+                    <td>{{$loans[0]->loan_type}}</td>
+                    <td>{{$loans[0]->amount_loan}}</td>
+                    <td>{{$loans[0]->amount_repayable}}</td>
+                    <td>{{$loans[0]->amount_paid}}</td>
                     <td>{{$loans[0]->interest_amount}}</td>
+                    <td>{{$loans[0]->interest_amount_paid}}</td>
+                    <td>{{$loans[0]->scapital_amount}}</td>
+                    <td>{{$loans[0]->scapital_amount_paid}}</td>
         						<td>{{$loans[0]->remaining_balance}}</td>
         						<td>{{$loans[0]->due_date}}</td>
                     <td>{{$loans[0]->reviewed_by}}</td>
@@ -255,13 +272,8 @@
                   </label>
                   <div class="col-md-8 col-sm-8 col-xs-12">
                     <input type="number" name="amount" id="amount" class="form-control col-md-10" required>
-                  </div>
-              </div>
-              <div class="form-group">
-                  <label class="control-label col-md-4 col-sm-4 col-xs-12">Interest
-                  </label>
-                  <div class="col-md-8 col-sm-8 col-xs-12">
-                    <input type="number" name="interest_amount" id="interest_amount" class="form-control col-md-10">
+                    <small>Amount Due: </small>
+                    <br/><small>Minimum Amount Due:  </small>
                   </div>
               </div>
               <div class="form-group">

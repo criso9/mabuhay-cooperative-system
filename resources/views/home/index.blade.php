@@ -1,14 +1,10 @@
 @extends('layout.main')
 
-@section('content')
+@section('breadcrumb')
+  <li>Home</li>
+@stop
 
-<div id="breadcrumb">
-    <div class="container">
-      <div class="breadcrumb" style="padding: 0px;font-size: 14px;">
-        <li>Home</li>
-      </div>
-    </div>
-  </div>
+@section('content')
 
   <!-- for carousel -->
   <div class="container">

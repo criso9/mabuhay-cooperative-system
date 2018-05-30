@@ -1,5 +1,10 @@
 @extends('layout.main')
 
+@section('breadcrumb')
+  <li><a href="{{url('/')}}">Home</a></li>
+  <li>Registration</li>
+@stop
+
 @section('content')
 
   @if (count($errors) > 0)
@@ -13,7 +18,7 @@
       </div>
   @endif
 
-  <div style="color: #333;">
+  <div style="margin-top: 130px;color: #333;">
     <h3 style="text-align: center;"> Member's Registration Form</h3>
 
     <div>
@@ -94,7 +99,7 @@
           <br/>
           <tr>
             <td colspan="6" align="right" style="padding-top: 20px;">
-              <button id="reg-submit" type="submit" class="btn btn-success btn-block" style="width: 201px; margin: auto;"/>Register</button>
+              <button id="reg-submit" type="submit" class="btn btn-success btn-block" style="width: 201px; margin: auto;">Register</button>
             </td>
           </tr>
         </table>

@@ -42,6 +42,8 @@ Business List
               <td>Description</td>
               <td>Status</td>
               <td>Capital</td>
+              <td>Income</td>
+              <td>Profit</td>
               <td>Date Started</td>
               <td>Added By</td>
 
@@ -60,6 +62,8 @@ Business List
                     <td>{{$b->description}}</td>
                     <td>{{$b->status}}</td>
                     <td>{{$b->capital}}</td>
+                    <td>{{$b->income}}</td>
+                    <td>{{$b->profit}}</td>
                     <td>{{$b->date_started}}</td>
                     <td>{{$b->added_by}}</td>
 
@@ -76,6 +80,8 @@ Business List
                   <td>{{$business[0]->description}}</td>
                   <td>{{$business[0]->status}}</td>
                   <td>{{$business[0]->capital}}</td>
+                  <td>{{$business[0]->income}}</td>
+                  <td>{{$business[0]->profit}}</td>
                   <td>{{$business[0]->date_started}}</td>
                   <td>{{$business[0]->added_by}}</td>
 

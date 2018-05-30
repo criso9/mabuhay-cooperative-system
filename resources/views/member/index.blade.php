@@ -19,6 +19,25 @@
           </div>
         </div>
       </div>
+      <div class="x_title">
+        <h2>Current Poll <small></small></h2>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content" style="margin-bottom: 30px;">
+        @if ($poll->count() > 1)
+          @foreach($poll as $p)
+            <div>
+              {{ PollWriter::draw($p->id, Auth::user()) }}
+            </div>
+          @endforeach
+        @elseif ($poll->count() > 0)
+          <div>
+              {{ PollWriter::draw($poll[0]->id, Auth::user()) }}
+            </div>
+        @else
+          <div style="color: red;">No current poll</div>
+        @endif
+      </div>
     </div>
     </div>
 </div>
