@@ -50,7 +50,6 @@ class CoopController extends BaseController
 
 	public function store(Request $request)
 	{
-
 		$checkCoop = Cooperative::whereNotNull('id')->first();
 
 		$logoSrc = $request['logo_img'];

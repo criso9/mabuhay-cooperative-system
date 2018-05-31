@@ -211,6 +211,8 @@ Route::group(['prefix' => 'member', 'middleware' => 'member'], function () {
 
   Route::post('/polls/vote/{poll}', array('as' => 'member.poll.vote','uses' => 'Admin\AdminController@votePoll'));
 
+  Route::get('/profile', array('as' => 'member.profile.edit','uses' => 'Member\MemberController@profileEdit'));
 
+  Route::post('/profile', array('as' => 'member.profile.update','uses' => 'Member\MemberController@profileUpdate'));
 
 });

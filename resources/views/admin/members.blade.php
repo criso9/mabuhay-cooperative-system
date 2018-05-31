@@ -76,7 +76,7 @@
 				                  </ul>
 				                </div>
 				                <div class="right col-xs-3 text-center">
-				                  <img src="/images/{{ $member->avatar }}" alt="" class="img-circle img-responsive">
+				                  <img src="{{ '/uploads/profile/'.$member->avatar }}" alt="" class="img-circle img-responsive">
 				                </div>
 				              </div>
 				              <div class="col-xs-12 bottom text-center">

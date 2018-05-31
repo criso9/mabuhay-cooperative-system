@@ -13,6 +13,7 @@ use DateTime;
 use DateInterval;
 use DatePeriod;
 use DB;
+use Carbon\Carbon;
 use App\Cooperative;
 use App\User;
 use App\MonthlyContribution;
@@ -41,7 +42,6 @@ class MemberController extends BaseController
     	->select('id', 'question', 'isClosed')
     	->where('isClosed', '=', '0')
     	->get();
-
 
 		return view('member.index', compact('contributions', 'poll'));
 	}
@@ -506,7 +506,6 @@ class MemberController extends BaseController
 
 	public function votePoll(Poll $poll, Request $request)
     {
-    	dd("test");
         try{
             $vote = $request->user()
                 ->poll($poll)
@@ -517,5 +516,98 @@ class MemberController extends BaseController
         }catch (\Exception $e){
             return back()->with('errors', $e->getMessage());
         }
+    }
+
+    public function profileEdit(){
+    	$user = DB::table('users')
+		->select('id', 'f_name', 'm_name', 'l_name', 'phone', 'address', 'b_date', 'gender', 'civil_status','email', 'avatar')
+		->where('id', '=', Auth::user()->id)
+		->first();
+
+		$gender = ['Male', 'Female'];
+		$civilstat = ['Single', 'Married', 'Separated', 'Widowed'];
+
+    	return view('member.profile.edit', compact('user', 'gender', 'civilstat'));
+    }
+
+    public function profileUpdate(Request $request){
+    	$dt = Carbon::parse($request['b_date']);
+        $age = Carbon::createFromDate($dt->year, $dt->month, $dt->day)->age;
+
+    	$validator = Validator::make($request = Input::all(), User::$profile);
+
+        $email = User::select('id')
+        ->where('email', '=', $request['email'])
+        ->whereNotIn('id', [Auth::user()->id])
+        ->count();
+
+        $fullName = User::select('id')
+        ->where('f_name', '=', $request['f_name'])
+        ->where('l_name', '=', $request['l_name'])
+        ->where('m_name', '=', $request['m_name'])
+        ->whereNotIn('id', [Auth::user()->id])
+        ->count();
+
+        $avatarReq = "";
+        if($request['avatar_req']){
+        	$avatarReq = $request['avatar'];
+        }
+
+        //Add custom validation
+        $validator->after(function ($validator) use ($age, $email, $fullName, $avatarReq) {
+            if($age < 18){
+                $validator->errors()->add('b_date', 'You must 18 or over to be a member in this Cooperative');
+            }
+            if($email > 0){
+                $validator->errors()->add('email', 'Email is already registered.');
+            }
+            if($fullName > 0){
+                $validator->errors()->add('f_name', 'Name is already registered (Last, First and Middle Name).');
+            }
+            if($avatarReq != ''){
+    			if($_FILES['avatar']['type'] != 'image/png' && $_FILES['avatar']['type'] != 'image/jpeg' && $_FILES['avatar']['type'] != 'image/jpg'){
+    				
+    				$validator->errors()->add('avatar', 'Profile image must be an image and must be a file of type: jpg, png');
+    			}
+    			if($_FILES['avatar']['size'] > '8000000'){
+    				
+    				$validator->errors()->add('avatar', 'Profile image size must be less than or equal to 8MB');
+    			}
+	    	}
+        });
+
+        if($validator->fails())
+        {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+    	$user = User::findOrFail(Auth::user()->id);
+
+        $user->f_name = $request['f_name']; 
+        $user->l_name = $request['l_name']; 
+        $user->m_name = $request['m_name']; 
+        $user->phone = $request['phone'];   
+        $user->address = $request['address'];  
+
+        $bDate = DateTime::createFromFormat('M d, Y', $request['b_date']);
+        $user->b_date = $bDate->format('Y-m-d');
+  
+        $user->gender = $request['gender'];  
+        $user->civil_status = $request['civil_status'];
+        $user->email = $request['email']; 
+
+        if($avatarReq != ''){
+        	$tmpFilePath = $_FILES['avatar']['tmp_name'];
+	    	$fileName = "pic-".date('Ymd-His').'-'.$_FILES['avatar']['name'];
+		    $filePath = "uploads/profile/pic-".date('Ymd-His').'-'.$_FILES['avatar']['name'];
+
+		   	move_uploaded_file($tmpFilePath, $filePath);
+
+		   	$user->avatar = $fileName;
+        }
+
+        $user->update();
+
+        return Redirect::route('member.index')->withStatusMessage('Profile was updated');
     }
 }

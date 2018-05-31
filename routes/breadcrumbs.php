@@ -182,3 +182,8 @@ Breadcrumbs::register('member.report', function ($breadcrumbs) {
 	$breadcrumbs->parent('member.index');
     $breadcrumbs->push('Report', route('member.report'));
 });
+
+Breadcrumbs::register('member.profile.edit', function ($breadcrumbs) {
+    $breadcrumbs->parent('member.index');
+    $breadcrumbs->push('Edit Profile', route('member.profile.edit'));
+});

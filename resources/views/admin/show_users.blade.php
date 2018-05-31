@@ -22,7 +22,7 @@ User Profile
             <div class="profile_img">
               <div id="crop-avatar">
                 <!-- Current avatar -->
-                <img class="img-responsive avatar-view" src="{{ url('/images/'.$member->avatar) }}" alt="Avatar" title="Change the avatar">
+                <img class="img-responsive avatar-view" src="{{ '/uploads/profile/'.$member->avatar }}" alt="Avatar" title="Change the avatar">
               </div>
             </div>
             <h3 style="text-transform: capitalize;">{{ $member->role_name }}</h3>
@@ -36,7 +36,7 @@ User Profile
               </li>
             </ul>
 
-            <button type="button" id="myBtn" class="btn btn-primary" data-toggle="modal" data-target = "#change-status-modal"><i class="fa fa-edit m-right-xs"></i> Change Status</button>
+            <button type="button" id="myBtn" class="btn btn-primary" data-toggle="modal" data-target = "#change-status-modal" onclick="modal()"><i class="fa fa-edit m-right-xs"></i> Change Status</button>
 
           </div>
           <div class="col-md-9 col-sm-9 col-xs-12">
@@ -101,14 +101,14 @@ User Profile
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Status</label>
             <div class="col-md-9 col-sm-9 col-xs-12"> 
-              {{ Form::select('status', ['active' => 'active', 'inactive' => 'inactive'], $member->status, ['class' => 'form-control', 'id' => 'status-field', 'onchange' => 'statusChange(this)']) }}
+              {{ Form::select('status', ['active' => 'active', 'inactive' => 'inactive'], $member->status, ['class' => 'form-control', 'id' => 'status-field', 'onchange' => 'statusChange(this.value)']) }}
             </div>
           </div>
           <div class="form-group" style="display: none;" id="remarks-field">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Remarks <span class="req">*</span>
             </label>
             <div class="col-md-9 col-sm-9 col-xs-12">     
-              <textarea name="remarks" placeholder="Enter text here" style="width: 100%;" required></textarea>
+              <textarea name="remarks" id="remarks" placeholder="Enter text here" style="width: 100%;"></textarea>
             </div>
           </div>
          <br/>
@@ -127,11 +127,18 @@ User Profile
 <script type="text/javascript">
   
   function statusChange(val){
-    if(val.value == 'inactive'){
+    if(val == 'inactive'){
       $('#remarks-field').css('display', 'block');
-    } else {
+      $('#remarks').attr("required",true);
+    } else if(val == 'active') {
       $('#remarks-field').css('display', 'none');
+      $('#remarks').attr("required",false);
     }
+  }
+
+  function modal(){
+    $('#remarks-field').css('display', 'none');
+    $('#remarks').attr("required",false);
   }
 
 </script>

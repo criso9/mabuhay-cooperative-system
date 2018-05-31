@@ -758,8 +758,19 @@ class OfficerController extends BaseController
 
         		$loanUpdated->update();
         	}
+
+        	$loanReceipt = DB::table('loan_payments')
+        	->join('loans', 'loans.transaction_no', '=', 'loan_payments.transaction_no')
+        	->select('loan_payments.transaction_no', 'amount', 'loan_payments.interest_amount', 'sharecap_amount', 'date_paid', 'payment_type', 'receipt_no',
+        		DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE loans.user_id = users.id) AS user_loan"),
+        		DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE updated_by = users.id) AS updated_by")
+        	)
+        	->where('loan_payments.id', $loanPay->id)
+        	->first();
+
+        	return view('officer.loan.receipt', compact('loanReceipt'));
 	        
-	        return Redirect::route('officer.loan.index')->withFlashMessage('Payment was added');
+	        // return Redirect::route('officer.loan.index')->withFlashMessage('Payment was added');
 	    }
     }
 

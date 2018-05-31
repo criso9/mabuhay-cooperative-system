@@ -41,7 +41,19 @@ class LoginController extends BaseController
             ->where('loans.status', 'active')
             ->get();
 
-            $msg = 'Please be reminded that you have existing loan/s. You can check the Loans page for more details.';
+            if($loans->count() > 0){
+                if(Auth::user()->avatar == "user-female.png" || Auth::user()->avatar == "user-male.png"){
+                        $msg = 'Please be reminded that you have existing loan/s. You can check the Loans page for more details. Please also update your profile image';
+                    } else {
+                        $msg = 'Please be reminded that you have existing loan/s. You can check the Loans page for more details.';
+                    }
+            } else {
+                if(Auth::user()->avatar == "user-female.png" || Auth::user()->avatar == "user-male.png"){
+                        $msg = 'Please update your profile image';
+                    }
+            }
+
+            
 
             // if($loans->count() > 1){
             //     foreach ($loans as $l) {
@@ -51,7 +63,7 @@ class LoginController extends BaseController
             //     // dd($loans[0]->transaction_no);
             // }
 
-            if($loans->count() > 0){
+            if($loans->count() > 0 || Auth::user()->avatar == "user-female.png" || Auth::user()->avatar == "user-male.png"){
                 if (Auth::user()->role_id == '1') {
                     return Redirect::intended('/admin')->withFlashMessage($msg);
                 } else if (Auth::user()->role_id == '2') {

@@ -119,8 +119,6 @@ Admin List
     </div>
   </div>
 
-  {{ PollWriter::draw(149, auth()->user()) }}
-
   <div id="add-admin" class="modal fade custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
     <div class="modal-content custom-modal-content">

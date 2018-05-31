@@ -50,6 +50,10 @@ class User extends Authenticatable
         'password' => 'required',
     ];
 
+    public static $profile = [
+        'f_name' => 'required'
+    ];
+
     public function role(){
         return $this->belongsTo('App\Role');
     }

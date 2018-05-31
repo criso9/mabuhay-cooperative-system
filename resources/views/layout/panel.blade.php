@@ -77,7 +77,7 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="/images/user-female.png" alt="..." class="img-circle profile_img">
+                <img src="{{ '/uploads/profile/'.Auth::user()->avatar }}" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
@@ -199,9 +199,9 @@
                   <li>
                     <a href="{{route('member.loan.index')}}"><i class="fa fa-credit-card"></i> Loans </a>
                   </li>
-                  <li>
+                  <!-- <li>
                     <a href="{{route('member.report')}}"><i class="fa fa-pie-chart"></i> Reports </a>
-                  </li>
+                  </li> -->
                 </ul>
               </div>
               @endif
@@ -247,7 +247,7 @@
                   </a>
                   <ul class="dropdown-menu dropdown-menu-animated">
                     <li class="profile-img">
-                        <img src="/images/user-female.png" alt="..." class="profile-img">
+                        <img src="{{ '/uploads/profile/'.Auth::user()->avatar }}" alt="..." class="profile-img">
                         <div class="profile-body">
                             <h5>{{ Auth::user()->f_name }} {{ Auth::user()->l_name }}</h5>
                             <h6>{{ Auth::user()->email }}</h6>
@@ -255,12 +255,15 @@
                     </li>
                     <li class="divider"></li>
                     <li class="class-full-of-rum">
-                        {{ link_to_route('admin.member.show', 'Profile', array(Auth::user()->id)) }}
+                        <a href="{{route('member.profile.edit')}}">Edit Profile</a>
                     </li>
                     <li>
                         <a href="{{route('home.index')}}">
                             <i class="voyager-home"></i>Home
                         </a>
+                    </li>
+                    <li class="class-full-of-rum">
+                        <a href="{{url('/uploads/Mabuhay BNHS.apk')}}">Download APK</a>
                     </li>
                     <li>
                       <form action="{{route('logout')}}" method="POST">
@@ -377,9 +380,9 @@
               <a href="{{route('member.loan.index')}}" class="btn btn-app">
                 <i class="fa fa-credit-card"></i> Loans
               </a>
-              <a href="{{route('member.report')}}" class="btn btn-app">
+              <!-- <a href="{{route('member.report')}}" class="btn btn-app">
                 <i class="fa fa-pie-chart"></i> Reports
-              </a>
+              </a> -->
             @endif
 
           </div>
@@ -431,6 +434,7 @@
     <!-- Custom Js -->
     <script src="{{ asset('js/custom.min.js') }}"></script>
     <script src="{{ asset('js/loader.js') }}"></script>
+    <script src="{{ asset('js/jquery.inputmask.bundle.js') }}"></script>
     <script type="text/javascript">
 
       var role = {{ Auth::user()->role_id }};
