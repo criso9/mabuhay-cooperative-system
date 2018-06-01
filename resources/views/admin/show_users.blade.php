@@ -29,7 +29,8 @@ User Profile
 
             <ul class="list-unstyled user_data">
               <li>
-                <i class="fa fa-user user-profile-icon"></i> Status: <span style="color:{{ $member->status == "inactive" ? "red" : "inherit" }};">{{$member->status}}</span>
+                <i class="fa fa-user user-profile-icon"></i> Status: 
+                <span class="label {{ $member->status == "inactive" ? "label-danger" : "label-success" }}">{{ $member->status }}</span>
               </li>
               <li>
                 Member since {{ $member->activated_at }}
@@ -125,6 +126,15 @@ User Profile
 
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script type="text/javascript">
+
+  $(document).ready(function() {
+    @if (Session::has('flash_message'))
+      Snackbar.show({
+        pos: 'top-right', 
+        text: '{{ Session::get('flash_message') }}',
+      });
+    @endif
+  });
   
   function statusChange(val){
     if(val == 'inactive'){
@@ -142,6 +152,5 @@ User Profile
   }
 
 </script>
-
 
 @stop

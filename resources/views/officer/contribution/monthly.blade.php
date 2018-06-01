@@ -57,10 +57,10 @@ Monthly Contributions
               </select>
             </div>
           </div>
-        </form>
+        {{Form::close()}}
          
 
-        <div class="monthly-contribution">
+        <div>
           <table id="officer-m-cont" class="table table-striped table-bordered">
           <thead>
             <tr>
@@ -196,33 +196,28 @@ Monthly Contributions
         </table>
         </div>
 
-      </div>
-
-    </div>
-  </div>
-
-  <div id="add-contribution" class="modal fade custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
+         <div id="add-contribution" class="modal fade custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
-		<div class="modal-content custom-modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<h4 class="modal-title" id="favoritesModalLabel">Add contribution</h4>
-			</div>
-			<div class="modal-body">
-				{{ Form::model($contributions, array('route' => array('officer.contribution.store'), 'method' => 'post', 'class' => 'form-horizontal form-label-left')) }}
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+    <div class="modal-content custom-modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="favoritesModalLabel">Add contribution</h4>
+      </div>
+      <div class="modal-body">
+        {{ Form::model($contributions, array('route' => array('officer.contribution.store'), 'method' => 'post', 'class' => 'form-horizontal form-label-left')) }}
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <input type="hidden" id="_year" name="_year">
         <input type="hidden" id="_month" name="_month">
         <input type="hidden" name="payment_id" value="{{ $payment->id }}">
-				<div class="form-group">
-	                <label class="control-label col-md-4 col-sm-4 col-xs-12">Name
-	                </label>
-	                 <div class="col-md-8 col-sm-8 col-xs-12">
-	                  {!! Form::select('user_id', $users, null, ['class' => 'form-control', 'style' => 'text-transform: Capitalize;']) !!}
-	                </div>
-	            </div>
+        <div class="form-group">
+                  <label class="control-label col-md-4 col-sm-4 col-xs-12">Name
+                  </label>
+                   <div class="col-md-8 col-sm-8 col-xs-12">
+                    {!! Form::select('user_id', $users, null, ['class' => 'form-control', 'style' => 'text-transform: Capitalize;']) !!}
+                  </div>
+              </div>
               <div class="form-group">
                 <label class="control-label col-md-4 col-sm-4 col-xs-12">For the Month of
                 </label>
@@ -235,20 +230,20 @@ Monthly Contributions
                   </div>
                 </div>
               </div>
-	            <div class="form-group">
-	                <label class="control-label col-md-4 col-sm-4 col-xs-12">Amount
-	                </label>
-	                <div class="col-md-8 col-sm-8 col-xs-12">
-	                  <input type="number" name="amount" id="amount" class="form-control col-md-10" required>
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label class="control-label col-md-4 col-sm-4 col-xs-12">Payment
-	                </label>
-	                <div class="col-md-8 col-sm-8 col-xs-12">
-	                  {!! Form::select('payment_type', ['Cash' => 'Cash', 'Bank' => 'Bank', 'Palawan Express' => 'Palawan Express'], null, ['class' => 'form-control', 'onchange' => 'paymentMethod(this)']) !!}
-	                </div>
-	            </div>
+              <div class="form-group">
+                  <label class="control-label col-md-4 col-sm-4 col-xs-12">Amount
+                  </label>
+                  <div class="col-md-8 col-sm-8 col-xs-12">
+                    <input type="number" name="amount" id="amount" class="form-control col-md-10" required>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label class="control-label col-md-4 col-sm-4 col-xs-12">Payment
+                  </label>
+                  <div class="col-md-8 col-sm-8 col-xs-12">
+                    {!! Form::select('payment_type', ['Cash' => 'Cash', 'Bank' => 'Bank', 'Palawan Express' => 'Palawan Express'], null, ['class' => 'form-control', 'onchange' => 'paymentMethod(this)']) !!}
+                  </div>
+              </div>
                <div class="form-group">
                   <label class="control-label col-md-4 col-sm-4 col-xs-12">Reference No.
                   </label>
@@ -268,15 +263,21 @@ Monthly Contributions
                   </div>
                 </div>
               </div>
-	             <br/>
-	             <div class="col-md-8 col-sm-8 col-xs-12 col-md-offset-4">
-	             	<button class="btn btn-success">Save</button>
-	             </div>
-	             
-	         	{{Form::close()}}
-			</div>
-		</div>
-	</div>
+               <br/>
+               <div class="col-md-8 col-sm-8 col-xs-12 col-md-offset-4">
+                <button class="btn btn-success">Save</button>
+               </div>
+               
+            {{Form::close()}}
+      </div>
+    </div>
+  </div>
+
+      </div>
+
+    </div>
+  </div>
+
 </div>
 </div>
 
@@ -451,13 +452,8 @@ Monthly Contributions
                 }
                 
             }
-        },
-        
+        }
     ],
-      fixedHeader: {
-        header: true,
-        footer: false
-      },
       "order": [[ 1, "asc" ]],
       "columnDefs": [
         { "orderable": false, "targets": 0 }

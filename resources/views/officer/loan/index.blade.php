@@ -73,7 +73,7 @@
 	                @foreach($loans as $l)
 	                  <tr>
 	                  	@if ($status_filter == 'Pending')
-							         @if ($position == 'President')
+							         @if ($position == 'President' || Auth::user()->role_id == '4')
                           <td align="middle">
                             <a href="" id="approveBtn" data-toggle="modal" data-target = "#approveModal" onclick="approveStatus('{{$l->id}}', '{{$l->amount_repayable}}')"><img id="{{$l->id}}-approve" src="/images/approve.png" style="width:25px; height: 25px;" onmouseover="onHover('{{$l->id}}-approve');" onmouseout="offHover('{{$l->id}}-approve');"/></a>
                           </td>
@@ -126,7 +126,7 @@
 	              @elseif ($loans->count() > 0)
 	                <tr>
 	                	@if($status_filter == 'Pending')
-                      @if ($position == 'President')
+                      @if ($position == 'President' || Auth::user()->role_id == '4')
                             <td align="middle">
                               <a href="" id="approveBtn" data-toggle="modal" data-target = "#approveModal" onclick="approveStatus('{{$loans[0]->id}}', '{{$loans[0]->amount_repayable}}')"><img id="{{$loans[0]->id}}-approve" src="/images/approve.png" style="width:25px; height: 25px;" onmouseover="onHover('{{$loans[0]->id}}-approve');" onmouseout="offHover('{{$loans[0]->id}}-approve');"/></a>
                             </td>
@@ -326,10 +326,6 @@ $(document).ready(function() {
 
     @if ($status_filter == 'Pending' || $status_filter == 'Active')
       $('#loans-list').DataTable({
-        fixedHeader: {
-          header: true,
-          footer: false
-        },
         "order": [[ 3, "desc" ]],
         "columnDefs": [
           { "orderable": false, "targets": "no-sort" }
@@ -337,10 +333,6 @@ $(document).ready(function() {
       });
     @else
       $('#loans-list').DataTable({
-        fixedHeader: {
-          header: true,
-          footer: false
-        },
         "order": [[ 1, "desc" ]]
       });
     @endif

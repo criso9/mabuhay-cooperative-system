@@ -1,37 +1,174 @@
 @media only screen and (max-width : 319px) {
     #myCarousel, .carousel-inner, .carousel-inner img {height: 280px !important;}
+    .member-filter-buttons {
+    	    margin-top: 70px;
+    }
+    .pending-type {
+    	right: 0;
+    }
+
+    #pending-users_wrapper{
+    	margin-top: 45px;
+    }
+
+    #business-list_wrapper{
+    	margin-top: 65px;
+    }
+
+    .mem-approval{
+    	width: 100% !important;
+    	margin-top: -30px;
+    }
+
+    .business-list{
+    	width: 65% !important;
+    	top: 37px !important;
+    }
+
+    #off-business{
+    	top: -15px !important;
+    }
 }
 
 /*Mobile Portrait (320 x 480)*/
 /*@media only screen and (min-width : 320px) and (max-width: 599px) and (orientation : portrait) {*/
 @media only screen and (min-width : 320px) and (max-width: 479px) {
     #myCarousel, .carousel-inner, .carousel-inner img {height: 280px !important;}
+    .member-filter-buttons {
+    	    margin-top: 70px;
+    }
+    .pending-type {
+    	right: 0;
+    }
+
+    #pending-users_wrapper{
+    	margin-top: 45px;
+    }
+
+    #business-list_wrapper{
+    	margin-top: 65px;
+    }
+
+    .mem-approval{
+    	width: 100% !important;
+    	margin-top: -30px;
+    }
+
+    .business-list{
+    	width: 65% !important;
+    	top: 37px !important;
+    }
+
+    #off-business{
+    	top: -15px !important;
+    }
+
+
 }
 
 /*Mobile landscape (480x320)*/
 /*@media only screen and (min-width : 320) and (max-width: 599px) and (orientation : landscape) {*/
 @media only screen and (min-width : 480px) and (max-width: 599px) {
-    
+     .member-filter-buttons {
+    	    margin-top: 70px;
+    }
+    .pending-type {
+    	right: 0;
+    }
+
+    #pending-users_wrapper{
+    	margin-top: 45px;
+    }
+
+    .mem-approval{
+    	width: 100% !important;
+    	margin-top: -30px;
+    }
+
+     #business-list_wrapper{
+    	margin-top: 65px;
+    }
+
+    .business-list{
+    	width: 65% !important;
+    	top: 37px !important;
+    }
+
+    #off-business{
+    	top: -15px !important;
+    }
 }
 
 /*Small tablet portrait (600x800)*/
 @media only screen and (min-width : 600px) and (max-width: 799px) {
-   
+    .member-filter-buttons {
+    	    margin-top: 70px;
+    }
+    .pending-type {
+    	right: 0;
+    }
+
+    #pending-users_wrapper{
+    	margin-top: 45px;
+    }
+
+    .mem-approval{
+    	width: 40% !important;
+    	margin-top: -30px;
+    }
+
+    .business-list {
+    	width: 22% !important;
+    	top: 26px !important;
+    }
+
+    #off-business{
+    	top: -24px !important;
+    }
+}
+
+@media only screen and (min-width : 768px) and (max-width: 799px) {
+	.business-list {
+		width: 32% !important;
+    	top: 58px !important;
+    }
+
+    #off-business{
+    	top: 0px !important;
+    }
 }
 
 /*Tablet portrait (768x1024)*/
 @media only screen and (min-width : 768px) and (max-width: 1023px) {
-    
+    #pending-users_filter, #loans-list_filter, #business-list_filter {
+		margin-left: -145px;
+    }
+
+    .mem-approval{
+    	width: 40% !important;
+    }
 }
 
 /*Small tablet landscape (800x600)*/
 @media only screen and (min-width : 800px) and (max-width: 1023px) {
-    
+    #pending-users_filter, #loans-list_filter, #business-list_filter {
+		margin-left: -120px;
+    }
+
+    .mem-approval{
+    	width: 37% !important;
+    }
 }
 
 /*Tablet landscape (1024x768)*/
 @media only screen and (min-width : 1024px) and (max-width: 1279px) {
-    
+    #pending-users_filter, #loans-list_filter, #business-list_filter {
+		margin-left: -120px;
+    }
+
+    .mem-approval{
+    	width: 37% !important;
+    }
 }
 
 @media only screen and (max-width: 767px) {

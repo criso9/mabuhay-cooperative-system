@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>
-    @if (Auth::user()->role_id == '1')
+    @if (Auth::user()->role_id == '1' || Auth::user()->role_id == '4')
       Admin Panel
     @elseif (Auth::user()->role_id == '2')
       Officer Panel
@@ -32,7 +32,7 @@
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
              <div class="site_title">
-                @if (Auth::user()->role_id == '1')
+                @if (Auth::user()->role_id == '1' || Auth::user()->role_id == '4')
                   <span id="admin">Administrator</span>
                 @elseif (Auth::user()->role_id == '2')
                   <span id="officer">Officer</span>
@@ -60,7 +60,7 @@
 
             <!-- sidebar menu -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-              @if (Auth::user()->role_id == '1')
+              @if (Auth::user()->role_id == '1' || Auth::user()->role_id == '4')
 
                 <div class="menu_section">
                 <h3>General</h3>

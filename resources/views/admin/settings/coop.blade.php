@@ -409,10 +409,6 @@
 	    });
 
 	    $('#carousel-list').DataTable({
-		    fixedHeader: {
-		      header: true,
-		      footer: false
-		    },
 		    "order": [[ 2, "asc" ]],
 		    "columnDefs": [
 		      { "orderable": false, "targets": 0 },
@@ -421,10 +417,6 @@
 		  });
 
 	    $('#docs-list').DataTable({
-		    fixedHeader: {
-		      header: true,
-		      footer: false
-		    },
 		    "order": [[ 1, "asc" ]],
 		    "columnDefs": [
 		      { "orderable": false, "targets": 0 }

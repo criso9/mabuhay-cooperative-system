@@ -139,7 +139,7 @@ class UserController extends BaseController
 		
         $user->update();
 
-        return Redirect::route('admin.member.show', ['member' => $id]); 
+        return Redirect::route('admin.member.show', ['member' => $id])->withFlashMessage('Change status successfully'); 
 	}
 
 	public function createMember()

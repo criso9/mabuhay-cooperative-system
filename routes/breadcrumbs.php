@@ -187,3 +187,8 @@ Breadcrumbs::register('member.profile.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('member.index');
     $breadcrumbs->push('Edit Profile', route('member.profile.edit'));
 });
+
+Breadcrumbs::register('member.password.edit', function ($breadcrumbs) {
+    $breadcrumbs->parent('member.index');
+    $breadcrumbs->push('Change Password', route('member.password.edit'));
+});

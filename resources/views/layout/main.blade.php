@@ -12,6 +12,7 @@
   <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ asset('css/font-awesome.min.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ asset('css/material-design-iconic-font.min.css') }}"/>
+  <link rel="stylesheet" href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" type="text/css" />
   <link rel="stylesheet" type="text/css" href="{{ asset('css/animate.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ asset('css/hamburgers.min.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ asset('css/animsition.min.css') }}"/>
@@ -59,7 +60,7 @@
               <ul class="nav nav-tabs navbar-nav navbar-right login-menu">
                 <li>
                     @if(Auth::check())
-                      @if(Auth::user()->role_id == 1)
+                      @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4)
                           <a href="{{route('admin.index')}}">
                       @elseif(Auth::user()->role_id == 2)
                           <a href="{{route('officer.index')}}">
@@ -67,7 +68,7 @@
                           <a href="{{route('member.index')}}">
                       @endif
                         <div class="logo-panel" style="margin-top: -6px;">
-                            <img src="/images/user-female.png" class="img-circle logo-img">
+                            <img src="{{ '/uploads/profile/'.Auth::user()->avatar }}" class="img-circle logo-img">
                         </div>
                         <span>
                             {{ Auth::user()->f_name }} {{ Auth::user()->l_name }}
@@ -100,6 +101,7 @@
         <!-- /page content -->
 
   <!--===============================================================================================-->
+  <script src="{{ asset('js/moment.min.js') }}"></script>
   <!-- <script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script> -->
   <script src="{{ asset('js/jquery.min.js') }}"></script>
   <!--===============================================================================================-->
@@ -107,6 +109,7 @@
   <!--===============================================================================================-->
     <script src="{{ asset('js/popper.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+     <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
   <!--===============================================================================================-->
     <script src="{{ asset('js/select2.min.js') }}"></script>
   <!--===============================================================================================-->

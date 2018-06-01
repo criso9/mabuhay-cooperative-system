@@ -64,7 +64,7 @@ class LoginController extends BaseController
             // }
 
             if($loans->count() > 0 || Auth::user()->avatar == "user-female.png" || Auth::user()->avatar == "user-male.png"){
-                if (Auth::user()->role_id == '1') {
+                if (Auth::user()->role_id == '1' || Auth::user()->role_id == '4') {
                     return Redirect::intended('/admin')->withFlashMessage($msg);
                 } else if (Auth::user()->role_id == '2') {
                     return Redirect::intended('/officer')->withFlashMessage($msg);
@@ -72,7 +72,7 @@ class LoginController extends BaseController
                     return Redirect::intended('/member')->withFlashMessage($msg);
                 }
             }else{
-                if (Auth::user()->role_id == '1') {
+                if (Auth::user()->role_id == '1' || Auth::user()->role_id == '4') {
                     return Redirect::intended('/admin');
                 } else if (Auth::user()->role_id == '2') {
                     return Redirect::intended('/officer');

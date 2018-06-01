@@ -14,14 +14,14 @@
         	<div class="clearfix"></div>
       	</div>
       	<div class="x_content">
-              	<div class="col-md-2 col-sm-2 col-xs-12 form-group pull-right" style="width: auto;padding-right: 0px;margin-bottom: 15px;">
+              	<!-- <div class="col-md-2 col-sm-2 col-xs-12 form-group pull-right" style="width: auto;padding-right: 0px;margin-bottom: 15px;">
                 	<a href="{{route('admin.member.create')}}" class="btn btn-round btn-info">Add Member</a>
-                </div>
+                </div> -->
                 
             <div class="clearfix"></div>
 
 			<div class="row" style="margin-bottom: 30px;">
-          		<div class="col-md-3 col-sm-3 col-xs-3" style="float: right;">
+          		<div class="col-md-3 col-sm-3 col-xs-12" style="float: right;">
           			{{ Form::open(array('route' => 'admin.member.index.filter', 'method' => 'post', 'class' => 'form-horizontal form-label-left pending-type', 'style' => 'top: 0px;')) }}
 			          <input type="hidden" name="_token" value="{{ csrf_token() }}">
 			          <div class="form-group">
@@ -38,7 +38,7 @@
           		</div>
           	</div>
 
-          	<div class="row">
+          	<div class="row member-filter-buttons">
 				<div class="col-md-12 col-sm-12 col-xs-12 text-center">
 					<!-- {{ Form::model($members, array('route' => array('admin.member.index.filter'), 'method' => 'post')) }}
 						<input type="hidden" name="_token" value="{{ csrf_token() }}"> -->
@@ -72,7 +72,9 @@
 				                  <ul class="list-unstyled">
 				                    <li><i class="fa fa-building"></i> Address: {{ $member->address }}</li>
 				                    <li><i class="fa fa-phone"></i> Phone: {{ $member->phone }}</li>
-				                    <li><i class="fa fa-user"></i> Status: <span style="color:{{ $member->status == "inactive" ? "red" : "inherit" }};">{{ $member->status }}</span></li>
+				                    <li><i class="fa fa-user"></i> Status: 
+				                    	<span class="label {{ $member->status == "inactive" ? "label-danger" : "label-success" }}">{{ $member->status }}</span>
+				                    </li>
 				                  </ul>
 				                </div>
 				                <div class="right col-xs-3 text-center">

@@ -20,7 +20,7 @@ Pending for Approval
       <div class="x_content">
       <br/>
 
-      {{ Form::open(array('route' => 'admin.pending.index.type', 'method' => 'post', 'class' => 'form-horizontal form-label-left pending-type', 'style' => 'width: 22%;float: right; right: -15px;')) }}
+      {{ Form::open(array('route' => 'admin.pending.index.type', 'method' => 'post', 'class' => 'form-horizontal form-label-left pending-type mem-approval', 'style' => 'width: 27%;float: right; right: -15px;')) }}
         
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <div class="form-group">
@@ -186,10 +186,10 @@ Pending for Approval
       // buttons: [
       //   'copy', 'csv', 'excel', 'pdf', 'print'
       // ],
-      fixedHeader: {
-        header: true,
-        footer: false
-      },
+      // fixedHeader: {
+      //   header: true,
+      //   footer: false
+      // },
       "order": [[ 11, "desc" ]],
       "columnDefs": [
         { "orderable": false, "targets": 0 },

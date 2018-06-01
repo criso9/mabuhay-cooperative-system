@@ -54,6 +54,12 @@ class User extends Authenticatable
         'f_name' => 'required'
     ];
 
+    public static $password = [
+        'email' => 'required|email',
+        'current_password' => 'required|min:8',
+        'password' => 'required|min:8|confirmed'
+    ];
+
     public function role(){
         return $this->belongsTo('App\Role');
     }
@@ -65,7 +71,7 @@ class User extends Authenticatable
 
     public function checkRoles()
     {
-        if($this->role_id == 1)
+        if($this->role_id == 1 || $this->role_id == 4)
         { 
             return "admin"; 
         }

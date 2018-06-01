@@ -39,6 +39,7 @@ class OfficerController extends BaseController
 			DB::raw('CONCAT(monthname(date_paid), \' \',  year(date_paid)) as monthname')
 		)
 		->whereIn('status', ['Active', 'Paid'])
+		->orderBy(DB::raw('month(date_paid)'), 'asc')
 		->groupBy(DB::raw('CONCAT(monthname(date_paid), \' \',  year(date_paid))'))
 		->get();
 
@@ -48,21 +49,28 @@ class OfficerController extends BaseController
 			DB::raw('SUM(profit) AS amount'),
 			DB::raw('CONCAT(monthname(date_paid), \' \',  year(date_paid)) as monthname')
 		)
+		->orderBy(DB::raw('month(date_paid)'), 'asc')
 		->groupBy(DB::raw('CONCAT(monthname(date_paid), \' \',  year(date_paid))'))
 		->get();
 
 		$loanM = DB::table('loan_payments')
 		->join('loans', 'loan_payments.transaction_no', '=', 'loans.transaction_no')
 		->select(
+			DB::raw('NULL AS amountbusiness'),
+			DB::raw('SUM(loan_payments.interest_amount) AS amountloan'),
 			DB::raw('CONCAT(monthname(date_paid), \' \',  year(date_paid)) as monthname')
 		)
 		->whereIn('status', ['Active', 'Paid'])
+		->orderBy(DB::raw('month(date_paid)'), 'asc')
 		->groupBy(DB::raw('CONCAT(monthname(date_paid), \' \',  year(date_paid))'));
 
 		$businessM = DB::table('business_incomes')
 		->select(
+			DB::raw('SUM(profit) AS amountbusiness'),
+			DB::raw('NULL AS amountloan'),
 			DB::raw('CONCAT(monthname(date_paid), \' \',  year(date_paid)) as monthname')
 		)
+		->orderBy(DB::raw('month(date_paid)'), 'asc')
 		->groupBy(DB::raw('CONCAT(monthname(date_paid), \' \',  year(date_paid))'));
 
 		$monthly = $loanM->union($businessM)->get();
@@ -110,7 +118,7 @@ class OfficerController extends BaseController
 
 	public function monthlyContribution()
 	{
-		if($this->position != 'Treasurer' && $this->position != 'President'){
+		if($this->position != 'Treasurer' && $this->position != 'President' && Auth::user()->role_id != '4'){
 			return Redirect::route('forbidden');
 		}else{
 			$curr_year = new DateTime(date('Y-m-d'));
@@ -210,7 +218,7 @@ class OfficerController extends BaseController
 
 	public function monthlyMemberContribution($id)
 	{
-		if($this->position != 'Treasurer' && $this->position != 'President'){
+		if($this->position != 'Treasurer' && $this->position != 'President' && Auth::user()->role_id != '4'){
 			return Redirect::route('forbidden');
 		}else{
 			$curr_year = new DateTime(date('Y-m-d'));
@@ -310,7 +318,7 @@ class OfficerController extends BaseController
 
 	public function memberYearSelected(Request $request)
 	{
-		if($this->position != 'Treasurer' && $this->position != 'President'){
+		if($this->position != 'Treasurer' && $this->position != 'President' && Auth::user()->role_id != '4'){
 			return Redirect::route('forbidden');
 		}else{
 			return Redirect::route('officer.contribution.monthly.member', [$request->_id, 'y' => $request->year, 'm'=>$request->month]);
@@ -319,7 +327,7 @@ class OfficerController extends BaseController
 
 	public function monthlyContributionYearSelected(Request $request)
 	{
-		if($this->position != 'Treasurer' && $this->position != 'President'){
+		if($this->position != 'Treasurer' && $this->position != 'President' && Auth::user()->role_id != '4'){
 			return Redirect::route('forbidden');
 		}else{
 			if($request->_payment == '1'){
@@ -334,7 +342,7 @@ class OfficerController extends BaseController
 
 	public function storeContribution(Request $request)
 	{
-		if($this->position != 'Treasurer' && $this->position != 'President'){
+		if($this->position != 'Treasurer' && $this->position != 'President' && Auth::user()->role_id != '4'){
 			return Redirect::route('forbidden');
 		}else{
 			$validator = Validator::make($data = Input::all(), MonthlyContribution::$rules);
@@ -369,20 +377,33 @@ class OfficerController extends BaseController
 	        $cont->updated_by = Auth::user()->id;
 
 	        $cont->save();
+
+	        $contReceipt = DB::table('contributions')
+        	->join('payments', 'contributions.payment_id', '=', 'payments.id')
+        	->select('amount', 'payment_type', 'receipt_no', 'date_paid', 'payment', 
+        		DB::raw("CONCAT(monthname(date), ' ', year(date)) AS monthly"),
+        		DB::raw("year(date) AS damayan"),
+        		DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE user_id = users.id) AS user_id"),
+        		DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE updated_by = users.id) AS updated_by")
+        	)
+        	->where('contributions.id', $cont->id)
+        	->first();
+
+        	return view('officer.contribution.receipt', compact('contReceipt'));
 	        
-	        if($request->payment_id == '1'){
-	        	return Redirect::route('officer.contribution.monthly', ['y' => $request->_year, 'm' => $request->_month])->withFlashMessage('Contribution was added');
-	        } else if ($request->payment_id == '2') {
-	        	return Redirect::route('officer.contribution.damayan', ['y' => $request->_year])->withFlashMessage('Contribution was added');
-	        } else if ($request->payment_id == '3') {
-	        	return Redirect::route('officer.contribution.sharecapital', ['y' => $request->_year])->withFlashMessage('Contribution was added');
-	        }
+	        // if($request->payment_id == '1'){
+	        // 	return Redirect::route('officer.contribution.monthly', ['y' => $request->_year, 'm' => $request->_month])->withFlashMessage('Contribution was added');
+	        // } else if ($request->payment_id == '2') {
+	        // 	return Redirect::route('officer.contribution.damayan', ['y' => $request->_year])->withFlashMessage('Contribution was added');
+	        // } else if ($request->payment_id == '3') {
+	        // 	return Redirect::route('officer.contribution.sharecapital', ['y' => $request->_year])->withFlashMessage('Contribution was added');
+	        // }
 	    }	
 	} 
 
 	public function damayanContribution()
 	{
-		if($this->position != 'Treasurer' && $this->position != 'President'){
+		if($this->position != 'Treasurer' && $this->position != 'President' && Auth::user()->role_id != '4'){
 			return Redirect::route('forbidden');
 		}else{
 			$curr_year = new DateTime(date('Y-m-d'));
@@ -440,7 +461,7 @@ class OfficerController extends BaseController
 
 	public function sharecapitalContribution()
 	{
-		if($this->position != 'Treasurer' && $this->position != 'President'){
+		if($this->position != 'Treasurer' && $this->position != 'President' && Auth::user()->role_id != '4'){
 			return Redirect::route('forbidden');
 		}else{
 			$curr_year = new DateTime(date('Y-m-d'));
@@ -498,7 +519,7 @@ class OfficerController extends BaseController
 
 	public function loan()
     {
-    	if($this->position != 'Treasurer' && $this->position != 'President'){
+    	if($this->position != 'Treasurer' && $this->position != 'President' && Auth::user()->role_id != '4'){
 			return Redirect::route('forbidden');
 		}else{
 	        $status_filter = Input::get('s');
@@ -563,7 +584,7 @@ class OfficerController extends BaseController
 
     public function loanFilter(Request $request)
     {
-    	if($this->position != 'Treasurer' && $this->position != 'President'){
+    	if($this->position != 'Treasurer' && $this->position != 'President' && Auth::user()->role_id != '4'){
 			return Redirect::route('forbidden');
 		}else{
        		return Redirect::route('officer.loan.index', ['s'=>$request->statusFilter]);
@@ -600,7 +621,7 @@ class OfficerController extends BaseController
     }
 
     public function loanPaymentView($trans){
-    	if($this->position != 'Treasurer' && $this->position != 'President'){
+    	if($this->position != 'Treasurer' && $this->position != 'President' && Auth::user()->role_id != '4'){
 			return Redirect::route('forbidden');
 		}else{
 			$loans = DB::table('loans')
@@ -647,7 +668,7 @@ class OfficerController extends BaseController
     }
 
     public function loanPayment(Request $request){
-    	if($this->position != 'Treasurer' && $this->position != 'President'){
+    	if($this->position != 'Treasurer' && $this->position != 'President' && Auth::user()->role_id != '4'){
 			return Redirect::route('forbidden');
 		}else{
 			$validator = Validator::make($data = Input::all(), LoanPayment::$rules);

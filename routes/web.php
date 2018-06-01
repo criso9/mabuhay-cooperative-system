@@ -215,4 +215,8 @@ Route::group(['prefix' => 'member', 'middleware' => 'member'], function () {
 
   Route::post('/profile', array('as' => 'member.profile.update','uses' => 'Member\MemberController@profileUpdate'));
 
+  Route::get('/password', array('as' => 'member.password.edit','uses' => 'Member\MemberController@passwordEdit'));
+
+  Route::post('/password', array('as' => 'member.password.update','uses' => 'Member\MemberController@passwordUpdate'));
+
 });

@@ -286,11 +286,7 @@ $(document).ready(function() {
             }
         },
         
-    ],
-      fixedHeader: {
-        header: true,
-        footer: false
-      }
+    ]
     });
   });
 

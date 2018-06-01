@@ -148,6 +148,7 @@
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    z-index: 99999;
 }
 
 /* Modal Content/Box */
@@ -295,6 +296,11 @@ table thead th, table thead td {
 
 .year-contribution {
     right: 160px;
+    width: 155px !important;
+}
+
+.year-contribution label {
+    margin-right: 0px !important;
 }
 
 .year-contribution-mem {
@@ -333,16 +339,16 @@ table thead th, table thead td {
     height: 30px;
 }
 #officer-m-cont_filter, #member-m-cont_filter, #officer-d-cont_filter, #member-d-cont_filter {
-    margin-left: 240px;
+    margin-left: 160px;
     position: absolute;
 }
 
 #officer-d-cont_filter, #member-d-cont_filter {
-    margin-left: 430px;
+    /*margin-left: 360px;*/
 }
 
 #pending-users_filter, #loans-list_filter, #business-list_filter {
-    margin-left: 50px;
+    margin-left: -10px;
     position: absolute;
 }
 

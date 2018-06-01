@@ -141,10 +141,6 @@ Documents List
     @endif
 
     $('#document-list').DataTable({
-      fixedHeader: {
-        header: true,
-        footer: false
-      },
       "order": [[ 3, "desc" ]],
       "columnDefs": [
         { "orderable": false, "targets": 4 }

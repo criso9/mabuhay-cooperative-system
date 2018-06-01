@@ -9,7 +9,7 @@
 	<div class="limiter">
 		<div>
 	  		@if (count($errors) > 0)
-				<div class="alert alert-danger">
+				<div class="alert alert-danger" style="margin-top: 125px;">
 					<strong>Whoops!</strong> There were some problems with your input.<br>
 					<ul>
 						@foreach ($errors->all() as $error)
@@ -38,7 +38,7 @@
 					</span>
 
 					<div class="wrap-input100 validate-input" data-validate = "Enter email">
-						<input class="input100" type="text" name="email" placeholder="Email">
+						<input class="input100" type="text" name="email" placeholder="Email" value="{{old('email')}}">
 						<span class="focus-input100" data-placeholder="&#xf207;"></span>
 					</div>
 

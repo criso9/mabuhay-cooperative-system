@@ -31,6 +31,7 @@ Business Information
           <thead>
             <tr>
               <th>Amount</th>
+              <th>Profit</th>
               <th>Date</th>
               <th>Updated By</th>
             </tr>
@@ -41,6 +42,7 @@ Business Information
               @foreach($business as $b)
                 <tr>
                   <td>{{$b->amount}}</td>
+                  <td>{{$b->profit}}</td>
                   <td>{{$b->date_paid}}</td>
                   <td>{{$b->updated_by}}</td>
                 </tr>
@@ -48,6 +50,7 @@ Business Information
             @elseif ($business->count() > 0)
               <tr>
                 <td>{{$business[0]->amount}}</td>
+                <td>{{$business[0]->profit}}</td>
                 <td>{{$business[0]->date_paid}}</td>
                 <td>{{$business[0]->updated_by}}</td>
               </tr>
@@ -160,11 +163,7 @@ Business Information
             }
         },
         
-    ],
-      fixedHeader: {
-        header: true,
-        footer: false
-      }
+    ]
     });
   });
 

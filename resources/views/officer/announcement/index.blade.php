@@ -170,10 +170,6 @@ Announcements List
     @endif
 
     $('#announcement-list').DataTable({
-      fixedHeader: {
-        header: true,
-        footer: false
-      },
       "order": [[ 5, "desc" ]],
       "columnDefs": [
         { "orderable": false, "targets": 6 }

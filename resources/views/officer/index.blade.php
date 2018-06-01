@@ -12,15 +12,21 @@
         <h2>Monthly Profit Report<small></small></h2>
         <div class="clearfix"></div>
       </div>
-      <div class="x_content" style="margin-bottom: 30px;">
+      <div class="x_content" style="margin-bottom: 30px;overflow: auto;">
         <canvas id="monthly-report" width="500" height="350"></canvas>
+      </div>
+      <div class="x_content" style="margin-bottom: 30px;overflow: auto;">
+        <canvas id="monthly-report-business" width="500" height="350"></canvas>
       </div>
       <div class="x_title">
         <h2>Yearly Profit Report<small></small></h2>
         <div class="clearfix"></div>
       </div>
-      <div class="x_content" style="margin-bottom: 30px;">
+      <div class="x_content" style="margin-bottom: 30px;overflow: auto;">
         <canvas id="yearly-report" width="500" height="350"></canvas>
+      </div>
+      <div class="x_content" style="margin-bottom: 30px;overflow: auto;">
+        <canvas id="yearly-report-business" width="500" height="350"></canvas>
       </div>
     </div>
   </div>
@@ -48,11 +54,13 @@
 
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script type="text/javascript">
-  var Month = new Array();
+  var MonthLoan = new Array();
+  var MonthBusiness = new Array();
   var Loan = new Array();
   var Business = new Array();
 
-  var Year = new Array();
+  var YearLoan = new Array();
+  var YearBusiness = new Array();
   var LoanY = new Array();
   var BusinessY = new Array();
 
@@ -61,28 +69,53 @@
       $('#msgModal').modal('show');
     @endif
 
-    @foreach($monthly as $m)
-        Month.push('{{ $m->monthname }}');
-    @endforeach
-
     @foreach($loanMonthly as $lm)
+        MonthLoan.push('{{ $lm->monthname }}');
         Loan.push('{{ $lm->amount }}');
     @endforeach
 
     @foreach($businessMonthly as $bm)
+        MonthBusiness.push('{{ $bm->monthname }}');
         Business.push('{{ $bm->amount }}');
     @endforeach
 
     new Chart(document.getElementById("monthly-report"), {
       type: 'bar',
         data: {
-            labels:Month,
+            labels:MonthLoan,
             datasets: [
               {
                 label: "Loan",
                 backgroundColor: "#3e95cd",
                 data: Loan
-              }, {
+              }
+              // ,
+              // {
+              //   label: "Business",
+              //   backgroundColor: "#8e5ea2",
+              //   data: Business
+              // }
+            ]
+        },
+        options: {
+          responsive: false,
+          scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+          },
+          legend: { display: true }
+      }
+    });
+
+    new Chart(document.getElementById("monthly-report-business"), {
+      type: 'bar',
+        data: {
+            labels:MonthBusiness,
+            datasets: [
+              {
                 label: "Business",
                 backgroundColor: "#8e5ea2",
                 data: Business
@@ -103,28 +136,47 @@
     });
 
     //yearly
-    @foreach($yearly as $y)
-        Year.push('{{ $y->yearname }}');
-    @endforeach
-
     @foreach($loanYearly as $ly)
+        YearLoan.push('{{ $ly->yearname }}');
         LoanY.push('{{ $ly->amount }}');
     @endforeach
 
     @foreach($businessYearly as $by)
+        YearBusiness.push('{{ $by->yearname }}');
         BusinessY.push('{{ $by->amount }}');
     @endforeach
 
     new Chart(document.getElementById("yearly-report"), {
       type: 'bar',
         data: {
-            labels:Year,
+            labels:YearLoan,
             datasets: [
               {
                 label: "Loan",
                 backgroundColor: "#3e95cd",
                 data: LoanY
-              }, {
+              }
+            ]
+        },
+        options: {
+          responsive: false,
+          scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+          },
+          legend: { display: true }
+      }
+    });
+
+    new Chart(document.getElementById("yearly-report-business"), {
+      type: 'bar',
+        data: {
+            labels:YearBusiness,
+            datasets: [
+              {
                 label: "Business",
                 backgroundColor: "#8e5ea2",
                 data: BusinessY

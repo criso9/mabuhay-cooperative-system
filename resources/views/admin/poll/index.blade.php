@@ -25,7 +25,7 @@ Poll Management
         <br/>
 
         @if($polls->count() >= 1)
-            <table class="table table-striped">
+            <table id="poll-list" class="table table-striped table-bordered">
                 <thead>
                 <tr>
                     <th>#</th>
@@ -134,6 +134,17 @@ Poll Management
       });
     @endif
 
+    $('#poll-list').DataTable({
+        "order": [[ 0, "desc" ]],
+        "columnDefs": [
+        { "orderable": false, "targets": 4 },
+        { "orderable": false, "targets": 5 },
+        { "orderable": false, "targets": 6 },
+        { "orderable": false, "targets": 7 },
+        { "orderable": false, "targets": 8 },
+        { "orderable": false, "targets": 9 }
+      ]
+      });
    
   });
 

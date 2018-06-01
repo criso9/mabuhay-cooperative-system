@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>
-    @if (Auth::user()->role_id == '1')
+    @if (Auth::user()->role_id == '1' || Auth::user()->role_id == '4')
       Admin Panel
     @elseif (Auth::user()->role_id == '2')
       Officer Panel

@@ -222,10 +222,6 @@ $(document).ready(function() {
       // buttons: [
       //   'copy', 'csv', 'excel', 'pdf', 'print'
       // ],
-      fixedHeader: {
-        header: true,
-        footer: false
-      },
       "order": [[ 1, "desc" ]],
     });
 

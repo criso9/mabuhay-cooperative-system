@@ -8,7 +8,7 @@
 @section('content')
 
   @if (count($errors) > 0)
-      <div class="alert alert-danger">
+      <div class="alert alert-danger" style="margin-top: 125px;margin-bottom: -110px;">
           <strong>Whoops!</strong> There were some problems with your input.<br>
           <ul>
               @foreach ($errors->all() as $error)
@@ -42,25 +42,38 @@
             <td>Contact No. <span class="req">*</span></td>
             <td colspan="2"><input type="text" name="phone" id="phone" required value="{{ old('phone') }}" class="form-control"/></td> 
             <td>Birth date <span class="req">*</span></td>
-            <td colspan="2"><input type="date" name="b_date" required value="{{ old('b_date') }}" class="form-control" /></td> 
+            <td colspan="2">
+              <div class="input-group date" style="width:100%;">
+                <input type="text" class="form-control" id="b_date" name="b_date" required />
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+              </div>
+            </td> 
           </tr>
           <tr>
             <td>Gender <span class="req">*</span></td>
             <td colspan="2"> 
-              <select  class="form-control" name="gender" required value="{{ old('gender') }}">
-                <option>Select Gender</option>
-                <option>Male</option>
-                <option>Female</option>
+              <select  class="form-control" name="gender" required>
+                @if (count($gender) > 1)
+                  @foreach($gender as $g)
+                    <option value="{{$g}}" {{ $g == old('gender') ? "selected" : "" }}>{{$g}}</option>
+                  @endforeach
+                @elseif (count($gender) > 0)
+                  <option value="{{old('gender')}}">{{old('gender')}}</option>
+                @endif
               </select>
             </td>
             <td>Civil Status <span class="req">*</span></td>
             <td colspan="2">
-              <select  class="form-control" name="civil_status" required value="{{ old('civil_status') }}">
-                <option>Select Status</option>
-                <option>Single</option>
-                <option>Married</option>
-                <option>Separated</option>
-                <option>Widowed</option>
+              <select  class="form-control" name="civil_status" required">
+                @if (count($civilstat) > 1)
+                  @foreach($civilstat as $cs)
+                    <option value="{{$cs}}" {{$cs == old('civil_status') ? "selected" : ""}}>{{$cs}}</option>
+                  @endforeach
+                @elseif (count($civilstat) > 0)
+                  <option value="{{old('civil_status')}}">{{old('civil_status')}}</option>
+                @endif
               </select>
             </td>
           </tr>
@@ -69,13 +82,14 @@
             <td colspan="2"><input id="referral" type="text" name="referral" value="{{ old('referral') }}" class="form-control" onchange="refRelationship(this)" /></td>
             <td id="ref_relation_label">Relationship </td>
             <td colspan="2">
-              <select class="form-control" name="ref_relation" id="ref_relation" value="{{ old('ref_relation') }}" disabled>
-                <option value="select">Select Relationship </option>
-                <option>Family</option>
-                <option>Friends</option>
-                <option>Classmate/Batchmate</option>
-                <option>Co-worker</option>
-                <option>Friends of Friends</option>
+              <select class="form-control" name="ref_relation" id="ref_relation" disabled>
+                @if (count($refRelation) > 1)
+                  @foreach($refRelation as $rr)
+                    <option value="{{$rr}}" {{$rr == old('ref_relation') ? "selected" : ""}}>{{$rr}}</option>
+                  @endforeach
+                @elseif (count($refRelation) > 0)
+                  <option value="{{old('ref_relation')}}">{{old('ref_relation')}}</option>
+                @endif
               </select> 
             </td>
           </tr>
@@ -141,6 +155,32 @@
   <script src="js/jquery-3.2.1.min.js"></script>
   <script type="text/javascript">
   $(document).ready(function() {
+    $('#b_date').datetimepicker({
+        format: "MMMM DD, YYYY",
+        maxDate: moment().add(1, 'h'),
+        date: "{{ old('b_date') }}"
+      });
+
+    if($('#referral').val() != ''){
+
+      document.getElementById("ref_relation").required = true;
+      document.getElementById("ref_relation").disabled=false;
+     
+      var span = document.createElement('span');
+      span.className = 'req';
+
+      document.getElementById('ref_relation_label').appendChild(span);
+    }else{
+      
+      document.getElementById("ref_relation").required = false;
+      document.getElementById("ref_relation").disabled = true;
+     
+      var span = document.createElement('span');
+      span.className = '';
+
+      document.getElementById('ref_relation_label').appendChild(span);
+    }
+
      var phone = [{ "mask": "0\\9#########"}, { "mask": "09#########"}];
     
       $('#phone').inputmask({ 
@@ -166,7 +206,7 @@
   function refRelationship(val) {
     if(val.value != ''){
       var element = document.getElementById('ref_relation');
-      element.value = 'select';
+      element.value = 'Select Relationship';
 
       document.getElementById("ref_relation").required = true;
       document.getElementById("ref_relation").disabled=false;
@@ -177,7 +217,7 @@
       document.getElementById('ref_relation_label').appendChild(span);
     }else{
       var element = document.getElementById('ref_relation');
-      element.value = 'select';
+      element.value = 'Select Relationship';
       
       document.getElementById("ref_relation").required = false;
       document.getElementById("ref_relation").disabled = true;

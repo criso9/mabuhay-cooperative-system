@@ -42,7 +42,7 @@ Damayan
 		          </div>
 		        {{ Form::close() }}
 
-				<div class="monthly-contribution">
+				<div>
 					<table id="officer-d-cont" class="table table-striped table-bordered">
 						<thead>
 						<tr>
@@ -283,26 +283,14 @@ $(document).ready(function() {
  
                 head.appendChild(style);
 
-                $(win.document.body)
-                  .prepend(
-                      '<div style="text-align: center;font-size: 22px;color: black;margin-top: 10px;margin-bottom: 20px;height: 95px;line-height: 95px;"><div style="display: inline-block;vertical-align: middle;"><div style="display: inline; margin-right: 20px;"><img src="{{url('/uploads/')}}/{{ $coop->logo }}" style="width:100px;" /></div><h2 style="display: inherit;font-size:30px;">{{ $coop->coop_name }}</h2></div></div>'
-                  );
+                $(win.document.body).prepend('<div style="text-align: center;font-size: 22px;color: black;margin-top: 10px;margin-bottom: 20px;height: 95px;line-height: 95px;"><div style="display: inline-block;vertical-align: middle;"><div style="display: inline; margin-right: 20px;"><img src="{{url('/uploads/')}}/{{ $coop->logo }}" style="width:100px;" /></div><h2 style="display: inherit;font-size:30px;">{{ $coop->coop_name }}</h2></div></div>');
 
                 $(win.document.body).find('h1').addClass('display').css('font-size', '20px');
-                $(win.document.body).find( 'table' )
-                        .addClass( 'print-table' );
-
-                //prepend Month and Year on the Title
+                $(win.document.body).find('table').addClass('print-table');
                 $(win.document.body).find('h1').text(fName);
-                
             }
-        },
-        
-    ],
-      fixedHeader: {
-        header: true,
-        footer: false
-      }
+        }
+    ]
     });
   });
 

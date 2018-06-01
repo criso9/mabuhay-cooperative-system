@@ -13,11 +13,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use DateTime;
 
 class RegisterController extends BaseController
 {
     public function index(){
-        return View('auth.register');
+        $gender = ['Select Gender', 'Male', 'Female'];
+        $civilstat = ['Select Status', 'Single', 'Married', 'Separated', 'Widowed'];
+        $refRelation = ['Select Relationship', 'Family', 'Friends', 'Classmate/Batchmate', 'Co-worker', 'Friends of Friends'];
+
+        return View('auth.register', compact('gender', 'civilstat', 'refRelation'));
     }
 
     public function store(Request $request)
@@ -79,7 +84,10 @@ class RegisterController extends BaseController
         $data->l_name = $request['l_name'];
         $data->phone = $request['phone'];
         $data->address = $request['address'];
-        $data->b_date = $request['b_date'];
+
+        $bDate = DateTime::createFromFormat('M d, Y', $request['b_date']);
+        $data->b_date = $bDate->format('Y-m-d');
+
         $data->gender = $request['gender'];
         $data->civil_status = $request['civil_status'];
         $data->email = $request['email'];

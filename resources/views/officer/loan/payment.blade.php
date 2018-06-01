@@ -79,7 +79,7 @@
        <br/>
        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-2">
         <a href="{{route('officer.loan.index')}}" class="btn btn-default">Back</a>
-        <button class="btn btn-success">Save</button>
+        <button class="btn btn-primary">Save</button>
        </div>
        
     {{Form::close()}}        

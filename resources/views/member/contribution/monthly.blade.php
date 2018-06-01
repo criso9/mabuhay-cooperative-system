@@ -266,11 +266,7 @@ Monthly Contributions
             }
         },
         
-    ],
-      fixedHeader: {
-        header: true,
-        footer: false
-      }
+    ]
     });
   });
 </script>

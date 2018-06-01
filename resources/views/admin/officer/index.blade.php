@@ -245,10 +245,6 @@ Admin - Officers
       // buttons: [
       //   'copy', 'csv', 'excel', 'pdf', 'print'
       // ],
-      fixedHeader: {
-        header: true,
-        footer: false
-      },
       "order": [[ 2, "asc" ]],
       "columnDefs": [
         { "orderable": false, "targets": 0 }
@@ -260,10 +256,6 @@ Admin - Officers
       // buttons: [
       //   'copy', 'csv', 'excel', 'pdf', 'print'
       // ],
-      fixedHeader: {
-        header: true,
-        footer: false
-      },
       "order": [[ 1, "asc" ]],
     });
 

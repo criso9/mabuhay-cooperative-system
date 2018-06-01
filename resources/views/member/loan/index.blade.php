@@ -174,10 +174,6 @@ $(document).ready(function() {
     @endif
 
     $('#loans-list').DataTable({
-      fixedHeader: {
-        header: true,
-        footer: false
-      },
       "order": [[ 1, "desc" ]],
     });
 

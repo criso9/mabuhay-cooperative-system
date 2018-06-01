@@ -36,6 +36,7 @@
                   <input type="hidden" name="avatar_req" id="avatar_req"/>
                   <img src="{{ '/uploads/profile/'.$user->avatar }}"  style="width:120px; height:auto; clear:both; display:block; padding:2px; border:1px solid #ddd;">
                   <input type="file" name="avatar" id="avatar" style="margin-top: 10px;" onchange="check(this.value)">
+                  <small>Please use images that has lower case file extension (ex. jpg, png)</small>
                 </div>
           </div>
             <div class="form-group">
@@ -124,6 +125,7 @@
             </div>
             <br/>
             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-2">
+              <a href="{{route('member.index')}}" class="btn btn-default">Back</a>
               <button type="submit" class="btn btn-primary">
               Update
             </button>

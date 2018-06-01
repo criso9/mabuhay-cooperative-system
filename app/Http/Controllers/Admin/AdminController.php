@@ -134,7 +134,8 @@ class AdminController extends BaseController
             Artisan::call('backup:run', [
                 '--only-db' => 'true'
             ]);
-            $output = Artisan::output();
+            // Artisan::call('db:backup');
+            // $output = Artisan::output();
             // Log::info("Backpack\BackupManager -- new backup started from admin interface \r\n" . $output);
             return Redirect::route('admin.backup.index')->withFlashMessage('Database backup success');
         } catch (Exception $e) {
@@ -313,7 +314,7 @@ class AdminController extends BaseController
     {
         $business = DB::table('business_incomes')
         ->join('businesses', 'business_incomes.business_id', '=', 'businesses.id')
-        ->select('business_incomes.id', 'business_id', 'businesses.name', 'businesses.description', 'business_incomes.amount', 'business_incomes.date_paid',
+        ->select('business_incomes.id', 'business_id', 'businesses.name', 'businesses.description', 'business_incomes.amount', 'business_incomes.date_paid', 'business_incomes.profit',
             DB::raw("(SELECT CONCAT(users.f_name, ' ', users.l_name) FROM users WHERE business_incomes.updated_by = users.id) AS updated_by")
         )
         ->where('business_incomes.business_id', '=', $id)

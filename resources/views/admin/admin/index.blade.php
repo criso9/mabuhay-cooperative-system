@@ -219,10 +219,6 @@ Admin List
       // buttons: [
       //   'copy', 'csv', 'excel', 'pdf', 'print'
       // ],
-      fixedHeader: {
-        header: true,
-        footer: false
-      },
       "order": [[ 1, "asc" ]],
       "columnDefs": [
         { "orderable": false, "targets": 0 }
@@ -234,10 +230,6 @@ Admin List
       // buttons: [
       //   'copy', 'csv', 'excel', 'pdf', 'print'
       // ],
-      fixedHeader: {
-        header: true,
-        footer: false
-      },
       "order": [[ 0, "asc" ]],
     });
 

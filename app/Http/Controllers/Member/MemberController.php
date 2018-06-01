@@ -28,15 +28,16 @@ class MemberController extends BaseController
 		$curr_date->format('Y');
 
 		$contributions = DB::table('users')
-			->join('contributions', 'users.id', '=', 'contributions.user_id')
-			->join('payments', 'contributions.payment_id', '=', 'payments.id')
-            ->select(DB::raw('contributions.amount AS amount'),
-            	DB::raw('monthname(contributions.date) AS month'))
-           	->whereYear('contributions.date', '=', $curr_date)
-           	->where('contributions.user_id', '=', Auth::user()->id)
-           	->where('payments.payment', '=', 'Monthly Contribution')
-           	->orderBy(DB::raw('month(contributions.date)'), 'asc')
-            ->get();
+		->join('contributions', 'users.id', '=', 'contributions.user_id')
+		->join('payments', 'contributions.payment_id', '=', 'payments.id')
+        ->select(DB::raw('SUM(contributions.amount) AS amount'),
+        	DB::raw('monthname(contributions.date) AS month'))
+       	->whereYear('contributions.date', '=', $curr_date)
+       	->where('contributions.user_id', '=', Auth::user()->id)
+       	->where('payments.payment', '=', 'Monthly Contribution')
+       	->orderBy(DB::raw('month(contributions.date)'), 'asc')
+       	->groupBy(DB::raw('monthname(contributions.date)'))
+        ->get();
 
         $poll = DB::table('polls')
     	->select('id', 'question', 'isClosed')
@@ -609,5 +610,49 @@ class MemberController extends BaseController
         $user->update();
 
         return Redirect::route('member.index')->withStatusMessage('Profile was updated');
+    }
+
+    public function passwordEdit(){
+    	$user = DB::table('users')
+		->select('id', 'email', 'password')
+		->where('id', '=', Auth::user()->id)
+		->first();
+
+    	return view('member.password.edit', compact('user'));
+    }
+
+    public function passwordUpdate(Request $request){
+    	$validator = Validator::make($request = Input::all(), User::$password);
+
+    	$user = DB::table('users')
+		->select('id', 'email', 'password')
+		->where('id', '=', Auth::user()->id)
+		->first();
+
+    	$curPassword = $request['current_password'];
+    	$newPassword = $request['password'];
+
+    	//Add custom validation
+        $validator->after(function ($validator) use ($curPassword, $newPassword, $user) {
+            if(!Auth::attempt(array('password' => Input::get('current_password')))){
+                $validator->errors()->add('current_password', 'Current password does not match.');
+            }
+            if(Input::get('current_password') == $newPassword){
+                $validator->errors()->add('password', 'New password should be different from the current.');
+            }
+        });
+
+    	if($validator->fails())
+        {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+    	$userChange = User::findOrFail(Auth::user()->id);
+
+        $userChange->password = bcrypt($request['password']);
+       
+        $userChange->update();
+
+    	return Redirect::route('member.index')->withStatusMessage('Password was change');
     }
 }

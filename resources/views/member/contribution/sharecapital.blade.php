@@ -230,11 +230,7 @@ Share Capital
             }
         },
         
-    ],
-      fixedHeader: {
-        header: true,
-        footer: false
-      }
+    ]
     });
   });
 </script>

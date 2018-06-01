@@ -19,8 +19,7 @@ Business List
       </div>
       <div class="x_content">
         <div style="clear:both;"></div>
-      	<br/>
-          {{ Form::open(array('route' => 'officer.business.index.filter', 'method' => 'post', 'class' => 'form-horizontal form-label-left pending-type', 'style' => 'width: 22%;float: right; right: -15px;top: 18px;')) }}
+          {{ Form::open(array('route' => 'officer.business.index.filter', 'method' => 'post', 'class' => 'form-horizontal form-label-left pending-type business-list', 'id' => 'off-business', 'style' => 'width: 240px;float: right; right: -15px;top: 0px;')) }}
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="form-group">
               <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-weight: normal;margin-right: -10px;">Status:</label>
@@ -114,17 +113,9 @@ Business List
 
     @if ($status_filter == 'Active')
       $('#business-list').DataTable({
-        fixedHeader: {
-          header: true,
-          footer: false
-        }
       });
     @else
       $('#business-list').DataTable({
-        fixedHeader: {
-          header: true,
-          footer: false
-        }
       });
     @endif
 

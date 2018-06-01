@@ -33,8 +33,7 @@
   <!-- Custom Styles-->
   <link href="{{ asset('css/admin-panel.min.css') }}" rel="stylesheet" type="text/css" />
    <link href="{{ asset('css/jquery.mCustomScrollbar.min.css') }}" rel="stylesheet"/>
-   <link href="{{ asset('css/responsive.css') }}" rel="stylesheet" type="text/css" />
-
+   
 
 
    <!-- Generic page styles -->
@@ -51,6 +50,8 @@
 
    
   <link href="{{ asset('css/custom.css') }}" rel="stylesheet" type="text/css" />
+  <link href="{{ asset('css/responsive.css') }}" rel="stylesheet" type="text/css" />
+
   
 
 </head>
@@ -62,7 +63,7 @@
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
              <div class="site_title">
-                @if (Auth::user()->role_id == '1')
+                @if (Auth::user()->role_id == '1' || Auth::user()->role_id == '4')
                   <span id="admin">Administrator</span>
                 @elseif (Auth::user()->role_id == '2')
                   <span id="officer">Officer</span>
@@ -90,7 +91,7 @@
 
             <!-- sidebar menu -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-              @if (Auth::user()->role_id == '1')
+              @if (Auth::user()->role_id == '1' || Auth::user()->role_id == '4')
 
                 <div class="menu_section">
                 <h3>General</h3>
@@ -120,7 +121,7 @@
               <div class="menu_section">
                 <h3>Others</h3>
                 <ul class="nav side-menu">
-                  @if($position != '')
+                  @if($position != '' || Auth::user()->role_id == '4')
                     <li>
                       <a href="#" id="officer-links" data-toggle="modal" data-target="#officerModal"><i class="fa fa-external-link-square"></i> Officer Links</a>
                     </li>
@@ -144,7 +145,7 @@
                   <li>
                     <a href="{{route('officer.index')}}"><i class="fa fa-dashboard"></i> Officer Dashboard </a>
                   </li>
-                  @if($position == 'Treasurer')
+                  @if($position == 'Treasurer' || Auth::user()->role_id == '4')
                     <li><a><i class="fa fa-money"></i> Contributions </a>
                       <ul class="nav child_menu">
                         <li><a href="{{route('officer.contribution.monthly')}}">Monthly</a></li>
@@ -254,16 +255,19 @@
                         </div>
                     </li>
                     <li class="divider"></li>
-                    <li class="class-full-of-rum">
-                        <a href="{{route('member.profile.edit')}}">Edit Profile</a>
-                    </li>
                     <li>
                         <a href="{{route('home.index')}}">
                             <i class="voyager-home"></i>Home
                         </a>
                     </li>
                     <li class="class-full-of-rum">
-                        <a href="{{url('/uploads/Mabuhay BNHS.apk')}}">Download APK</a>
+                        <a href="{{route('member.profile.edit')}}">Edit Profile</a>
+                    </li>
+                    <li class="class-full-of-rum">
+                        <a href="{{route('member.password.edit')}}">Change Password</a>
+                    </li>
+                    <li class="class-full-of-rum">
+                        <a href="{{url('/uploads/Mabuhay BNHS.apk')}}">Download Mobile Application</a>
                     </li>
                     <li>
                       <form action="{{route('logout')}}" method="POST">
@@ -309,11 +313,11 @@
             <h4 class="modal-title">Officer Links</h4>
           </div>
           <div class="modal-body">
-            @if (Auth::user()->role_id == '1')
+            @if (Auth::user()->role_id == '1' || Auth::user()->role_id == '4')
               <a href="{{route('officer.index')}}" class="btn btn-app">
                 <i class="fa fa-dashboard"></i> Dashboard
               </a>
-              @if($position == 'President' || $position == 'Treasurer')
+              @if($position == 'President' || $position == 'Treasurer' || Auth::user()->role_id == '4')
               <br/>
               <div style="background: rgb(51, 102, 51) none repeat scroll 0% 0%;;color: #fff;font-weight: bold;text-align: center;"><h5 style="padding: 2px;">Contributions</h5></div>
               <a href="{{route('officer.contribution.monthly')}}" class="btn btn-app">
