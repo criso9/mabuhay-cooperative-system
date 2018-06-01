@@ -29,13 +29,6 @@
 			{{ Form::open(array('route' => 'member.password.update', 'method' => 'post', 'class' => 'form-horizontal form-label-left')) }}
 	          <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="form-group">
-                <label class="control-label col-md-2 col-sm-2 col-xs-12">Email<span class="req">*</span>
-                </label>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                  <input type="text" placeholder="ex@example.com" name="email" id="email" required class="form-control" value="{{$user->email}}" />
-                </div>
-            </div>
-            <div class="form-group">
                 <label class="control-label col-md-2 col-sm-2 col-xs-12">Current Password<span class="req">*</span>
                 </label>
                 <div class="col-md-4 col-sm-4 col-xs-12">

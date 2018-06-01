@@ -57,6 +57,7 @@ class UserController extends BaseController
 				DB::raw("YEAR(activated_at) as activated_at")
 	        )
 			->where('l_name', 'like', $selected_filter.'%')
+			->where('role_id', '!=', '4')
 			->whereIn('users.status', $statFilter)
 			->orderBy('l_name', 'asc')
 			->get();
@@ -78,6 +79,7 @@ class UserController extends BaseController
 						END) AS description"),
 				DB::raw("YEAR(activated_at) as activated_at")
 			)
+			->where('role_id', '!=', '4')
 			->whereIn('users.status', $statFilter)
 			->orderBy('l_name', 'asc')
 			->get();
@@ -102,6 +104,7 @@ class UserController extends BaseController
 				DB::raw("DATE_FORMAT(activated_at, '%M %d, %Y') as activated_at"),
 				DB::raw("DATE_FORMAT(b_date, '%M %d, %Y') as b_date")
 			)
+			->where('role_id', '!=', '4')
 			->where('users.id', '=', $id)
 			->first();
 		
@@ -175,6 +178,7 @@ class UserController extends BaseController
 		->where('status', 'active')
 		->whereNotIn('id', [DB::raw("SELECT DISTINCT user_id FROM officers WHERE status ='active'")])
 		->where('id', '!=', Auth::user()->id)
+		->where('role_id', '!=', '4')
 		->orderBy('l_name')
 		->pluck('fullName', 'id');
 
@@ -328,6 +332,7 @@ class UserController extends BaseController
 		$users = User::select(DB::raw("CONCAT(l_name, ', ', f_name) AS fullName"),'id')
 		->where('status', 'active')
 		->whereNotIn('id', [DB::raw("SELECT DISTINCT user_id FROM admins WHERE status ='active'")])
+		->where('role_id', '!=', '4')
 		->orderBy('l_name')
 		->pluck('fullName', 'id');
 
