@@ -55,7 +55,6 @@ class User extends Authenticatable
     ];
 
     public static $password = [
-        'email' => 'required|email',
         'current_password' => 'required|min:8',
         'password' => 'required|min:8|confirmed'
     ];

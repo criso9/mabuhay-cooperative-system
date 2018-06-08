@@ -196,7 +196,6 @@ class EmailController extends BaseController
 		            $message->subject('Announcement');
 		        });
 
-		        //send SMS - activate if implemented (with unlimited SMS)
 		        $smsmsg = $this->coop->coop_name.": ".$announcement->details." on ".$event_date_sms.".";
 
 		        $result = $this->itexmo($u->phone,$smsmsg,"TR-CARIS178289_J2DJP");

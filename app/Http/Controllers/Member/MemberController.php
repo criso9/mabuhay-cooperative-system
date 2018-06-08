@@ -308,6 +308,7 @@ class MemberController extends BaseController
 		$activeLoan = DB::table('loans')
 		->select(DB::raw('SUM(amount_loan) AS amount'), DB::raw('SUM(remaining_balance) AS balance'))
 		->where('user_id', '=', Auth::user()->id)
+		->where('loan_type', 'Cash')
 		->whereIn('status', ['Active', 'Pending'])
 		->first();
 
@@ -433,8 +434,11 @@ class MemberController extends BaseController
 		$activeLoan = DB::table('loans')
 		->select(DB::raw('SUM(amount_loan) AS amount'), DB::raw('SUM(remaining_balance) AS balance'))
 		->where('user_id', '=', Auth::user()->id)
+		->where('loan_type', 'Cash')
 		->whereIn('status', ['active', 'pending'])
 		->first();
+
+		$loanable = 0;
 
 		if($contribution->amount != null){
 			if($activeLoan->balance >= $contribution->loan_limit){
@@ -468,6 +472,7 @@ class MemberController extends BaseController
 		$activeLoan = DB::table('loans')
 		->select(DB::raw('SUM(amount_loan) AS amount'), DB::raw('SUM(remaining_balance) AS balance'))
 		->where('user_id', '=', Auth::user()->id)
+		->where('loan_type', 'Motor')
 		->whereIn('status', ['active', 'pending'])
 		->first();
 

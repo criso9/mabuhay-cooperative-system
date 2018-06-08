@@ -302,7 +302,9 @@ $(document).ready(function() {
       	minDate: moment().add(1, 'h')
       });
 
-      $('#date_paid').datetimepicker();
+      $('#date_paid').datetimepicker({
+        maxDate: moment().add(1, 'h')
+      });
 
       var currentdate = moment().format('MMDDYYYY-HHmmssSS');
       $('#receiptno').val(currentdate);
