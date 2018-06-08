@@ -75,6 +75,37 @@
     </div>
   </div>
 
+  <div class="aboutus" style="margin-top: 30px;">
+    <div class="container">
+      <h3>About the Developers
+      </h3>
+      <hr>
+      <div class="col-md-7 wow fadeInDown dev1" data-wow-duration="1000ms" data-wow-delay="300ms" style="float: left;width: 40%;">
+        <img src="images/68claudinegailmarfil.jpg" class="img-responsive" style="width: 220px;text-align: center;">
+        <h4>Claudine Gail P. Marfil</h4>
+        <h5 style="margin-top: -22px;margin-left: 50px;">Quality Tester</h5>
+        <h5 style="margin-top: 5px;margin-left: 46px;">+63908724793</h5>
+        <h5 style="margin-top: 5px;margin-left: 27px;">claudmarfil@gmail.com</h5>
+      </div>
+      <div class="col-md-7 wow fadeInDown dev2" data-wow-duration="1000ms" data-wow-delay="300ms" style="float: left;width: 40%;margin-bottom: 50px;">
+        <img src="images/67carissanavarroza.jpg" class="img-responsive" style="width: 220px;text-align: center;">
+        <h4>Carissa M. Navarroza</h4>
+        <h5 style="margin-top: -22px;margin-left: 24px;">Web Developer/Analyst</h5>
+        <h5 style="margin-top: 5px;margin-left: 46px;">+639151178289</h5>
+        <h5 style="margin-top: 5px;margin-left: 0px;">carissanavarroza@outlook.com</h5>
+      </div>
+              </div>
+            </div>
+          </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="previousOfficersModal" class="modal fade custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content custom-modal-content">

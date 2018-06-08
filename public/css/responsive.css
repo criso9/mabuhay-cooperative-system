@@ -28,6 +28,11 @@
     #off-business{
     	top: -15px !important;
     }
+
+    .dev1, .dev2 {
+        float: none !important;
+        width: 100% !important;
+    }
 }
 
 /*Mobile Portrait (320 x 480)*/
@@ -61,6 +66,11 @@
 
     #off-business{
     	top: -15px !important;
+    }
+
+    .dev1, .dev2 {
+        float: none !important;
+        width: 100% !important;
     }
 
 
