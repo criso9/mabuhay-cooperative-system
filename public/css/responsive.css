@@ -76,6 +76,14 @@
 
 }
 
+@media only screen and (max-width: 505px) {
+    .div-main-reg-form {margin-top: 200px;}
+}
+
+@media only screen and (max-width: 576px) {
+    .navbar-brand {margin-right: 0px;}
+}
+
 /*Mobile landscape (480x320)*/
 /*@media only screen and (min-width : 320) and (max-width: 599px) and (orientation : landscape) {*/
 @media only screen and (min-width : 480px) and (max-width: 599px) {
@@ -157,6 +165,18 @@
     .mem-approval{
     	width: 40% !important;
     }
+
+    .navbar-nav {
+    float: left;
+    margin: 0;
+    }
+
+    .nav-tabs > li {
+    float: left;
+    margin-bottom: 0;
+}
+
+    .div-main-reg-form {margin-top: 200px;}
 }
 
 /*Small tablet landscape (800x600)*/
@@ -167,6 +187,12 @@
 
     .mem-approval{
     	width: 37% !important;
+    }
+}
+
+@media only screen and (min-width : 800px) and (max-width: 1068px) {
+    .reg-form {
+        padding: 25px;
     }
 }
 
@@ -181,6 +207,10 @@
     }
 }
 
+@media only screen and (min-width : 1024px) and (max-width: 1199px) {
+    .div-main-reg-form {margin-top: 215px;}
+}
+
 @media only screen and (max-width: 767px) {
     .navbar-brand {margin-left: 0px;}
     #breadcrumb {z-index: 1020;}
@@ -191,3 +221,37 @@
      .wrap-login100 {margin-top: 0px !important}
 }
 
+@media only screen and  (max-width: 800px) {
+    .reg-form {
+        padding: 25px;
+    }
+}
+
+@media only screen and  (min-width: 800px) {
+    .col-2-label {
+        width: 14%;
+        float: left;
+        padding-left: 10px;
+    }
+    .col-2-input {
+        width: 19%;
+        float: left;
+    }
+
+    .col-10-input {
+        width: 86%;
+        float: left;
+    }
+
+    .col-4-input {
+        width: 36%;
+        float: left;
+    }
+
+    .reg-form .row {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    }
+
+    .agree-btn {padding-left: 10px;}
+}
