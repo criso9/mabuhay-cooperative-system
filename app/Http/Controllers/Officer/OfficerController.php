@@ -389,15 +389,15 @@ class OfficerController extends BaseController
         	->where('contributions.id', $cont->id)
         	->first();
 
-        	return view('officer.contribution.receipt', compact('contReceipt'));
+        	// return view('officer.contribution.receipt', compact('contReceipt'));
 	        
-	        // if($request->payment_id == '1'){
-	        // 	return Redirect::route('officer.contribution.monthly', ['y' => $request->_year, 'm' => $request->_month])->withFlashMessage('Contribution was added');
-	        // } else if ($request->payment_id == '2') {
-	        // 	return Redirect::route('officer.contribution.damayan', ['y' => $request->_year])->withFlashMessage('Contribution was added');
-	        // } else if ($request->payment_id == '3') {
-	        // 	return Redirect::route('officer.contribution.sharecapital', ['y' => $request->_year])->withFlashMessage('Contribution was added');
-	        // }
+	        if($request->payment_id == '1'){
+	        	return Redirect::route('officer.contribution.monthly', ['y' => $request->_year, 'm' => $request->_month])->withFlashMessage('Contribution was added');
+	        } else if ($request->payment_id == '2') {
+	        	return Redirect::route('officer.contribution.damayan', ['y' => $request->_year])->withFlashMessage('Contribution was added');
+	        } else if ($request->payment_id == '3') {
+	        	return Redirect::route('officer.contribution.sharecapital', ['y' => $request->_year])->withFlashMessage('Contribution was added');
+	        }
 	    }	
 	} 
 
