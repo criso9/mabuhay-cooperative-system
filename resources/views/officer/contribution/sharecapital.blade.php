@@ -292,9 +292,9 @@ $(document).ready(function() {
 
   function addContribution() {
     $('#_year').val($('#year-contribution').find(":selected").text());
-      $('#myDatepicker').datetimepicker({
-        minDate: moment().add(1, 'h')
-      });
+      // $('#myDatepicker').datetimepicker({
+      //   minDate: moment().add(1, 'h')
+      // });
 
       $('#date_paid').datetimepicker({
         maxDate: moment().add(1, 'h')

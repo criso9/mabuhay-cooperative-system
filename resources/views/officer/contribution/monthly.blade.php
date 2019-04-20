@@ -466,8 +466,8 @@ Monthly Contributions
       $('#_month').val($('#month-contribution').find(":selected").text());
       $('#myDatepicker').datetimepicker({
         format: "MMMM YYYY",
-        viewMode: "months",
-        minDate: moment().add(1, 'h')
+        viewMode: "months"
+        // minDate: moment().add(1, 'h')
       });
 
       $('#date_paid').datetimepicker({

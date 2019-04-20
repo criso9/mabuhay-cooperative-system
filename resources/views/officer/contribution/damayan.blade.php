@@ -298,8 +298,8 @@ $(document).ready(function() {
 	  $('#_year').val($('#year-contribution').find(":selected").text());
       $('#myDatepicker').datetimepicker({
       	format: "YYYY",
-      	viewMode: "years",
-      	minDate: moment().add(1, 'h')
+      	viewMode: "years"
+      	// minDate: moment().add(1, 'h')
       });
 
       $('#date_paid').datetimepicker({
