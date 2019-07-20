@@ -26,6 +26,7 @@ class MemberController extends BaseController
 	{
 		$curr_date = new DateTime(date('Y-m-d'));
 		$curr_date->format('Y');
+		$curr_year_string = $curr_date->format('Y');
 
 		$contributions = DB::table('users')
 		->join('contributions', 'users.id', '=', 'contributions.user_id')
@@ -44,7 +45,9 @@ class MemberController extends BaseController
     	->where('isClosed', '=', '0')
     	->get();
 
-		return view('member.index', compact('contributions', 'poll'));
+
+
+		return view('member.index', compact('contributions', 'poll', 'curr_year_string'));
 	}
 
 	public function monthlyContribution()

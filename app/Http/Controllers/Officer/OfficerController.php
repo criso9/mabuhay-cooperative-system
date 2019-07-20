@@ -139,7 +139,7 @@ class OfficerController extends BaseController
 	        	$selected_month = 'All';
 	        }
 
-			$users = User::select(DB::raw("CONCAT(l_name, ', ', f_name) AS fullName"),'id')->where('status', 'active')->whereNotIn('id', [Auth::user()->id])->where('role_id', '!=', '4')->orderBy('l_name')->pluck('fullName', 'id');
+			$users = User::select(DB::raw("CONCAT(l_name, ', ', f_name) AS fullName"),'id')->where('status', 'active')->whereNotIn('id', [Auth::user()->id])->orderBy('l_name')->pluck('fullName', 'id');
 
 			$payment = DB::table('payments')
 			->select('id')
@@ -416,7 +416,7 @@ class OfficerController extends BaseController
 	        	$selected_year = $curr_year->format('Y');
 	        }
 
-			$users = User::select(DB::raw("CONCAT(l_name, ', ', f_name) AS fullName"),'id')->where('status', 'active')->whereNotIn('id', [Auth::user()->id])->where('role_id', '!=', '4')->orderBy('l_name')->pluck('fullName', 'id');
+			$users = User::select(DB::raw("CONCAT(l_name, ', ', f_name) AS fullName"),'id')->where('status', 'active')->whereNotIn('id', [Auth::user()->id])->orderBy('l_name')->pluck('fullName', 'id');
 
 			$payment = DB::table('payments')
 			->select('id')
@@ -474,7 +474,7 @@ class OfficerController extends BaseController
 	        	$selected_year = $curr_year->format('Y');
 	        }
 
-			$users = User::select(DB::raw("CONCAT(l_name, ', ', f_name) AS fullName"),'id')->where('status', 'active')->whereNotIn('id', [Auth::user()->id])->where('role_id', '!=', '4')->orderBy('l_name')->pluck('fullName', 'id');
+			$users = User::select(DB::raw("CONCAT(l_name, ', ', f_name) AS fullName"),'id')->where('status', 'active')->whereNotIn('id', [Auth::user()->id])->orderBy('l_name')->pluck('fullName', 'id');
 
 			$payment = DB::table('payments')
 			->select('id')
@@ -858,7 +858,6 @@ class OfficerController extends BaseController
 				DB::raw("YEAR(activated_at) as activated_at")
 	        )
 			->where('l_name', 'like', $selected_filter.'%')
-			->where('role_id', '!=', '4')
 			->whereIn('users.status', $statFilter)
 			->orderBy('l_name', 'asc')
 			->get();
@@ -876,7 +875,6 @@ class OfficerController extends BaseController
 						END) AS description"),
 				DB::raw("YEAR(activated_at) as activated_at")
 			)
-			->where('role_id', '!=', '4')
 			->whereIn('users.status', $statFilter)
 			->orderBy('l_name', 'asc')
 			->get();
@@ -896,7 +894,6 @@ class OfficerController extends BaseController
 				DB::raw("DATE_FORMAT(activated_at, '%M %d, %Y') as activated_at"),
 				DB::raw("DATE_FORMAT(b_date, '%M %d, %Y') as b_date")
 			)
-			->where('role_id', '!=', '4')
 			->where('users.id', '=', $id)
 			->first();
 		
